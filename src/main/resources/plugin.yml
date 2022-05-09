@@ -1,0 +1,4 @@
+name: EloriaAPI
+version: '${project.version}'
+main: be.alexandre01.eloriaapi.eloriaapi.EloriaAPI
+api-version: 1.18

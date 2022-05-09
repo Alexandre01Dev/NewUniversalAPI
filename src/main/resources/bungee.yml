@@ -1,0 +1,3 @@
+main: be.alexandre01.eloriaapi.proxy.
+name: DreamNetwork-Core
+version: ${project.version}
