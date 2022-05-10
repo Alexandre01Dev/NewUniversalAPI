@@ -44,7 +44,7 @@ public class PlayerData {
                     for(ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                         if (all.hasPermission("MODERATOR")) {
                             all.sendMessage(new TextComponent(TextComponent.fromLegacyText("§6§LMOD§8│ §7Première connexion de §b" + playerName)));
-
+                            Mysql.update("INSERT INTO users (uuid, name, coins, gemmes) VALUES ('" + uuid + "', '" + playerName + "', '" + coins + "', '" + gemmes + "')");
                         }
                     }
                 }
