@@ -3,6 +3,7 @@ package be.alexandre01.eloriamc.server.packets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.v1_8_R3.*;
 import net.minecraft.server.v1_8_R3.WorldSettings.EnumGamemode;
 import org.bukkit.Bukkit;
@@ -25,6 +26,8 @@ public class NPC extends Reflections {
     private String name;
     @Getter
     private Location location;
+
+    @Getter @Setter private NPCInteract interaction;
 
     @Getter
     private GameProfile gameProfile;
@@ -202,5 +205,13 @@ public class NPC extends Reflections {
 
     }
 
+
+    public interface NPCInteract {
+         public void action(Player player,InteractClick click);
+    }
+
+    public enum InteractClick {
+        RIGHT,LEFT;
+    }
 
 }

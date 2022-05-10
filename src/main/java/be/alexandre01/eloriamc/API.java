@@ -13,11 +13,13 @@ public class API  {
     }
 
     public API(){
-        DatabaseManager.initAllDatabaseConnection();
-        RedisManager.init();
 
     }
 
+    public void onOpen(){
+        DatabaseManager.initAllDatabaseConnection();
+        RedisManager.init();
+    }
     public void onClose(){
         DatabaseManager.closeAllDatabaseConnection();
         RedisManager.close();

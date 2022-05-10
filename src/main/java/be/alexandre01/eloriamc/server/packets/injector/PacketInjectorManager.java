@@ -1,4 +1,4 @@
-package be.alexandre01.eloriamc.server.packets;
+package be.alexandre01.eloriamc.server.packets.injector;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;

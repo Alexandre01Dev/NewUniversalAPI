@@ -1,9 +1,10 @@
-package be.alexandre01.eloriamc.server.packets;
+package be.alexandre01.eloriamc.server.packets.injector;
 
+import be.alexandre01.eloriamc.server.packets.PacketUtils;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.entity.Player;
 
-public abstract class PacketInterceptor extends PacketUtils{
+public abstract class PacketInterceptor extends PacketUtils {
     private boolean cancelled = false;
 
 

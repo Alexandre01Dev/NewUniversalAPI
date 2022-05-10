@@ -1,8 +1,8 @@
-package be.alexandre01.eloriamc.server.packets;
+package be.alexandre01.eloriamc.server.packets.injector;
 
-import fr.betterlight.Main;
-import fr.betterlight.utils.packet.custom_events.PacketDecodeEvent;
-import fr.betterlight.utils.packet.custom_events.PacketEncodeEvent;
+import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.packets.custom_events.PacketDecodeEvent;
+import be.alexandre01.eloriamc.server.packets.custom_events.PacketEncodeEvent;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
@@ -26,7 +26,7 @@ public class PacketInjector extends Thread{
         this.player = player;
         this.pluginManager = Bukkit.getPluginManager();
         channel = ((CraftPlayer)this.player).getHandle().playerConnection.networkManager.channel;
-        packetInjectorManager = Main.getInstance().getPacketInjectorManager();
+        packetInjectorManager = SpigotPlugin.getInstance().getPacketInjectorManager();
         packetInjectorManager.addInjector(this);
 
     }
