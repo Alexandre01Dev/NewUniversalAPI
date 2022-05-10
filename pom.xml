@@ -65,9 +65,18 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>techscode</id>
+            <url>https://repo.techscode.com/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>me.TechsCode</groupId>
+            <artifactId>UltraPermissionsAPI</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>

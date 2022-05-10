@@ -8,6 +8,8 @@ import be.alexandre01.inazuma.uhc.presets.PresetData;
 import be.alexandre01.inazuma.uhc.roles.Role;
 import be.alexandre01.inazuma.uhc.roles.RoleManager;
 import lombok.var;
+import me.TechsCode.UltraPermissions.UltraPermissions;
+import me.TechsCode.UltraPermissions.UltraPermissionsAPI;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -101,6 +103,7 @@ public class ModuleLoader {
     }
 
     public boolean reloadModule(Module module){
+        UltraPermissions.getAPI().getUsers().name("").get().
         HashMap<Player,Role> classRoles = new HashMap<>();
          boolean r = false;
         System.out.println(module.getModuleName()+" | "+ Arrays.toString(module.getAuthors()));
