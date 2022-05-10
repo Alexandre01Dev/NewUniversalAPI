@@ -14,15 +14,21 @@ public class API  {
 
     public API(){
 
+        System.out.println("DATA LOAD");
+
     }
 
     public void onOpen(){
         DatabaseManager.initAllDatabaseConnection();
         RedisManager.init();
     }
+
+
     public void onClose(){
         DatabaseManager.closeAllDatabaseConnection();
         RedisManager.close();
+
+        System.out.println("DATA UNLOAD");
     }
 
 

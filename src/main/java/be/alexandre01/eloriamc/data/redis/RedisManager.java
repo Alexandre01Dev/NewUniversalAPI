@@ -19,7 +19,7 @@ public class RedisManager {
         Jedis j = null;
         try {
             j = pool.getResource();
-            j.auth("1234");
+            j.auth("bqN4PUu6526G8SVvZ5g86mSbN62b6H4t3CD4fqpPrwJ5mj4MVi");
             j.set(key, value);
         } finally {
             j.close();
@@ -30,7 +30,7 @@ public class RedisManager {
         Jedis j = null;
         try {
             j = pool.getResource();
-            j.auth("1234");
+            j.auth("bqN4PUu6526G8SVvZ5g86mSbN62b6H4t3CD4fqpPrwJ5mj4MVi");
             j.del(key);
         } finally {
             j.close();
@@ -41,7 +41,7 @@ public class RedisManager {
         Jedis j = null;
         try {
             j = pool.getResource();
-            j.auth("1234");
+            j.auth("bqN4PUu6526G8SVvZ5g86mSbN62b6H4t3CD4fqpPrwJ5mj4MVi");
             return j.get(key);
         } finally {
             j.close();
