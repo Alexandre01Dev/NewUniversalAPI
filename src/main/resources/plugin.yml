@@ -1,4 +1,6 @@
 name: EloriaAPI
 version: '${project.version}'
-main: be.alexandre01.eloriaapi.eloriaapi.EloriaAPI
+main: be.alexandre01.eloriamc.server.SpigotPlugin
 api-version: 1.18
+depend:
+  - UltraPermissions

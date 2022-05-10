@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc;
 
+import be.alexandre01.eloriamc.data.mysql.DatabaseManager;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,11 +13,13 @@ public class API  {
     }
 
     public API(){
+        DatabaseManager.initAllDatabaseConnection();
         RedisManager.init();
 
     }
 
     public void onClose(){
+        DatabaseManager.closeAllDatabaseConnection();
         RedisManager.close();
     }
 

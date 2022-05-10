@@ -22,9 +22,6 @@ public abstract class PresetLoaderImpl {
     @SneakyThrows
     private void set(Module module) {
         p = (PresetLoaderImpl) module.getPresetClass().getConstructor().newInstance();
-        pData = (DefaultPresetData) p;
-        modules.put(module.getPresetClass(),module);
-        this.m = module;
         onSet(module);
     }
 }
