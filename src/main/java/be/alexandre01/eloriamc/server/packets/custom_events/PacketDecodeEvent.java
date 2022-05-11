@@ -58,6 +58,16 @@ public class PacketDecodeEvent extends Event implements Cancellable {
         }
     }
 
+    public <T> T getValue(String name,Class<T> type){
+        try{
+            Field field = packet.getClass().getDeclaredField(name);
+            field.setAccessible(true);
+            return (T) field.get(packet);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
     public Class<?> getPacketClass(){
         return packet.getClass();
     }

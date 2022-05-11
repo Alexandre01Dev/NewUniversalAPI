@@ -6,6 +6,7 @@ import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
+import be.alexandre01.eloriamc.server.packets.npc.NPC;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.SkinData;
 import be.alexandre01.eloriamc.server.packets.skin.SkinFactory;
@@ -34,7 +35,6 @@ public class SpigotPlugin extends JavaPlugin {
         AutoPacketInjectorJoin.init(AutoPacketInjectorJoin.PacketInjectorType.INPUT_DECODER);
         API.getInstance().onOpen();
         eventsFactory = new EventsFactory();
-        skinFactory = new SkinFactory();
     }
 
     @Override
