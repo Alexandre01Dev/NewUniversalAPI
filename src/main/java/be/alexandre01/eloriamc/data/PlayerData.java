@@ -24,6 +24,10 @@ public class PlayerData {
     private int coins;
     private int gemmes;
 
+    private boolean mod;
+
+
+
     public String toJson(){
         return new Gson().toJson(this);
     }
@@ -39,12 +43,27 @@ public class PlayerData {
                     Mysql.update("INSERT INTO users (uuid, name, playerData) VALUES ('" + uuid + "', '" + playerName + "', '" + this.toJson() + "')");
                     this.savePlayerCache();
                 } else {
-                    PlayerDataManager.setPlayerData(uuid);
+                    PlayerData playerData = PlayerData.fromJson(rs.getString("playerData"));
+                    playerData.savePlayerCache();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void savePlayer() {
+        Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
+            try {
+                if(rs.next()) {
+                    Mysql.update("UPDATE users SET playerData= '" + this.toJson() + "' WHERE uuid= '" + uuid + "'");
+                    deletePlayerCache();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     public void savePlayerCache(){
