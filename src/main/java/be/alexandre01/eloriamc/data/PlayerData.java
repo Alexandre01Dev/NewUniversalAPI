@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.data;
 
+import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import com.google.gson.Gson;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PlayerData {
+public class PlayerData implements IPlayerData {
 
     private final String playerName;
     private final String uuid;
@@ -36,6 +37,17 @@ public class PlayerData {
         return new Gson().fromJson(playerdata, PlayerData.class);
     }
 
+
+
+    public void savePlayerCache(){
+        RedisManager.set("Player:" + playerName, this.toJson());
+    }
+
+    public void deletePlayerCache(){
+        RedisManager.del("Player:" + playerName);
+    }
+
+    @Override
     public void setupPlayer() {
         Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
             try {
@@ -52,10 +64,11 @@ public class PlayerData {
         });
     }
 
+    @Override
     public void savePlayer() {
         Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
             try {
-                if(rs.next()) {
+                if (rs.next()) {
                     Mysql.update("UPDATE users SET playerData= '" + this.toJson() + "' WHERE uuid= '" + uuid + "'");
                     deletePlayerCache();
                 }
@@ -63,14 +76,25 @@ public class PlayerData {
                 e.printStackTrace();
             }
         });
-
     }
 
-    public void savePlayerCache(){
-        RedisManager.set("Player:" + playerName, this.toJson());
+    @Override
+    public void addCoins(int i) {
+        coins = coins + i;
     }
 
-    public void deletePlayerCache(){
-        RedisManager.del("Player:" + playerName);
+    @Override
+    public void removeCoins(int i) {
+        coins = coins - i;
+    }
+
+    @Override
+    public void addGemmes(int i) {
+        gemmes = gemmes + i;
+    }
+
+    @Override
+    public void removeGemmes(int i) {
+        gemmes = gemmes - i;
     }
 }
