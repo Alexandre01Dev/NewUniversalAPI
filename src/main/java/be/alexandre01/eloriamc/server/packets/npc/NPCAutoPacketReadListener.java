@@ -7,9 +7,10 @@ import org.bukkit.event.Listener;
 
 public class NPCAutoPacketReadListener implements Listener {
 
-    private NPCFactory npcFactory;
+    private final NPCFactory npcFactory;
 
     public NPCAutoPacketReadListener(NPCFactory factory) {
+        System.out.println("Hmmm");
         npcFactory = factory;
     }
 
@@ -26,6 +27,6 @@ public class NPCAutoPacketReadListener implements Listener {
         npcFactory.getNPC(event.getValue("a",Integer.class)).getInteraction().action(
                 event.getPlayer(),
                 (packet.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) ?
-                        NPC.InteractClick.LEFT : NPC.InteractClick.RIGHT);
+                        NPC.InteractClick.RIGHT : NPC.InteractClick.LEFT);
     }
 }

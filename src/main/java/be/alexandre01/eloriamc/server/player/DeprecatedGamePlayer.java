@@ -218,19 +218,10 @@ public class DeprecatedGamePlayer implements HumanEntity {
         return player.getLastDamage();
     }
 
-    @Override
-    public int _INVALID_getLastDamage() {
-        return (int) player._INVALID_getLastDamage();
-    }
 
     @Override
     public void setLastDamage(double damage) {
         player.setLastDamage(damage);
-    }
-
-    @Override
-    public void _INVALID_setLastDamage(int damage) {
-        player._INVALID_setLastDamage(damage);
     }
 
     @Override
@@ -328,60 +319,36 @@ public class DeprecatedGamePlayer implements HumanEntity {
         player.damage(amount);
     }
 
-    @Override
-    public void _INVALID_damage(int amount) {
-        player._INVALID_damage(amount);
-    }
 
     @Override
     public void damage(double amount, Entity source) {
         player.damage(amount, source);
     }
 
-    @Override
-    public void _INVALID_damage(int amount, Entity source) {
-        player._INVALID_damage(amount, source);
-    }
 
     @Override
     public double getHealth() {
         return player.getHealth();
     }
 
-    @Override
-    public int _INVALID_getHealth() {
-        return player._INVALID_getHealth();
-    }
 
     @Override
     public void setHealth(double health) {
         player.setHealth(health);
     }
 
-    @Override
-    public void _INVALID_setHealth(int health) {
-        player._INVALID_setHealth(health);
-    }
 
     @Override
     public double getMaxHealth() {
         return player.getMaxHealth();
     }
 
-    @Override
-    public int _INVALID_getMaxHealth() {
-        return player._INVALID_getMaxHealth();
-    }
 
     @Override
     public void setMaxHealth(double health) {
         player.setMaxHealth(health);
     }
 
-    @Override
-    public void _INVALID_setMaxHealth(int health) {
-        player._INVALID_setMaxHealth(health);
-    }
 
     @Override
     public void resetMaxHealth() {

@@ -32,9 +32,7 @@ public class Reflections {
     }
 
     public void sendPacket(Player player, Packet<?> packet){
-
             sendPacket(packet,player);
-
     }
 
 }

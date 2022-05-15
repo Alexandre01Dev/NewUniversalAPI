@@ -1,5 +1,8 @@
 package be.alexandre01.eloriamc.server.player;
 
+import be.alexandre01.eloriamc.API;
+import be.alexandre01.eloriamc.chat.ChatConfiguration;
+import be.alexandre01.eloriamc.chat.ChatOptions;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -18,12 +21,14 @@ import java.util.concurrent.ScheduledExecutorService;
 public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     SpigotPlugin spigotPlugin;
+    API api;
     Player player;
 
     public BasePlayer(Player player) {
         super(((CraftServer) player.getServer()), ((CraftPlayer) player).getHandle());
         this.player = player;
         this.spigotPlugin = SpigotPlugin.getInstance();
+        this.api = API.getInstance();
     }
 
 
@@ -46,16 +51,16 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
      * @param message
      * */
     public void sendMessage(ChatOptions chatOptions, String message){
-        sendMessage(gameAPI.getChatConfiguration().getChatTextBuilder(chatOptions.getName()),message);
+        sendMessage(api.getChatConfiguration().getChatTextBuilder(chatOptions.getName()),message);
     }
     public void sendMessage(ChatOptions chatOptions, BaseComponent... components){
-        sendMessage(gameAPI.getChatConfiguration().getChatTextBuilder(chatOptions.getName()),components);
+        sendMessage(api.getChatConfiguration().getChatTextBuilder(chatOptions.getName()),components);
     }
     public void sendMessage(String name, String message){
-        sendMessage(gameAPI.getChatConfiguration().getChatTextBuilder(name),message);
+        sendMessage(api.getChatConfiguration().getChatTextBuilder(name),message);
     }
     public void sendMessage(String name, BaseComponent... components){
-        sendMessage(gameAPI.getChatConfiguration().getChatTextBuilder(name),components);
+        sendMessage(api.getChatConfiguration().getChatTextBuilder(name),components);
     }
     public void sendMessage(ChatConfiguration.ChatTextBuilder chatTextBuilder, String message){
         spigot().sendMessage(chatTextBuilder.build(this,message));

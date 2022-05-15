@@ -5,6 +5,7 @@ import be.alexandre01.eloriamc.server.events.nms.EventUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 public class ListenerPlayerManager extends EventUtils {
 
-    Multimap<Player, IPlayerEvent> listeners = ArrayListMultimap.create();
+    @Getter Multimap<Player, IPlayerEvent> listeners = ArrayListMultimap.create();
     HashMap<Class<? extends Event>, IPlayerEvent> events = new HashMap<>();
 
     public <T extends Event> IPlayerEvent<T> registerEvent(Class<T> t, String handler, Player player, IPlayerEvent<T> customEvent){
