@@ -76,4 +76,8 @@ public class AutoConfig {
     public Location getLocation(String location) {
         return locationHashMap.get(location);
     }
+
+    public void setLocation(String locationName, Location location) {
+        locationHashMap.put(locationName, location);
+    }
 }
