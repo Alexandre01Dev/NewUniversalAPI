@@ -12,12 +12,17 @@ import be.alexandre01.eloriamc.server.packets.skin.SkinFactory;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBar;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.lang.reflect.Field;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -78,8 +83,19 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
         //send bossbar
         bossBarManagerTask.setBossBar(player,"TheFuckingBossBar");
+    }
 
+    public void registerCommand(String commandName, Command commandClass){
+        try{
+            final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
+            bukkitCommandMap.setAccessible(true);
+            CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+
+            commandMap.register(commandName, commandClass);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
     }
 

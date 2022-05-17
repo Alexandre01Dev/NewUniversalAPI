@@ -136,8 +136,6 @@ public class NPCUniversalEntity extends NPCInstance {
     }
 
 
-
-
     public void setMetadata(int i, Object o){
         DataWatcher w = new DataWatcher((Entity)null);
         w.a(i, o);
