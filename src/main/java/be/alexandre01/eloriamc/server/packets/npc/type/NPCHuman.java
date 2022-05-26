@@ -35,6 +35,7 @@ public class NPCHuman extends NPCInstance {
         this.location = npc.getLocation();
         this.gameProfile = npc.getGameProfile();
         this.skinData = npc.getSkinData();
+        System.out.println(skinData);
         this.player = player;
     }
 

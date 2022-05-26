@@ -111,14 +111,14 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        NPC npc = new NPC("§a§lCreepah",player.getLocation(),EntityType.CREEPER);
+        NPC npc = new NPC("§a§lCreepah",player.getLocation());
+        npc.setSkin(skinFactory.getSkinData("Boug1"));
         npc.setInteraction(new NPC.NPCInteract() {
             @Override
             public void action(Player player, NPC.InteractClick click) {
                 player.sendMessage("Ksss there, tu viens de "+ click.name());
             }
         });
-        npc.get(player, NPCUniversalEntity.class);
         npc.initAndShow(player);
 
         BossBar bossBar = new BossBar("§fTheFuckingBossBar",100);
