@@ -1,5 +1,7 @@
 package be.alexandre01.eloriamc.manager;
 
+import be.alexandre01.eloriamc.data.PlayerData;
+import be.alexandre01.eloriamc.data.PlayerDataManager;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.TechsCode.UltraPermissions.UltraPermissions;
@@ -35,6 +37,16 @@ public class RankManager {
         Optional<String> prefix = it.get(0).getSuffix();
         return prefix.map(s -> s + " ").orElse(null);
     }
+
+    public String getGroup() {
+        Optional<User> user = ultraPermissionsAPI.getUsers().name(player.getName());
+        if(!user.isPresent()) return null;
+        GroupList it = user.get().getActiveGroups().bestToWorst();
+        if(it.isEmpty()) return null;
+        String groupName = it.get(0).getName();
+        return groupName;
+    }
+
 
     public String getPlayerPrefix() {
         Optional<User> user = ultraPermissionsAPI.getUsers().name(player.getName());

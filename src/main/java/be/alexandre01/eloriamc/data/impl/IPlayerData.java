@@ -1,17 +1,16 @@
 package be.alexandre01.eloriamc.data.impl;
 
+import be.alexandre01.eloriamc.data.TypeData;
+
 public interface IPlayerData {
 
     void setupPlayer();
 
     void savePlayer();
 
+    void add(TypeData typeData, int i);
 
-    void addCoins(int i);
+    void remove(TypeData typeData, int i);
 
-    void removeCoins(int i);
-
-    void addGemmes(int i);
-
-    void removeGemmes(int i);
+    void set (TypeData typeData, int i);
 }

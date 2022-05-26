@@ -1,5 +1,7 @@
-package be.alexandre01.eloriamc.data;
+package be.alexandre01.eloriamc.data.game;
 
+import be.alexandre01.eloriamc.data.PlayerData;
+import be.alexandre01.eloriamc.data.TypeData;
 import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
@@ -7,25 +9,20 @@ import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class PlayerData implements IPlayerData {
+public class KbWarrior implements IPlayerData {
 
     private final String playerName;
     private final String uuid;
 
-    private int coins;
-    private int gemmes;
-
-    private boolean mod;
+    private int kill;
+    private int death;
+    private int bestKs;
 
 
 
@@ -40,22 +37,22 @@ public class PlayerData implements IPlayerData {
 
 
     public void savePlayerCache(){
-        RedisManager.set("Player:" + playerName, this.toJson());
+        RedisManager.set("KbWarrior:" + playerName, this.toJson());
     }
 
     public void deletePlayerCache(){
-        RedisManager.del("Player:" + playerName);
+        RedisManager.del("KbWarrior:" + playerName);
     }
 
     @Override
     public void setupPlayer() {
-        Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
+        Mysql.query("SELECT * FROM kbwarrior WHERE uuid='" + uuid + "'", rs -> {
             try {
                 if(!rs.next()) {
-                    Mysql.update("INSERT INTO users (uuid, name, playerData) VALUES ('" + uuid + "', '" + playerName + "', '" + this.toJson() + "')");
+                    Mysql.update("INSERT INTO users (uuid, name, kbData) VALUES ('" + uuid + "', '" + playerName + "', '" + this.toJson() + "')");
                     this.savePlayerCache();
                 } else {
-                    PlayerData playerData = PlayerData.fromJson(rs.getString("playerData"));
+                    PlayerData playerData = PlayerData.fromJson(rs.getString("kbData"));
                     playerData.savePlayerCache();
                 }
             } catch (SQLException e) {
@@ -66,10 +63,10 @@ public class PlayerData implements IPlayerData {
 
     @Override
     public void savePlayer() {
-        Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
+        Mysql.query("SELECT * FROM kbwarrior WHERE uuid='" + uuid + "'", rs -> {
             try {
                 if (rs.next()) {
-                    Mysql.update("UPDATE users SET playerData= '" + this.toJson() + "' WHERE uuid= '" + uuid + "'");
+                    Mysql.update("UPDATE users SET kbData= '" + this.toJson() + "' WHERE uuid= '" + uuid + "'");
                     deletePlayerCache();
                 }
             } catch (SQLException e) {
@@ -81,38 +78,43 @@ public class PlayerData implements IPlayerData {
     @Override
     public void add(TypeData typeData, int i) {
         switch (typeData) {
-            case Coins:
-                coins = coins + i;
+            case KillKbW:
+                kill = kill + i;
                 break;
-            case Gemmes:
-                gemmes = gemmes + i;
+            case DeathKbW:
+                death = death + i;
                 break;
+            case BestKSKbw:
+                bestKs = bestKs + i;
         }
     }
 
     @Override
     public void remove(TypeData typeData, int i) {
         switch (typeData) {
-            case Coins:
-                coins = coins - i;
+            case KillKbW:
+                kill = kill - i;
                 break;
-            case Gemmes:
-                gemmes = gemmes - i;
+            case DeathKbW:
+                death = death - i;
                 break;
+            case BestKSKbw:
+                bestKs = bestKs - i;
         }
     }
 
     @Override
     public void set(TypeData typeData, int i) {
         switch (typeData) {
-            case Coins:
-                coins = i;
+            case KillKbW:
+                kill = i;
                 break;
-            case Gemmes:
-                gemmes =  i;
+            case DeathKbW:
+                death = i;
                 break;
+            case BestKSKbw:
+                bestKs = i;
         }
 
     }
-
 }
