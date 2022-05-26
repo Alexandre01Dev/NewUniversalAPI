@@ -28,6 +28,5 @@ public class RegisterEvent<T extends Event> implements Listener {
         IEvent<T> iEvent = (IEvent<T>) eventsFactory.getEventHashMap().get(event.getClass());
         iEvent.onEvent(event);
         System.out.println(event);
-        System.out.println(event);
     }
 }

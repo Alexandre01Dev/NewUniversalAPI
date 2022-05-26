@@ -21,13 +21,17 @@ public class EventsFactory extends EventUtils {
         spigotPlugin = SpigotPlugin.getInstance();
     }
 
-    public <T extends Event> IEvent<T> fastRegisterEvent(Class<T> event, IEvent<T> iEvent) {
+    public <T extends Event> IEvent<T> fastRegisterEvent(Class<?> event, IEvent<? extends Event> iEvent) {
         if(!eventHashMap.containsKey(iEvent.getEventClass())){
             eventHashMap.put(iEvent.getEventClass(), iEvent);
             Listener registerEvent = new RegisterEvent<>(iEvent.getEventClass(), this);
             for (Map.Entry<Class<? extends Event>, Set<RegisteredListener>> entry : spigotPlugin.getPluginLoader().createRegisteredListeners(registerEvent, spigotPlugin).entrySet())
                 getEventListeners(getRegistrationClass(iEvent.getEventClass())).registerAll(entry.getValue());
         }
-        return iEvent;
+        return (IEvent<T>) iEvent;
+    }
+
+    public void unregisterEvent(IEvent<? extends Event> iEvent){
+        eventHashMap.remove(iEvent.getEventClass());
     }
 }

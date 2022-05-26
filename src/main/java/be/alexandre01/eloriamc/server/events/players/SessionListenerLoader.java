@@ -10,7 +10,7 @@ public class SessionListenerLoader {
     }
 
     public void playerJoinSession(BasePlayer basePlayer){
-        for (IPlayerEvent<?> iPlayerEvent  : session.getSessionManager().getPlayerEvents());
+        for (IPlayerEvent<?> iPlayerEvent  : session.getListenerManager().getPlayerEvents());
 
     }
 }

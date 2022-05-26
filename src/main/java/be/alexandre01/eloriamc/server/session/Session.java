@@ -9,14 +9,18 @@ import java.util.ArrayList;
 
 @Getter
 public abstract class Session {
+    private boolean isStarted = false;
     private ArrayList<Class<?>> cancelledListener = new ArrayList<>();
     @Getter ArrayList<BasePlayer> players = new ArrayList<>();
+
     SessionParameters sessionParameters = new SessionParameters();
 
     @Getter
     SpigotPlugin spigotPlugin;
 
-    public final SessionListenerManager sessionManager = new SessionListenerManager();
+    public final SessionListenerManager listenerManager = new SessionListenerManager();
+
+    public final SessionManager sessionManager = SessionManager.getInstance();
     private String name;
 
     public Session(String name,boolean isTemporary){
@@ -29,7 +33,28 @@ public abstract class Session {
         players.add(player);
     }
 
-    protected abstract void start(SpigotPlugin gameAPI);
+    public void finish(){
+        isStarted = false;
+        System.out.println("Session"+ name+" finished");
+        listenerManager.unregisterAllEvents();
+        listenerManager.unregisterAllPlayerEvents();
+        stop(spigotPlugin);
+        if(sessionParameters.getRedirection() != null){
+            if(!sessionParameters.getRedirection().isStarted)
+                sessionParameters.getRedirection().start(spigotPlugin);
+        }
 
-    protected abstract void stop(SpigotPlugin gameAPI);
+    }
+
+
+    public void processStart(){
+        isStarted = true;
+        System.out.println("Session"+ name+" started");
+        start(spigotPlugin);
+    }
+    protected void start(SpigotPlugin base){}
+
+    protected void stop(SpigotPlugin base){}
+
+
 }

@@ -8,6 +8,7 @@ public class SessionManager {
 
     private HashMap<String, Session> sessions;
     private HashMap<BasePlayer, Session> playersOnSession;
+    private Session defaultSession = null;
     private static SessionManager instance;
 
     public static SessionManager getInstance() {
@@ -33,4 +34,7 @@ public class SessionManager {
         return null;
     }
 
+    public Session getDefault() {
+        return defaultSession;
+    }
 }
