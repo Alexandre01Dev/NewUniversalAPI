@@ -6,7 +6,7 @@ import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
 import be.alexandre01.eloriamc.server.listener.PlayerJoin;
 import be.alexandre01.eloriamc.server.listener.PlayerQuit;
 import be.alexandre01.eloriamc.server.listener.ServerAttached;
-import be.alexandre01.eloriamc.server.session.listeners.PlayerListener;
+
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
@@ -22,6 +22,7 @@ import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.player.BasePlayerManager;
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.SessionManager;
+import be.alexandre01.eloriamc.server.session.listeners.PlayerListener;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
 import lombok.Getter;
 import org.bukkit.Bukkit;

@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemBuilder {
@@ -129,4 +130,18 @@ public class ItemBuilder {
         }
         return is;
     }
-}
+    public ItemStack build(Boolean showItemInfo,ItemFlag... itemFlagsToKeep) {
+        ItemMeta im = this.is.getItemMeta();
+        List<ItemFlag> itemFlags = Arrays.asList(itemFlagsToKeep);
+        if (!showItemInfo) {
+            for(ItemFlag itemFlag : ItemFlag.values()){
+                if(!itemFlags.contains(itemFlag)){
+                    im.addItemFlags(itemFlag);
+            }
+            this.is.setItemMeta(im);
+        }
+            return this.is;
+        }
+        return null;
+        }
+    }
