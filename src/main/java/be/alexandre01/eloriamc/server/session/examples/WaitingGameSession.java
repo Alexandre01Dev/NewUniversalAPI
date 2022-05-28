@@ -1,12 +1,14 @@
 package be.alexandre01.eloriamc.server.session.examples;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.player.BasePlayer;
+import be.alexandre01.eloriamc.server.player.GamePlayer;
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.Update;
 import be.alexandre01.eloriamc.server.session.runnables.Updater;
 
-public class WaitingGameSession extends Session implements Updater {
+public class WaitingGameSession extends Session<GamePlayer> implements Updater {
     private int maxTime;
     private int minTime;
 
@@ -16,6 +18,7 @@ public class WaitingGameSession extends Session implements Updater {
         super(name, isTemporary);
         this.maxTime = maxTime;
         this.minTime = minTime;
+
     }
     public WaitingGameSession(String name, boolean isTemporary, int maxTime, int minTime, int playerDif) {
         super(name, isTemporary);
@@ -23,6 +26,7 @@ public class WaitingGameSession extends Session implements Updater {
         this.minTime = minTime;
         this.playerDif = playerDif;
     }
+
 
 
     @Override
@@ -49,6 +53,7 @@ public class WaitingGameSession extends Session implements Updater {
                 int players = getPlayers().size();
                 if(players >= maxPlayers){
                     getPlayers().forEach(basePlayer -> {
+
                         basePlayer.sendActionBar("§aTous les joueurs sont présents");
                         });
                         base.getUpdateFactory().callScheduler("onEnd",base);

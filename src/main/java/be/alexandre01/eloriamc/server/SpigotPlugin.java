@@ -3,26 +3,28 @@ package be.alexandre01.eloriamc.server;
 import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
+import be.alexandre01.eloriamc.server.session.listeners.PlayerListener;
+import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
 import be.alexandre01.eloriamc.server.packets.npc.NPC;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
-import be.alexandre01.eloriamc.server.packets.npc.type.NPCUniversalEntity;
 import be.alexandre01.eloriamc.server.packets.skin.MojangUtils;
 import be.alexandre01.eloriamc.server.packets.skin.SkinData;
 import be.alexandre01.eloriamc.server.packets.skin.SkinFactory;
 import be.alexandre01.eloriamc.server.packets.skin.SkinPlayer;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBar;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
-import be.alexandre01.eloriamc.server.player.GamePlayer;
-import be.alexandre01.eloriamc.server.player.GamePlayerManager;
+import be.alexandre01.eloriamc.server.player.BasePlayer;
+import be.alexandre01.eloriamc.server.player.BasePlayerManager;
+import be.alexandre01.eloriamc.server.session.Session;
+import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +32,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.util.UUID;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -43,18 +44,23 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private final NPCFactory npcFactory = new NPCFactory();
 
-    @Getter private ListenerPlayerManager listenerPlayerManager = new ListenerPlayerManager();
+    @Getter private final ListenerPlayerManager listenerPlayerManager = new ListenerPlayerManager();
 
-    @Getter private BossBarManagerTask bossBarManagerTask = new BossBarManagerTask();
+    @Getter private final BossBarManagerTask bossBarManagerTask = new BossBarManagerTask();
 
-    @Getter private UpdateFactory updateFactory = new UpdateFactory();
+    @Getter private final UpdateFactory updateFactory = new UpdateFactory();
 
-    @Getter private GamePlayerManager gamePlayerManager= new GamePlayerManager();
+    @Getter private final BasePlayerManager basePlayerManager = new BasePlayerManager();
 
+    @Getter private final ModuleLoader moduleLoader = new ModuleLoader(this);
+
+    @Getter private final SessionManager sessionManager = SessionManager.getInstance();
 
     @Override
     public void onEnable() {
         instance = this;
+        saveConfig();
+        saveDefaultConfig();
         packetInjectorManager = new PacketInjectorManager();
         AutoPacketInjectorJoin.init(AutoPacketInjectorJoin.PacketInjectorType.INPUT_DECODER);
 
@@ -62,6 +68,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         eventsFactory = new EventsFactory();
         npcFactory.initialize(true);
 
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(this, this);
         registerCommand("skin", new Command("Skin") {
             @Override
@@ -94,11 +101,27 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
 
 
+
+
                 return false;
             }
         });
 
         skinFactory.registerSkinData("Boug1",new SkinData("ewogICJ0aW1lc3RhbXAiIDogMTY1MTI0OTM1NTkxOCwKICAicHJvZmlsZUlkIiA6ICIxMGZhZDhhOWVmZTQ0NzEzYmYxMThjY2MzODRkZTU3NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJDb2ZmZWVCdW5ueSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80NTNkM2I2MmFkOTVlMjFkZDJiOTFiZGFhMDI5OWViNWJhYWZkYzEyYmYxN2UxMjAwZGI5OWMwNTQwZWJjYjI2IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjYzA4ODQwNzAwNDQ3MzIyZDk1M2EwMmI5NjVmMWQ2NWExM2E2MDNiZjY0YjE3YzgwM2MyMTQ0NmZlMTYzNSIKICAgIH0KICB9Cn0=","fUy+nnSryBoMJQiTOqfuCTlxErYexvhseHEDqimCNfnQ8nRSfGIH8PCXv6mTq7p+3hJ0ZjE9n5bDXsEGPhLz9MJyU2QHfK1k2mdqHEopPUSsy88b/E1+xib2ZS5Lbv/lP843Al1ABupnaOgboOxknt4tiO5QgKowIqJDzffF0DYMbAKe2QBKxDKZiZeFFoSkmvJnd0fLf6AK5je7KzBxebWYzOrPdkbSANO5tNtZ79rJzAYb6lOe6osZ3yycJ7HRZVicB3WJA9znGSr/CjQQLw1XU0vKbC26MoG8sTHAy1GJxEWe7eMBkWyo7IPbJj6+lD7DQJ6PZUfMRfQ+NMRRja0UqMgC5jQmQQCgvAWEclmZSmbv9V9cPUa/kifIZVI9ySqx395Dl6ghQdh7pnk3+weHxyE44vVH9qnisPF/TS2LeD4I/ZLPhcgZpZ/98oavbznckdARcAwHZNWtSYP7KNGde6qBkN7LnjKfM1B5bqrAcSF8RWQJ26aUespULN9thpuA6lvsNJKMa39up0qeaaqI25Sp9eH+qsT5qHA6SYhm2Hs+tttnvPlN2LZQ6poobJ4ALYbkAR7JR8bwxQvfppBHz1z3WLsTu6JvVa3CVJn+2i4Fi9iMcpNZFaiA58PFNXI4sZR3DEmRMyt8cbb536Vzr3/1L791366V8V++dh0="));
+        moduleLoader.getModules().forEach(module -> {
+            Class<?> c = module.getDefaultSession();
+                Session session = null;
+                try {
+                    session = (Session) c.newInstance();
+                    session.processStart();
+
+                    sessionManager.setDefaultSession(session);
+                } catch (InstantiationException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+        });
 
     }
 
@@ -126,18 +149,27 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         //send bossbar
         bossBarManagerTask.setBossBar(player,"TheFuckingBossBar");
 
-        getGamePlayer(player);
+        getBasePlayer(player);
+
+
 
     }
 
 
 
-    public GamePlayer getGamePlayer(Player player){
+    public BasePlayer getBasePlayer(Player player){
 
-        if(getGamePlayerManager().getPlayerHashMap().containsKey(player)){
-            return getGamePlayerManager().getPlayerHashMap().get(player);
+        if(getBasePlayerManager().getPlayerHashMap().containsKey(player)){
+            return getBasePlayerManager().getPlayerHashMap().get(player);
         }
-        return new GamePlayer(player);
+        return new BasePlayer(player);
+    }
+    public <T> T getBasePlayer(Player player, T b){
+
+        if(getBasePlayerManager().getPlayerHashMap().containsKey(player)){
+            return (T) getBasePlayerManager().getPlayerHashMap().get(player);
+        }
+        return (T) getBasePlayerManager().createPlayerObject(player);
     }
 
     public void registerCommand(String commandName, Command commandClass){
