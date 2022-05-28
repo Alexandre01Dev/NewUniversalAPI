@@ -3,6 +3,7 @@ package be.alexandre01.eloriamc.server;
 import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
+import be.alexandre01.eloriamc.server.listener.ServerAttached;
 import be.alexandre01.eloriamc.server.session.listeners.PlayerListener;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
@@ -55,6 +56,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     @Getter private final ModuleLoader moduleLoader = new ModuleLoader(this);
 
     @Getter private final SessionManager sessionManager = SessionManager.getInstance();
+    @Getter private ServerAttached serverAttached;
 
     @Override
     public void onEnable() {
@@ -68,8 +70,10 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         eventsFactory = new EventsFactory();
         npcFactory.initialize(true);
 
+        this.getServer().getPluginManager().registerEvents(serverAttached = new ServerAttached(), this);
+
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(this, this);
         registerCommand("skin", new Command("Skin") {
             @Override
             public boolean execute(CommandSender commandSender, String s, String[] strings) {
