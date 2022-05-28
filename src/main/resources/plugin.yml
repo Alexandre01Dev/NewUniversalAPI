@@ -4,3 +4,4 @@ main: be.alexandre01.eloriamc.server.SpigotPlugin
 api-version: 1.18
 depend:
   - UltraPermissions
+  - DreamNetwork-Core

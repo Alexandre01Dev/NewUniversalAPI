@@ -108,6 +108,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     }
 
 
+    /*
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
@@ -129,6 +130,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         getGamePlayer(player);
 
     }
+
+     */
 
 
 

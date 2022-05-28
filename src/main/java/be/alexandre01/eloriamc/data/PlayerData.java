@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.data;
 
+import be.alexandre01.eloriamc.data.game.KbWarrior;
 import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
@@ -22,10 +23,12 @@ public class PlayerData implements IPlayerData {
     private final String playerName;
     private final String uuid;
 
-    private int coins;
-    private int gemmes;
+    private float coins;
+    private float ecu;
 
     private boolean mod;
+
+    private KbWarrior kbWarrior;
 
 
 
@@ -84,8 +87,8 @@ public class PlayerData implements IPlayerData {
             case Coins:
                 coins = coins + i;
                 break;
-            case Gemmes:
-                gemmes = gemmes + i;
+            case Ecu:
+                ecu = ecu + i;
                 break;
         }
     }
@@ -96,8 +99,8 @@ public class PlayerData implements IPlayerData {
             case Coins:
                 coins = coins - i;
                 break;
-            case Gemmes:
-                gemmes = gemmes - i;
+            case Ecu:
+                ecu = ecu - i;
                 break;
         }
     }
@@ -108,8 +111,8 @@ public class PlayerData implements IPlayerData {
             case Coins:
                 coins = i;
                 break;
-            case Gemmes:
-                gemmes =  i;
+            case Ecu:
+                ecu =  i;
                 break;
         }
 
