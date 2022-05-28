@@ -3,6 +3,8 @@ package be.alexandre01.eloriamc.server;
 import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
+import be.alexandre01.eloriamc.server.listener.PlayerJoin;
+import be.alexandre01.eloriamc.server.listener.PlayerQuit;
 import be.alexandre01.eloriamc.server.listener.ServerAttached;
 import be.alexandre01.eloriamc.server.session.listeners.PlayerListener;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
@@ -71,6 +73,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         npcFactory.initialize(true);
 
         this.getServer().getPluginManager().registerEvents(serverAttached = new ServerAttached(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         //getServer().getPluginManager().registerEvents(this, this);
