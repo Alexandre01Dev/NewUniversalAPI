@@ -15,8 +15,8 @@ public class GamePlayer extends BasePlayer {
 
 
     public static GamePlayer get(Player player){
-        if(spigotPlugin.getGamePlayerManager().getPlayerHashMap().containsKey(player)){
-            return spigotPlugin.getGamePlayerManager().getPlayerHashMap().get(player);
+        if(spigotPlugin.getBasePlayerManager().getPlayerHashMap().containsKey(player)){
+            return (GamePlayer) spigotPlugin.getBasePlayerManager().getPlayerHashMap().get(player);
         }
         return new GamePlayer(player);
     }

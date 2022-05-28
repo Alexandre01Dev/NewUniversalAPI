@@ -7,16 +7,17 @@ import lombok.Setter;
 public abstract class Task {
     private SpigotPlugin spigotPlugin;
     @Getter private TaskRunnable taskRunnable = null;
-
     public Task(){
         spigotPlugin = SpigotPlugin.getInstance();
     }
-     public Integer id;
+    public Integer id;
     public abstract void cancel();
 
     public void delayed(Runnable runnable){
         spigotPlugin.getServer().getScheduler().scheduleSyncDelayedTask(spigotPlugin, runnable, id);
     }
+
+
 
 
     public void onUpdate(TaskRunnable taskRunnable){
