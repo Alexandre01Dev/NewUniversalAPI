@@ -20,8 +20,23 @@ public class PlayerJoin implements Listener, NameTagImpl {
             case "Responsable":
                 setNameTag(player, "02Resp", rankManager.getRankPrefix(), " §8┃ §a✔");
                 break;
+            case "SMod":
+                setNameTag(player, "03SMod", rankManager.getRankPrefix(), " §8┃ §a✔");
+                break;
+            case "Mod":
+                setNameTag(player, "04Mod", rankManager.getRankPrefix(), " §8┃ §a✔");
+                break;
+            case "Helper":
+                setNameTag(player, "05Helper", rankManager.getRankPrefix(), " §8┃ §a✔");
+                break;
+            case "Builder":
+                setNameTag(player, "06Builder", rankManager.getRankPrefix(), " §8┃ §a✔");
+                break;
             case "Custom":
-                setNameTag(player, "05" + player.getName(), rankManager.getPlayerPrefix(), "");
+                setNameTag(player, "07" + player.getName(), rankManager.getPlayerPrefix(), "");
+                break;
+            case "Joueur":
+                setNameTag(player, "99Joueur", rankManager.getRankPrefix(), "");
                 break;
         }
 
