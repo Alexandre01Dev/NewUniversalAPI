@@ -18,7 +18,7 @@ public class AutoPacketInjectorJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         System.out.println("[EloRiaMC] Injecting packets for " + e.getPlayer().getName());
-        PacketInjector packetInjector = new PacketInjector(e.getPlayer());
+        PacketInjector packetInjector = spigotPlugin.getBasePlayer(e.getPlayer()).getPacketInjector();
         if(type == PacketInjectorType.ALL || type == PacketInjectorType.INPUT_DECODER)
             packetInjector.injectInputDecoder();
         if(type == PacketInjectorType.ALL || type == PacketInjectorType.OUTPUT_ENCODER)

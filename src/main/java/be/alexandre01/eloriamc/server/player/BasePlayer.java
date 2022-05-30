@@ -4,6 +4,7 @@ import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.chat.ChatConfiguration;
 import be.alexandre01.eloriamc.chat.ChatOptions;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.packets.injector.PacketInjector;
 import be.alexandre01.eloriamc.server.session.players.PlayerDamager;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -22,6 +23,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    @Getter
+    PacketInjector packetInjector;
     @Getter PlayerDamager damagerUtils = new PlayerDamager();
     SpigotPlugin spigotPlugin;
     API api;
@@ -32,6 +35,7 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
         this.player = player;
         this.spigotPlugin = SpigotPlugin.getInstance();
         this.api = API.getInstance();
+        this.packetInjector = new PacketInjector(player);
     }
 
 
