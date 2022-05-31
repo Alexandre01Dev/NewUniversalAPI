@@ -1,5 +1,7 @@
 package be.alexandre01.eloriamc.server.listener;
 
+import be.alexandre01.eloriamc.data.PlayerData;
+import be.alexandre01.eloriamc.data.PlayerDataManager;
 import be.alexandre01.eloriamc.manager.RankManager;
 import be.alexandre01.eloriamc.server.player.NameTagImpl;
 import org.bukkit.entity.Player;
@@ -12,6 +14,10 @@ public class PlayerJoin implements Listener, NameTagImpl {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+
+        PlayerData playerData = PlayerDataManager.getPlayerData(player.getName());
+        playerData.getSettings().setNotifFriend(false);
+        playerData.savePlayerCache();
         RankManager rankManager = new RankManager(player.getName());
         switch (rankManager.getGroup()) {
             case "Admin":
