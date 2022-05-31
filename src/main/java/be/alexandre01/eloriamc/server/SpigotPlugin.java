@@ -92,24 +92,26 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                     return true;
                 }
 
-                String uuid = MojangUtils.getUUID(strings[0]);
-                if(uuid == null){
-                    player.sendMessage("§cPlayer not found");
-                    return false;
-                }
+                new Thread(){
+                    @Override
+                    public void run() {
+                        String uuid = MojangUtils.getUUID(strings[0]);
+                        if(uuid == null){
+                            player.sendMessage("§cPlayer not found");
+                            return;
+                        }
 
-                SkinData skinData =  MojangUtils.getSkinDataFromUUID(uuid);
-                if(skinData == null){
-                    player.sendMessage("§cPlayerSkin not found");
-                    return false;
-                }
+                        SkinData skinData =  MojangUtils.getSkinDataFromUUID(uuid);
+                        if(skinData == null){
+                            player.sendMessage("§cPlayerSkin not found");
+                            return;
+                        }
 
-                SkinPlayer skinPlayer = new SkinPlayer(player);
-                skinPlayer.applySkin(skinData);
+                        SkinPlayer skinPlayer = new SkinPlayer(player);
+                        skinPlayer.applySkin(skinData);
 
-
-
-
+                    }
+                }.run();
 
 
                 return false;
