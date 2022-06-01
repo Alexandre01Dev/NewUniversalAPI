@@ -19,6 +19,7 @@ import net.minecraft.server.v1_8_R3.Tuple;
 import org.bukkit.entity.Enderman;
 import org.bukkit.event.Listener;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -74,12 +75,19 @@ public class PlayerData implements IPlayerData {
                 } else {
                     PlayerData playerData = fromJson(rs.getString("playerData"));
                     for( Tuple<Identifier,String> id : playerData.getIdentifiers()){
+                        System.out.println("cc" + id.b() + " " +  id.a());
                         if(id.a() == null){
+                            System.out.println("null");
                             try {
                                 try {
                                     //Fait un new manuellement aux classes (ex: Madness,KbWarrior) et l'injecte dedans  si elles n'existent pas
-                                    // <!> Attention a bien mettre des valeurs par défaut+ Mettre un @NoArgsConstructor dans ces classes <!>
-                                    playerData.getClass().getField(id.b()).set(playerData,id.a().getClass().newInstance());
+                                    // <!> Attention a bien mettre des valeurs par défaut+ Mettre un @NoArgsConstructor dans ces classes <!>+
+
+                                    Field field = playerData.getClass().getDeclaredField(id.b());
+                                    System.out.println("Fuck 2");
+                                    field.set(playerData,field.getType().newInstance());
+                                    System.out.println("TESTED");
+                                    playerData.savePlayerCache();
                                 } catch (InstantiationException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -90,9 +98,8 @@ public class PlayerData implements IPlayerData {
                             }
                         }
                     }
-
-
                     playerData.savePlayerCache();
+
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -149,6 +156,51 @@ public class PlayerData implements IPlayerData {
                 break;
         }
 
+    }
+
+    public List<Tuple<Identifier,String>> getIdentifiers(){
+        List<Tuple<Identifier,String>> ids = new ArrayList<>();
+        System.out.println("LIST USED");
+        for(Field field : this.getClass().getDeclaredFields()){
+            System.out.println("FOR USED "+ field.getName());
+            System.out.println("FOR TYPE "+ field.getType());
+            System.out.println("FOR ANNOTED"+ field.getAnnotatedType());
+            System.out.println("FOR GENERIC"+ field.getGenericType());
+            field.setAccessible(true);
+            System.out.println();
+
+            System.out.println(isInheritedClass(Identifier.class,field.getType()));
+            if(   isInheritedClass(Identifier.class,field.getType())){
+                System.out.println("SHEESH");
+                try {
+                    ids.add(new Tuple<>((Identifier) field.get(this),field.getName()));
+                    System.out.println(ids);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        for(Field field : this.getClass().getFields()){
+            field.setAccessible(true);
+            if(field.getType().isAssignableFrom(Identifier.class)){
+                System.out.println("SHEESH");
+                try {
+                    ids.add(new Tuple<>((Identifier) field.get(this),field.getName()));
+                    System.out.println(ids);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ids;
+    }
+    public boolean isInheritedClass(Class<?> parent, Class<?> child) {
+        if (parent.isAssignableFrom(child)) {
+            // is child or same class
+            return parent.isAssignableFrom(child.getSuperclass());
+        } else {
+            return false;
+        }
     }
 
 }
