@@ -33,8 +33,11 @@ public class PlayerData implements IPlayerData {
     private final String playerName;
     private final String uuid;
 
-    private float coins;
-    private float ecu;
+    private int coins;
+    private int ecu;
+
+    private float exp;
+    private int level;
 
     private boolean mod;
 

@@ -1,12 +1,15 @@
 package be.alexandre01.eloriamc.server;
 
 import be.alexandre01.eloriamc.API;
+import be.alexandre01.eloriamc.server.commands.RcList;
+import be.alexandre01.eloriamc.server.commands.ReportChat;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
 import be.alexandre01.eloriamc.server.listener.PlayerJoin;
 import be.alexandre01.eloriamc.server.listener.PlayerQuit;
 import be.alexandre01.eloriamc.server.listener.ServerAttached;
 
+import be.alexandre01.eloriamc.server.manager.MessageData;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
@@ -36,6 +39,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -61,6 +65,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     @Getter private final SessionManager sessionManager = SessionManager.getInstance();
     @Getter private ServerAttached serverAttached;
 
+    @Getter private HashMap<Integer, MessageData> messageData = new HashMap<>();
+
     @Override
     public void onEnable() {
         instance = this;
@@ -79,6 +85,9 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         //getServer().getPluginManager().registerEvents(this, this);
+
+        registerCommand("reportchat", new ReportChat("reportchat"));
+        registerCommand("rclist", new RcList("rclist"));
         registerCommand("skin", new Command("Skin") {
             @Override
             public boolean execute(CommandSender commandSender, String s, String[] strings) {

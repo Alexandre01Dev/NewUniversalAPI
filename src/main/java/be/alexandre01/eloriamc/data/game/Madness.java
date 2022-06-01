@@ -14,5 +14,5 @@ public class Madness implements Identifier{
     private int death = 0;
     private int bestks = 0;
     private float elo = 0;
-    private String division = "";
+    private String division = "§6§lBronze IV";
 }

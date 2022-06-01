@@ -21,7 +21,7 @@ public class ProxyJoin implements Listener {
     public void onPostLogin(PostLoginEvent e) {
         ProxiedPlayer player = e.getPlayer();
 
-        PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0, (float) 0.00, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
+        PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0,0, 0, 1, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
         playerData.setupPlayer();
 
         BungeePlugin.getInstance().getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
