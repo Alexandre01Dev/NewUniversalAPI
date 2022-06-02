@@ -4,7 +4,6 @@ import be.alexandre01.eloriamc.data.TypeData;
 
 public interface IPlayerData {
 
-    void setupPlayer();
 
     void savePlayer();
 

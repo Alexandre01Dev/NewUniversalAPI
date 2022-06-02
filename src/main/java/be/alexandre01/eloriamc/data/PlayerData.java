@@ -10,21 +10,12 @@ import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.minecraft.server.v1_8_R3.EntityEnderman;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Tuple;
-import org.bukkit.entity.Enderman;
-import org.bukkit.event.Listener;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -81,47 +72,6 @@ public class PlayerData implements IPlayerData {
         RedisManager.del("Player:" + playerName);
     }
 
-    @Override
-    public void setupPlayer() {
-        Mysql.query("SELECT * FROM users WHERE uuid='" + uuid + "'", rs -> {
-            try {
-                if(!rs.next()) {
-                    Mysql.update("INSERT INTO users (uuid, name, playerData) VALUES ('" + uuid + "', '" + playerName + "', '" + this.toJson() + "')");
-                    this.savePlayerCache();
-                } else {
-                    PlayerData playerData = fromJson(rs.getString("playerData"));
-                    for( Tuple<Identifier,String> id : playerData.getIdentifiers()){
-                        System.out.println("cc" + id.b() + " " +  id.a());
-                        if(id.a() == null){
-                            System.out.println("null");
-                            try {
-                                try {
-                                    //Fait un new manuellement aux classes (ex: Madness,KbWarrior) et l'injecte dedans  si elles n'existent pas
-                                    // <!> Attention a bien mettre des valeurs par défaut+ Mettre un @NoArgsConstructor dans ces classes <!>+
-
-                                    Field field = playerData.getClass().getDeclaredField(id.b());
-                                    System.out.println("Fuck 2");
-                                    field.set(playerData,field.getType().newInstance());
-                                    System.out.println("TESTED");
-                                    playerData.savePlayerCache();
-                                } catch (InstantiationException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            } catch (IllegalAccessException e) {
-                                throw new RuntimeException(e);
-                            } catch (NoSuchFieldException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                    playerData.savePlayerCache();
-
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     @Override
     public void savePlayer() {

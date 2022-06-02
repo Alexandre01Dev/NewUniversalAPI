@@ -3,6 +3,7 @@ package be.alexandre01.eloriamc.proxy.listener;
 import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.Settings;
+import be.alexandre01.eloriamc.data.SetupPlayerData;
 import be.alexandre01.eloriamc.data.game.KbWarrior;
 import be.alexandre01.eloriamc.data.game.Madness;
 import be.alexandre01.eloriamc.proxy.BungeePlugin;
@@ -26,8 +27,8 @@ public class ProxyJoin implements Listener {
     public void onPostLogin(PostLoginEvent e) {
         ProxiedPlayer player = e.getPlayer();
 
-        PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0,0, 0, 1, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
-        playerData.setupPlayer();
+        //PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0,0, 0, 1, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
+        PlayerData playerData = SetupPlayerData.setupPlayer(player.getName(), player.getUniqueId().toString());
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
 
         BungeePlugin.getInstance().getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
