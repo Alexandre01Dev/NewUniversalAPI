@@ -11,13 +11,18 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class ProxyQuit implements Listener {
+    API api;
+    public ProxyQuit(){
+        api = API.getInstance();
+    }
 
     @EventHandler
     public void onQuit(PlayerDisconnectEvent e) {
         ProxiedPlayer player = e.getPlayer();
 
-        PlayerData playerData = API.getInstance().getPlayerDataManager().getPlayerData(player.getName());
+        PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
         playerData.savePlayer();
+        api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
 
         BungeePlugin.getInstance().getOnline().setData("all", ProxyServer.getInstance().getOnlineCount() - 1);
     }

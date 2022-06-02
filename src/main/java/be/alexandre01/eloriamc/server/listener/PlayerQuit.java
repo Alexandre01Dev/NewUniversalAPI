@@ -1,5 +1,7 @@
 package be.alexandre01.eloriamc.server.listener;
 
+import be.alexandre01.eloriamc.API;
+import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.manager.RankManager;
 import be.alexandre01.eloriamc.server.player.NameTagImpl;
 import org.bukkit.entity.Player;
@@ -8,10 +10,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuit implements Listener, NameTagImpl {
+    API api;
+    public PlayerQuit(){
+     api = API.getInstance();
+    }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
+
+         api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
 
         RankManager rankManager = new RankManager(player.getName());
         switch (rankManager.getGroup()) {

@@ -23,6 +23,7 @@ public class PlayerJoin implements Listener, NameTagImpl {
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
         playerData.getSettings().setNotifFriend(false);
         playerData.savePlayerCache();
+        api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         RankManager rankManager = new RankManager(player.getName());
         switch (rankManager.getGroup()) {
             case "Admin":
