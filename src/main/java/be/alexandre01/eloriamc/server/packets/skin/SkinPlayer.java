@@ -59,6 +59,10 @@ public class SkinPlayer extends Reflections {
             public void run() {
                 player.showPlayer(player);
                 connectionpacket.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.showPlayer(player);
+                    connectionpacket.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
+                }
             }
         },5);
 

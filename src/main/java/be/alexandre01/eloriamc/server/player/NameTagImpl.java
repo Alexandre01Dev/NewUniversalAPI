@@ -8,10 +8,6 @@ import org.bukkit.scoreboard.Team;
 
 public interface NameTagImpl {
 
-
-
-
-
     default void setNameTag(Player player, String teamName,String prefix,String suffix){
         Scoreboard score = Bukkit.getScoreboardManager().getMainScoreboard();
         Team t = score.getTeam(teamName);

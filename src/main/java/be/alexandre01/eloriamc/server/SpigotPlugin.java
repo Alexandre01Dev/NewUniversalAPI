@@ -15,10 +15,7 @@ import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
 import be.alexandre01.eloriamc.server.packets.npc.NPC;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
-import be.alexandre01.eloriamc.server.packets.skin.MojangUtils;
-import be.alexandre01.eloriamc.server.packets.skin.SkinData;
-import be.alexandre01.eloriamc.server.packets.skin.SkinFactory;
-import be.alexandre01.eloriamc.server.packets.skin.SkinPlayer;
+import be.alexandre01.eloriamc.server.packets.skin.*;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBar;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
@@ -84,6 +81,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
+
         //getServer().getPluginManager().registerEvents(this, this);
 
         registerCommand("reportchat", new ReportChat("reportchat"));
@@ -92,14 +91,6 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
             @Override
             public boolean execute(CommandSender commandSender, String s, String[] strings) {
                 Player player = (Player) commandSender;
-                if(strings.length == 0){
-
-                    SkinData skinData = skinFactory.getSkinData("Boug1");
-
-                    SkinPlayer skinPlayer = new SkinPlayer(player);
-                    skinPlayer.applySkin(skinData);
-                    return true;
-                }
 
                 new Thread(){
                     @Override
@@ -116,17 +107,54 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                             return;
                         }
 
-                        SkinPlayer skinPlayer = new SkinPlayer(player);
-                        skinPlayer.applySkin(skinData);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(SpigotPlugin.this,() -> {
+                            SkinPlayer skinPlayer = new SkinPlayer(player);
+                            skinPlayer.applySkin(skinData);
+                        });
+
 
                     }
-                }.run();
+                }.start();
 
 
                 return false;
             }
         });
+        registerCommand("cskin", new Command("CSkin") {
+            @Override
+            public boolean execute(CommandSender commandSender, String s, String[] strings) {
+                Player player = (Player) commandSender;
 
+                new Thread(){
+                    @Override
+                    public void run() {
+                        if(SpigotPlugin.getInstance().getSkinFactory().getSkinsFile().containsKey(strings[0])){
+                            SkinFile skinFile = SpigotPlugin.getInstance().getSkinFactory().getSkinsFile().get(strings[0]);
+                            skinFile.readFile();
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(SpigotPlugin.this,() -> {
+                                SkinPlayer skinPlayer = new SkinPlayer(player);
+                                skinPlayer.applySkin(skinFile.getSkinData());
+                            });
+                        }
+                    }
+                }.start();
+
+
+                return false;
+            }
+        });
+        registerCommand("rskin", new Command("RSkin") {
+            @Override
+            public boolean execute(CommandSender commandSender, String s, String[] strings) {
+                Player player = (Player) commandSender;
+                SpigotPlugin.getInstance().getSkinFactory().readFiles();
+
+                commandSender.sendMessage("§aSkin reloaded !");
+
+
+                return false;
+            }
+        });
         skinFactory.registerSkinData("Boug1",new SkinData("ewogICJ0aW1lc3RhbXAiIDogMTY1MTI0OTM1NTkxOCwKICAicHJvZmlsZUlkIiA6ICIxMGZhZDhhOWVmZTQ0NzEzYmYxMThjY2MzODRkZTU3NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJDb2ZmZWVCdW5ueSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80NTNkM2I2MmFkOTVlMjFkZDJiOTFiZGFhMDI5OWViNWJhYWZkYzEyYmYxN2UxMjAwZGI5OWMwNTQwZWJjYjI2IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjYzA4ODQwNzAwNDQ3MzIyZDk1M2EwMmI5NjVmMWQ2NWExM2E2MDNiZjY0YjE3YzgwM2MyMTQ0NmZlMTYzNSIKICAgIH0KICB9Cn0=","fUy+nnSryBoMJQiTOqfuCTlxErYexvhseHEDqimCNfnQ8nRSfGIH8PCXv6mTq7p+3hJ0ZjE9n5bDXsEGPhLz9MJyU2QHfK1k2mdqHEopPUSsy88b/E1+xib2ZS5Lbv/lP843Al1ABupnaOgboOxknt4tiO5QgKowIqJDzffF0DYMbAKe2QBKxDKZiZeFFoSkmvJnd0fLf6AK5je7KzBxebWYzOrPdkbSANO5tNtZ79rJzAYb6lOe6osZ3yycJ7HRZVicB3WJA9znGSr/CjQQLw1XU0vKbC26MoG8sTHAy1GJxEWe7eMBkWyo7IPbJj6+lD7DQJ6PZUfMRfQ+NMRRja0UqMgC5jQmQQCgvAWEclmZSmbv9V9cPUa/kifIZVI9ySqx395Dl6ghQdh7pnk3+weHxyE44vVH9qnisPF/TS2LeD4I/ZLPhcgZpZ/98oavbznckdARcAwHZNWtSYP7KNGde6qBkN7LnjKfM1B5bqrAcSF8RWQJ26aUespULN9thpuA6lvsNJKMa39up0qeaaqI25Sp9eH+qsT5qHA6SYhm2Hs+tttnvPlN2LZQ6poobJ4ALYbkAR7JR8bwxQvfppBHz1z3WLsTu6JvVa3CVJn+2i4Fi9iMcpNZFaiA58PFNXI4sZR3DEmRMyt8cbb536Vzr3/1L791366V8V++dh0="));
         moduleLoader.getModules().forEach(module -> {
             Class<?> c = module.getDefaultSession();
@@ -142,6 +170,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                     throw new RuntimeException(e);
                 }
         });
+
+        skinFactory.readFiles();
 
     }
 

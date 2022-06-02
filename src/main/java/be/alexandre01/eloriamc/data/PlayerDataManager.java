@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class PlayerDataManager {
 
-    public static PlayerData getPlayerData(String playername) {
+    public PlayerData getPlayerData(String playername) {
         return PlayerData.fromJson(RedisManager.get("Player:" + playername));
     }
 }

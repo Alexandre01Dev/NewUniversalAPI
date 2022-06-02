@@ -8,11 +8,13 @@ import be.alexandre01.eloriamc.data.redis.RedisManager;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.SQLException;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class KbWarrior {

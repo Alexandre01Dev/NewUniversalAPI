@@ -24,6 +24,7 @@ import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -48,7 +49,19 @@ public class PlayerData implements IPlayerData {
     private Madness madness;
 
 
-
+    public PlayerData(String playerName, String uuid, boolean initDefault){
+        this.playerName = playerName;
+        this.uuid = uuid;
+        if(!initDefault) return;
+        this.coins = 0;
+        this.ecu = 0;
+        this.exp = 0;
+        this.level = 1;
+        this.mod = false;
+        this.settings = new Settings(true, true, true, true);
+        this.kbWarrior = new KbWarrior();
+        this.madness = new Madness();
+    }
 
     public String toJson(){
         return new Gson().toJson(this);
@@ -197,6 +210,7 @@ public class PlayerData implements IPlayerData {
         }
         return ids;
     }
+
     public boolean isInheritedClass(Class<?> parent, Class<?> child) {
         if (parent.isAssignableFrom(child)) {
             // is child or same class
