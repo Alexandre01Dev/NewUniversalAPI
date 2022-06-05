@@ -6,18 +6,41 @@ import be.alexandre01.eloriamc.chat.ChatOptions;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjector;
 import be.alexandre01.eloriamc.server.session.players.PlayerDamager;
+import com.mojang.authlib.GameProfile;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.*;
+import org.bukkit.Achievement;
+import org.bukkit.Material;
+import org.bukkit.Statistic;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboard;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.map.MapView;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.net.InetSocketAddress;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -152,5 +175,9 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     @Override
     public void removeNameTag(Player player, String teamName) {
         NameTagImpl.super.removeNameTag(player, teamName);
+    }
+
+    public BasePlayer(CraftServer server, EntityPlayer entity) {
+        super(server, entity);
     }
 }

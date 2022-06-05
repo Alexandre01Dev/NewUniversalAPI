@@ -37,6 +37,10 @@ public class NPCFactory {
         return npcs.get(entityID);
     }
 
+    public boolean containsNPC(int entityID){
+        return npcs.containsKey(entityID);
+    }
+
     public void removeNPC(int entityID){
         npcs.remove(entityID);
     }

@@ -33,6 +33,7 @@ public class PlayerData implements IPlayerData {
 
     private boolean mod;
 
+
     private Settings settings;
 
     private KbWarrior kbWarrior;

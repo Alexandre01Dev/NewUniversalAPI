@@ -4,7 +4,9 @@ import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.PlayerDataManager;
 import be.alexandre01.eloriamc.manager.RankManager;
+import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.player.NameTagImpl;
+import be.alexandre01.eloriamc.server.session.Session;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,17 +14,23 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoin implements Listener, NameTagImpl {
     API api;
+    SpigotPlugin plugin;
     public PlayerJoin(){
      api = API.getInstance();
+        plugin = SpigotPlugin.getInstance();
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
+
+        for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
+            defaultSession.addPlayer(player);
+        }
         playerData.getSettings().setNotifFriend(false);
-        playerData.savePlayerCache();
+        if(!api.isNoDB())
+            playerData.savePlayerCache();
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         RankManager rankManager = new RankManager(player.getName());
         switch (rankManager.getGroup()) {

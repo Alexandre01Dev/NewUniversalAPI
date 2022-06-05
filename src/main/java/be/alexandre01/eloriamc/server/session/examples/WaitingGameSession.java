@@ -12,19 +12,22 @@ public class WaitingGameSession extends Session<GamePlayer> implements Updater {
     private int maxTime;
     private int minTime;
 
+    private Session<?> defaultSession;
+
     private int playerDif = 0;
 
-    public WaitingGameSession(String name, boolean isTemporary, int maxTime, int minTime) {
+    public WaitingGameSession(String name, boolean isTemporary, int maxTime, int minTime, Session<?> defaultSession) {
         super(name, isTemporary);
         this.maxTime = maxTime;
         this.minTime = minTime;
-
+        this.defaultSession = defaultSession;
     }
-    public WaitingGameSession(String name, boolean isTemporary, int maxTime, int minTime, int playerDif) {
+    public WaitingGameSession(String name, boolean isTemporary, int maxTime, int minTime, int playerDif, Session<?> defaultSession) {
         super(name, isTemporary);
         this.maxTime = maxTime;
         this.minTime = minTime;
         this.playerDif = playerDif;
+        this.defaultSession = defaultSession;
     }
 
 
@@ -49,7 +52,7 @@ public class WaitingGameSession extends Session<GamePlayer> implements Updater {
             int ticks = 120;
             @Override
             public void update() {
-                int maxPlayers = getSessionManager().getDefault().getSessionParameters().getMaxPlayers();
+                int maxPlayers = defaultSession.getSessionParameters().getMaxPlayers();
                 int players = getPlayers().size();
                 if(players >= maxPlayers){
                     getPlayers().forEach(basePlayer -> {

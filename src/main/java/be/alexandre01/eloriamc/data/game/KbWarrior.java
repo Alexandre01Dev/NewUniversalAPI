@@ -18,13 +18,9 @@ import java.sql.SQLException;
 @Getter
 @Setter
 public class KbWarrior {
-
     private int kill;
     private int death;
     private int bestKs;
     private float elo;
     private String division;
-
-
-
 }

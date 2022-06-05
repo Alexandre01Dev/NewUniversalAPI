@@ -48,23 +48,45 @@ public class AutoConfig {
                     if(player.hasPermission("eloriamc.admin")) {
                         if(args.length < 1) {
                             for (String loc : locations) {
-                                player.sendMessage("§b- "+ loc);
+                                String pre = "§c";
+                                if(locationHashMap.containsKey(loc)) {
+                                    pre = "§a";
+                                }
+                                for(String key : locationHashMap.keySet()) {
+                                    System.out.println(key);
+                                }
+                                player.sendMessage(pre+"- "+ loc);
                             }
                             return true;
                         }
 
-                        if(args.length > 1) {
                             if(args[0].equalsIgnoreCase("set")) {
-                                if(args.length > 2) {
-                                    if(locationHashMap.containsKey(args[1])) {
+                                if(args.length > 1) {
+                                    if(locations.contains(args[1])) {
                                         locationHashMap.put(args[1], player.getLocation());
                                         yamlUtils.getConfig().set("locations."+args[1], player.getLocation());
                                         yamlUtils.save();
                                         player.sendMessage("§aLocation set!");
+                                        return false;
                                     }
+                                    player.sendMessage("§cLocation not found!");
+                                    return false;
+                                }
+                                player.sendMessage("§cUsage: /"+command+" set <location>");
+                            }
+
+                            if(args[0].equalsIgnoreCase("tp")){
+                                if(args.length > 1) {
+                                    if(locations.contains(args[1])) {
+                                        player.teleport(locationHashMap.get(args[1]));
+                                        player.sendMessage("§aTeleported to location!");
+                                        return false;
+                                    }
+                                    player.sendMessage("§cLocation not found!");
+                                    return false;
                                 }
                             }
-                        }
+
                     }
                 }
 

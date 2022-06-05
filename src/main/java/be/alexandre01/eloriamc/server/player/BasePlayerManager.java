@@ -21,6 +21,7 @@ public class BasePlayerManager {
 
     public BasePlayer createPlayerObject(Player player){
         try {
+            System.out.println(defaultPlayerClass.getName());
             BasePlayer gamePlayer = defaultPlayerClass.getConstructor(Player.class).newInstance(player);
             playerHashMap.put(player, gamePlayer);
             return gamePlayer;

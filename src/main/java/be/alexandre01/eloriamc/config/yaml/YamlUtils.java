@@ -24,14 +24,28 @@ public class YamlUtils {
         confDataFile = new File(plugin.getDataFolder(), name);
         confDataConfig = YamlConfiguration.loadConfiguration(confDataFile);
         utf8 = new Utf8YamlConfiguration();
-        loadYml();
+        loadYml(false);
+    }
+    public YamlUtils(Plugin plugin, String name,String pathName,boolean saveRessource) {
+        this.plugin = plugin;
+        confDataFile = new File(plugin.getDataFolder(), name);
+        confDataConfig = YamlConfiguration.loadConfiguration(confDataFile);
+        utf8 = new Utf8YamlConfiguration();
+        loadYml(saveRessource);
     }
     public YamlUtils(Plugin plugin, String name) {
         this.plugin = plugin;
         confDataFile = new File(plugin.getDataFolder(), name);
         confDataConfig = YamlConfiguration.loadConfiguration(confDataFile);
         utf8 = new Utf8YamlConfiguration();
-        loadYml();
+        loadYml(false);
+    }
+    public YamlUtils(Plugin plugin, String name,boolean saveRessource) {
+        this.plugin = plugin;
+        confDataFile = new File(plugin.getDataFolder(), name);
+        confDataConfig = YamlConfiguration.loadConfiguration(confDataFile);
+        utf8 = new Utf8YamlConfiguration();
+        loadYml(saveRessource);
     }
     public FileConfiguration getConfig(){
         return confDataConfig;
@@ -46,16 +60,22 @@ public class YamlUtils {
             e.printStackTrace();
         }
     }
-    private void loadYml() {
+    private void loadYml(boolean saveRessource) {
         if(!confDataFile.exists()){
             if(pathName != null){
                 if(!new File(plugin.getDataFolder()+pathName).exists()){
                     confDataFile.getParentFile().mkdirs();
-                    plugin.saveResource(confDataFile.getName(), false);
+
+                    if(saveRessource){
+                        plugin.saveResource(confDataFile.getName(), false);
+                    }
+
                 }
             }else {
                 confDataFile.getParentFile().mkdirs();
-                plugin.saveResource(confDataFile.getName(), false);
+                if(saveRessource){
+                    plugin.saveResource(confDataFile.getName(), false);
+                }
             }
         }
         confDataConfig= new YamlConfiguration();

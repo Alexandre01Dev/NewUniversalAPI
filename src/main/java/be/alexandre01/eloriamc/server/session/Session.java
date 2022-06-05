@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -37,6 +38,8 @@ public abstract class Session<T extends BasePlayer> {
     }
 
     public void addPlayer(T player){
+        System.out.println(player);
+        System.out.println(player.getName());
         players.add(player);
         uuidToGP.put(player.getUniqueId(),player);
 
@@ -47,26 +50,29 @@ public abstract class Session<T extends BasePlayer> {
 
 
     public T getCustomPlayer(Player player){
-       return (T) spigotPlugin.getBasePlayer(player);
+        Class<T> persistentClass = (Class<T>)
+                ((ParameterizedType)getClass().getGenericSuperclass())
+                        .getActualTypeArguments()[0];
+       return (T) spigotPlugin.getBasePlayer(player,persistentClass);
     }
     public void addPlayer(Player player){
-        addPlayer(spigotPlugin.getBasePlayer(player));
+        addPlayer(getCustomPlayer(player));
     }
 
 
-    public void removePlayer(BasePlayer player){
+    public void removePlayer(T player){
         players.remove(player);
         uuidToGP.remove(player.getUniqueId());
         onRemovePlayer(player);
     }
 
     public void removePlayer(Player player){
-        removePlayer(spigotPlugin.getBasePlayer(player));
+        removePlayer(getCustomPlayer(player));
     }
 
-    protected void onAddPlayer(BasePlayer player){}
+    protected void onAddPlayer(T player){}
 
-    protected void onRemovePlayer(BasePlayer player){}
+    protected void onRemovePlayer(T player){}
 
     public void finish(){
         isStarted = false;

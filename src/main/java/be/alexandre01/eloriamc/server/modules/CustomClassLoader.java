@@ -5,12 +5,16 @@ import be.alexandre01.eloriamc.server.SpigotPlugin;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.jar.JarFile;
 
 public class CustomClassLoader extends URLClassLoader {
+
+    public static ArrayList<CustomClassLoader> customClassLoaders = new ArrayList<>();
         public CustomClassLoader(URL url, ClassLoader parent) {
             super(new URL[] { url }, parent);
+            customClassLoaders.add(this);
         }
 
         @Override

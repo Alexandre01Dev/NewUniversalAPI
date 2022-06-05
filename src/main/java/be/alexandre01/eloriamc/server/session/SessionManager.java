@@ -4,14 +4,15 @@ import be.alexandre01.eloriamc.server.player.BasePlayer;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SessionManager {
 
     private HashMap<String, Session> sessions = new HashMap<>();
     private HashMap<BasePlayer, Session> playersOnSession = new HashMap<>();
-    @Setter @Getter
-    private Session defaultSession = null;
+    @Getter
+    private ArrayList<Session> defaultSessions = new ArrayList<>();
     private static SessionManager instance;
 
     public static SessionManager getInstance() {
@@ -37,7 +38,4 @@ public class SessionManager {
         return null;
     }
 
-    public Session getDefault() {
-        return defaultSession;
-    }
 }

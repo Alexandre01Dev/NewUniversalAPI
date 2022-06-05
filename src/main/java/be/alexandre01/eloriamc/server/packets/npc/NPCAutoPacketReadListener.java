@@ -21,10 +21,9 @@ public class NPCAutoPacketReadListener implements Listener {
         PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();
         if(packet.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) return;
 
-
-
-
-        npcFactory.getNPC(event.getValue("a",Integer.class)).getInteraction().action(
+        int entityID = event.getValue("a",Integer.class);
+        if(npcFactory.containsNPC(entityID))
+        npcFactory.getNPC(entityID).getInteraction().action(
                 event.getPlayer(),
                 (packet.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) ?
                         NPC.InteractClick.RIGHT : NPC.InteractClick.LEFT);

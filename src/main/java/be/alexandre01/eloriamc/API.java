@@ -15,7 +15,11 @@ public class API  {
     @Getter
     PlayerDataManager playerDataManager;
 
+    @Getter
     boolean noDB = false;
+    @Getter
+    boolean noDream = false;
+
 
 
     @Getter private final ChatConfiguration chatConfiguration = new ChatConfiguration();
@@ -39,6 +43,11 @@ public class API  {
         if(s != null && s.equalsIgnoreCase("false")){
             noDB = true;
             playerDataManager = new TestingPlayerDataManager();
+        }
+
+        String s2 = System.getProperty("N");
+        if(s2 != null && s2.equalsIgnoreCase("false")){
+            noDream = true;
         }
         if(!noDB){
             System.out.println("DATA LOAD");
