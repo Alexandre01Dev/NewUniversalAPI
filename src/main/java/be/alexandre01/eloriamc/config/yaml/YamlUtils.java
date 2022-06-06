@@ -91,9 +91,8 @@ public class YamlUtils {
 
             confDataConfig = utf8;
 
-
-
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("ERROR LOADING FILE");
         }
     }

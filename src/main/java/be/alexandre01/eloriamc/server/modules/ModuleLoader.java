@@ -3,6 +3,7 @@ package be.alexandre01.eloriamc.server.modules;
 import be.alexandre01.eloriamc.config.yaml.YamlUtils;
 import be.alexandre01.eloriamc.server.session.Session;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -35,15 +36,20 @@ public class ModuleLoader {
         YamlUtils cacheYML = new YamlUtils(plugin,"cache.yml");
 
         if(cacheYML.getFile().exists()){
+            System.out.println("Cache Found");
         FileConfiguration cachedConfig = cacheYML.getConfig();
+            System.out.println("Cache Config Loaded");
+            System.out.println(cachedConfig.getKeys(true));
         if(cachedConfig.contains("modules")){
             for (String key : cachedConfig.getConfigurationSection("modules").getKeys(false)) {
-                if (cachedConfig.contains(key)) {
-                    String json = cachedConfig.getString(key);
-                    System.out.println(json);
-                    Module module = (Module) new Gson().fromJson(json,Module.class);
-
+                if (cachedConfig.contains("modules."+key)) {
+                    System.out.println("Cached Config ? ");
+                    String json = cachedConfig.getString("modules."+key);
+                    System.out.println(""+json);
+                    Module module = (Module) new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json,Module.class);
+                    System.out.println(module.getUrl());
                     cachedModule.add(module);
+
                 }
             }
         }
@@ -68,8 +74,10 @@ public class ModuleLoader {
 
                 Module cache = null;
                 for (Module module : cachedModule) {
-                    if (module.getUrl().equals(file.toURI().toURL())) {
+                    System.out.println(file.toURI().toURL());
+                    if (module.getUrl().toString().equals(file.toURI().toURL().toString())) {
                         cache = module;
+                        System.out.println("Cached >> "+ cache);
                         break;
                     }
                 }
@@ -106,20 +114,16 @@ public class ModuleLoader {
                         authors = yamlConfiguration.getStringList("authors").toArray(new String[0]);
                         version = yamlConfiguration.getString("version");
                         material = Material.getMaterial(yamlConfiguration.getInt("itemId"));
+                        inputStream.close();
                     }
                 }
 
 
 
                 Module module = null;
-                YamlConfiguration yamlConfiguration = new YamlConfiguration();
 
-                if(child.getResource("module.yml") != null){
-                    InputStream inputStream = child.getResourceAsStream("module.yml");
-                    yamlConfiguration.load(inputStream);
-                    for (String k : yamlConfiguration.getKeys(false)){
-                        System.out.println("KEY>>"+ k);
-                    }
+
+
 
                     module = new Module();
                     module.setFile(file);
@@ -133,8 +137,7 @@ public class ModuleLoader {
 
                     module.setChild(child);
                     module.setUrl(file.toURI().toURL());
-                    inputStream.close();
-                }
+
                 if(module == null)
                     return;
 

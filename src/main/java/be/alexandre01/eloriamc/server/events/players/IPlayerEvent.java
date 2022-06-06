@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.server.events.players;
 
+import be.alexandre01.eloriamc.server.SpigotPlugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -21,6 +22,13 @@ public abstract class IPlayerEvent<T extends Event> {
     public IPlayerEvent(){
         eventClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    public void registerToPlayer(Player player){
+        this.player = player;
+        System.out.println("Registering to player "+ this.getEventClass().getSimpleName() + " for " + player.getName());
+        SpigotPlugin.getInstance().getListenerPlayerManager().registerEvent(getEventClass(), getPlayerCall(), player, this);
+
     }
     public abstract void onPlayerEvent(T event, Player player);
 

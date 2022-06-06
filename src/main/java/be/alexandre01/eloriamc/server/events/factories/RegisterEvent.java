@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 public class RegisterEvent<T extends Event> implements Listener {
 
@@ -25,8 +26,11 @@ public class RegisterEvent<T extends Event> implements Listener {
     @EventHandler
     public void onRegister(T event) {
         if(!eventsFactory.getEventHashMap().containsKey(event.getClass())) return;
-        IEvent<T> iEvent = (IEvent<T>) eventsFactory.getEventHashMap().get(event.getClass());
-        iEvent.onEvent(event);
-        System.out.println(event);
+        Collection<IEvent<T>> iEvent = eventsFactory.getEventHashMap().get(event.getClass());
+        iEvent.forEach(iPlayerEvent -> {
+            if(iPlayerEvent.getEventClass().equals(event.getClass())) {
+                iPlayerEvent.onEvent(event);
+            }
+        });
     }
 }

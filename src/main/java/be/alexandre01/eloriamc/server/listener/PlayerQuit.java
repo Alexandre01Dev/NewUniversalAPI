@@ -27,18 +27,23 @@ public class PlayerQuit implements Listener, NameTagImpl {
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
             defaultSession.addPlayer(player);
         }
-        RankManager rankManager = new RankManager(player.getName());
-        switch (rankManager.getGroup()) {
-            case "Admin":
-                removeNameTag(player, "01Admin");
-                break;
-            case "Responsable":
-                removeNameTag(player, "02Resp");
-                break;
-            case "Custom":
-                removeNameTag(player, "05" + player.getName());
+        try {
+            RankManager rankManager = new RankManager(player.getName());
+            switch (rankManager.getGroup()) {
+                case "Admin":
+                    removeNameTag(player, "01Admin");
+                    break;
+                case "Responsable":
+                    removeNameTag(player, "02Resp");
+                    break;
+                case "Custom":
+                    removeNameTag(player, "05" + player.getName());
 
-                break;
+                    break;
+            }
+        }catch (Exception ignored){
+            System.out.println("[EloriaMC] Erreur lors de la suppression du nametag");
         }
+
     }
 }

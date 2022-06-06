@@ -6,12 +6,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegisterPlayerEvent<T extends Event> implements Listener {
 
     String handler;
 
     ListenerPlayerManager listenerPlayerManager;
+
+
 
     public <T extends Class<? extends Event>> RegisterPlayerEvent(Class<? extends Event> event, String handler, ListenerPlayerManager listenerPlayerManager) {
         this.handler = handler;
@@ -29,12 +36,16 @@ public class RegisterPlayerEvent<T extends Event> implements Listener {
             if(o != null) {
                 if(o instanceof Player) {
                     Player p = (Player) o;
-                    listenerPlayerManager.listeners.get(p).forEach(iPlayerEvent -> {
-                        if(iPlayerEvent.getEventClass().equals(event.getClass())) {
-                            iPlayerEvent.onPlayerEvent(event,p);
+                    ListenerPerPlayer listener = listenerPlayerManager.getListenersPerPlayer().get(p);
+                    List<IPlayerEvent> collected = listener.getListeners().stream().filter(iPlayerEvent -> iPlayerEvent.getEventClass().equals(event.getClass())).collect(Collectors.toList());
+                    for(Iterator<IPlayerEvent> iterator = collected.iterator(); iterator.hasNext();) {
+                        IPlayerEvent iPlayerEvent = iterator.next();
+                        try {
+                            iPlayerEvent.onPlayerEvent(event, p);
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                        System.out.println(event);
-                    });
+                    }
                 }
             }
         } catch (IllegalAccessException e) {

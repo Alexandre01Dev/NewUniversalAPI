@@ -1,9 +1,11 @@
 package be.alexandre01.eloriamc.server.session;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.events.players.IPlayerEvent;
 import be.alexandre01.eloriamc.server.events.players.SessionListenerManager;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.session.examples.WaitingGameSession;
+import be.alexandre01.eloriamc.server.session.inventory.item.ItemFactory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -27,6 +29,8 @@ public abstract class Session<T extends BasePlayer> {
     public final SessionListenerManager listenerManager = new SessionListenerManager();
     public final SessionManager sessionManager = SessionManager.getInstance();
 
+    @Getter private final ItemFactory itemFactory;
+
     private String name;
 
     public Session(String name,boolean isTemporary){
@@ -35,6 +39,7 @@ public abstract class Session<T extends BasePlayer> {
         sessionParameters.setTemporary(isTemporary);
         spigotPlugin = SpigotPlugin.getInstance();
         sessionManager.registerSession(this);
+        itemFactory = new ItemFactory(this);
     }
 
     public void addPlayer(T player){
@@ -42,6 +47,7 @@ public abstract class Session<T extends BasePlayer> {
         System.out.println(player.getName());
         players.add(player);
         uuidToGP.put(player.getUniqueId(),player);
+        listenerManager.registerToPlayer(player.getPlayer());
 
         onAddPlayer(player);
     }
@@ -63,6 +69,7 @@ public abstract class Session<T extends BasePlayer> {
     public void removePlayer(T player){
         players.remove(player);
         uuidToGP.remove(player.getUniqueId());
+        listenerManager.unregisterPlayerEvents(player.getPlayer());
         onRemovePlayer(player);
     }
 

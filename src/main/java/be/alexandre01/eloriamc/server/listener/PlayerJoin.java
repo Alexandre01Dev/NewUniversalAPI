@@ -32,33 +32,38 @@ public class PlayerJoin implements Listener, NameTagImpl {
         if(!api.isNoDB())
             playerData.savePlayerCache();
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
-        RankManager rankManager = new RankManager(player.getName());
-        switch (rankManager.getGroup()) {
-            case "Admin":
-                setNameTag(player, "01Admin", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "Responsable":
-                setNameTag(player, "02Resp", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "SMod":
-                setNameTag(player, "03SMod", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "Mod":
-                setNameTag(player, "04Mod", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "Helper":
-                setNameTag(player, "05Helper", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "Builder":
-                setNameTag(player, "06Builder", rankManager.getRankPrefix(), " §8┃ §a✔");
-                break;
-            case "Custom":
-                setNameTag(player, "07" + player.getName(), rankManager.getPlayerPrefix(), "");
-                break;
-            case "Joueur":
-                setNameTag(player, "99Joueur", rankManager.getRankPrefix(), "");
-                break;
+        try {
+            RankManager rankManager = new RankManager(player.getName());
+            switch (rankManager.getGroup()) {
+                case "Admin":
+                    setNameTag(player, "01Admin", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Responsable":
+                    setNameTag(player, "02Resp", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "SMod":
+                    setNameTag(player, "03SMod", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Mod":
+                    setNameTag(player, "04Mod", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Helper":
+                    setNameTag(player, "05Helper", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Builder":
+                    setNameTag(player, "06Builder", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Custom":
+                    setNameTag(player, "07" + player.getName(), rankManager.getPlayerPrefix(), "");
+                    break;
+                case "Joueur":
+                    setNameTag(player, "99Joueur", rankManager.getRankPrefix(), "");
+                    break;
+            }
+        }catch (Exception ignored){
+            System.out.println("[EloriaMC] Erreur lors de la création du nametag du joueur " + player.getName());
         }
+
 
     }
 }

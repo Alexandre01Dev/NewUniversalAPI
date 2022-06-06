@@ -15,9 +15,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class AutoConfig {
-    private HashMap<String,Location > locationHashMap;
+    @Getter private HashMap<String,Location > locationHashMap;
 
-    private ArrayList<String> locations;
+    @Getter private ArrayList<String> locations;
     @Getter private YamlUtils yamlUtils;
     private JavaPlugin plugin;
 
@@ -97,6 +97,10 @@ public class AutoConfig {
 
     public Location getLocation(String location) {
         return locationHashMap.get(location);
+    }
+
+    public boolean containsLocation(String location) {
+        return locationHashMap.containsKey(location);
     }
 
     public void setLocation(String locationName, Location location) {

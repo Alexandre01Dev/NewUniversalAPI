@@ -86,7 +86,7 @@ public class NPC extends Reflections {
                 public void onPlayerEvent(PlayerQuitEvent event, Player player) {
                     playersInstance.remove(player);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(spigotPlugin, () -> {
-                        spigotPlugin.getListenerPlayerManager().getListeners().removeAll(player);
+                        spigotPlugin.getListenerPlayerManager().getListenersPerPlayer().get(player).getListeners().clear();
                     }
                     );
 
