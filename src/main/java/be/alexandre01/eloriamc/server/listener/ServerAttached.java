@@ -36,7 +36,6 @@ public class ServerAttached implements Listener {
             @Override
             public void onNewDataReceived(LinkedTreeMap<String, Object> linkedTreeMap) {
                 createInitialData("all", 0);
-
             }
         });
 

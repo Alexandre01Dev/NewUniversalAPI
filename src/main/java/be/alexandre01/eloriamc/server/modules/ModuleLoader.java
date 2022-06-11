@@ -30,30 +30,35 @@ public class ModuleLoader {
 
     @Getter private final ArrayList<Module> cachedModule = new ArrayList<>();
 
-
+    YamlUtils cacheYML;
+    Plugin plugin;
     public ModuleLoader(Plugin plugin) {
-
-        YamlUtils cacheYML = new YamlUtils(plugin,"cache.yml");
+        this.plugin = plugin;
+         cacheYML = new YamlUtils(plugin,"cache.yml");
 
         if(cacheYML.getFile().exists()){
             System.out.println("Cache Found");
-        FileConfiguration cachedConfig = cacheYML.getConfig();
+            FileConfiguration cachedConfig = cacheYML.getConfig();
             System.out.println("Cache Config Loaded");
             System.out.println(cachedConfig.getKeys(true));
-        if(cachedConfig.contains("modules")){
-            for (String key : cachedConfig.getConfigurationSection("modules").getKeys(false)) {
-                if (cachedConfig.contains("modules."+key)) {
-                    System.out.println("Cached Config ? ");
-                    String json = cachedConfig.getString("modules."+key);
-                    System.out.println(""+json);
-                    Module module = (Module) new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json,Module.class);
-                    System.out.println(module.getUrl());
-                    cachedModule.add(module);
+            if(cachedConfig.contains("modules")){
+                for (String key : cachedConfig.getConfigurationSection("modules").getKeys(false)) {
+                    if (cachedConfig.contains("modules."+key)) {
+                        System.out.println("Cached Config ? ");
+                        String json = cachedConfig.getString("modules."+key);
+                        System.out.println(""+json);
+                        Module module = (Module) new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json,Module.class);
+                        System.out.println(module.getUrl());
+                        cachedModule.add(module);
 
+                    }
                 }
             }
         }
-        }
+        load();
+    }
+
+    public void load(){
         boolean b = cacheYML.getFile().delete();
         if(!b){
             System.out.println("Could not delete cache.yml");
@@ -62,11 +67,11 @@ public class ModuleLoader {
         dir = new File(plugin.getDataFolder().getAbsolutePath()+"/modules");
 
         try {
-             if(!dir.exists()) {
+            if(!dir.exists()) {
                 dir.mkdirs();
             }
             if(isDirEmpty(dir.toPath())) {
-               return;
+                return;
             }
             for(File file : Objects.requireNonNull(dir.listFiles())) {
                 if (file.isDirectory())
@@ -125,18 +130,18 @@ public class ModuleLoader {
 
 
 
-                    module = new Module();
-                    module.setFile(file);
-                    module.setSessionPath(sessionPath);
-                    module.setModuleName(moduleName);
-                    module.setVersion(version);
-                    module.setAuthors(authors);
-                    module.setDescription(description);
+                module = new Module();
+                module.setFile(file);
+                module.setSessionPath(sessionPath);
+                module.setModuleName(moduleName);
+                module.setVersion(version);
+                module.setAuthors(authors);
+                module.setDescription(description);
 
-                    module.setMaterial(material);
+                module.setMaterial(material);
 
-                    module.setChild(child);
-                    module.setUrl(file.toURI().toURL());
+                module.setChild(child);
+                module.setUrl(file.toURI().toURL());
 
                 if(module == null)
                     return;
@@ -160,7 +165,6 @@ public class ModuleLoader {
         } catch (InvalidConfigurationException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 

@@ -38,10 +38,10 @@ public class SkinPlayer extends Reflections {
     }
 
 
-    public void applySkin(SkinData skinData) {
+    public void applySkin(SkinData skinData,boolean refresh) {
         entityPlayer.getProfile().getProperties().clear();
         entityPlayer.getProfile().getProperties().put("textures", new Property("textures", skinData.getTexture(), skinData.getSignature()));
-
+        if(!refresh) return;
         PlayerConnection connectionpacket = ((CraftPlayer)player).getHandle().playerConnection;
         connectionpacket.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
         connectionpacket.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
@@ -72,8 +72,9 @@ public class SkinPlayer extends Reflections {
                 connectionpacket.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
             }
         }
+    }
 
-
-
+    public void applySkin(SkinData skinData) {
+        applySkin(skinData,true);
     }
 }
