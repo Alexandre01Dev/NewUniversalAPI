@@ -6,11 +6,11 @@ import be.alexandre01.eloriamc.data.game.Madness;
 import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
+import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_8_R3.Tuple;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;

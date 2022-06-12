@@ -28,9 +28,7 @@ public class PlayerJoin implements Listener, NameTagImpl {
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
             defaultSession.addPlayer(player);
         }
-        playerData.getSettings().setNotifFriend(false);
-        if(!api.isNoDB())
-            playerData.savePlayerCache();
+
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         try {
             RankManager rankManager = new RankManager(player.getName());
@@ -40,6 +38,9 @@ public class PlayerJoin implements Listener, NameTagImpl {
                     break;
                 case "Responsable":
                     setNameTag(player, "02Resp", rankManager.getRankPrefix(), " §8┃ §a✔");
+                    break;
+                case "Développer":
+                    setNameTag(player, "03Dev", rankManager.getRankPrefix(), " §8┃ §a✔");
                     break;
                 case "SMod":
                     setNameTag(player, "03SMod", rankManager.getRankPrefix(), " §8┃ §a✔");
@@ -53,11 +54,20 @@ public class PlayerJoin implements Listener, NameTagImpl {
                 case "Builder":
                     setNameTag(player, "06Builder", rankManager.getRankPrefix(), " §8┃ §a✔");
                     break;
+                case "Famous":
+                    setNameTag(player, "07Famous", rankManager.getRankPrefix(), " §8┃ §b✪");
+                    break;
+                case "Youtuber":
+                    setNameTag(player, "08Youtuber", rankManager.getRankPrefix(), " §8┃ §b✪");
+                    break;
+                case "Tiktok":
+                    setNameTag(player, "09Tiktok", rankManager.getRankPrefix(), " §8┃ §b✪");
+                    break;
                 case "Custom":
                     setNameTag(player, "07" + player.getName(), rankManager.getPlayerPrefix(), "");
                     break;
                 case "Joueur":
-                    setNameTag(player, "99Joueur", rankManager.getRankPrefix(), "");
+                    setNameTag(player, "99Joueur", "§7", "");
                     break;
             }
         }catch (Exception ignored){

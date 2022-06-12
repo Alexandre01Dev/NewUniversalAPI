@@ -2,7 +2,7 @@ package be.alexandre01.eloriamc.data;
 
 import be.alexandre01.eloriamc.data.game.Identifier;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
-import net.minecraft.server.v1_8_R3.Tuple;
+import be.alexandre01.eloriamc.utils.Tuple;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
