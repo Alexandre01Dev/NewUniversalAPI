@@ -5,4 +5,9 @@ public enum TypeData {
     Coins,
     Ecu,
 
+    exp,
+
+    level,
+
+
 }
