@@ -99,6 +99,7 @@ public abstract class Session<T extends BasePlayer> {
         isStarted = true;
         System.out.println("Session"+ name+" started");
         start(spigotPlugin);
+
     }
     protected void start(SpigotPlugin base){}
 

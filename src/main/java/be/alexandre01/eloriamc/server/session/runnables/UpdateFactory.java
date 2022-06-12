@@ -1,8 +1,10 @@
 package be.alexandre01.eloriamc.server.session.runnables;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -16,14 +18,15 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class UpdateFactory {
     private SpigotPlugin spigotPlugin;
-    private Multimap<String,Task> bukkitTasks = HashMultimap.create();
+    @Getter private Multimap<String,Task> bukkitTasks = HashMultimap.create();
 
-    private HashMap<Update,Integer> taskIds = new HashMap<>();
+    @Getter private HashMap<Update,Integer> taskIds = new HashMap<>();
 
-    public UpdateFactory(){
-        spigotPlugin = SpigotPlugin.getInstance();
+    public UpdateFactory(SpigotPlugin spigotPlugin){
+        this.spigotPlugin = spigotPlugin;
     }
-    private HashMap<String,Method> methods = new HashMap<>();
+
+    @Getter private HashMap<String, Tuple<Method,Updater>> methods = new HashMap<>();
     public void createUpdate(Updater updater){
             Set<Method> methods;
             Method[] publicMethods = updater.getClass().getMethods();
@@ -34,20 +37,25 @@ public class UpdateFactory {
             byte b;
             for (i = (arrayOfMethod1 = publicMethods).length, b = 0; b < i; ) {
                 final Method method = arrayOfMethod1[b];
+                System.out.println("public >> "+ method.getName());
                 methods.add(method);
                 b++;
             }
             for (i = (arrayOfMethod1 = privateMethods).length, b = 0; b < i; ) {
                 final Method method = arrayOfMethod1[b];
+                System.out.println("private >> "+ method.getName());
                 methods.add(method);
                 b++;
             }
 
         for (Method method : methods) {
             Update up = method.<Update>getAnnotation(Update.class);
+            System.out.println("Meth >> "+ method.getName());
+            System.out.println(up);
             if (up == null)
                 continue;
-            this.methods.put(up.name(),method);
+            System.out.println("AH OUE FUCK");
+            this.methods.put(up.name(),new Tuple<>(method,updater));
         }
 
 
@@ -58,7 +66,8 @@ public class UpdateFactory {
 
     public Task callScheduler(String scheduler,Object... objects){
         if(!methods.containsKey(scheduler)) return null;
-        Method method = methods.get(scheduler);
+        Tuple<Method,Updater> tuple = methods.get(scheduler);
+        Method method = tuple.a();
         Update up = method.<Update>getAnnotation(Update.class);
 
         if(up.type().name().contains("BUKKIT")){
@@ -71,10 +80,12 @@ public class UpdateFactory {
             }
         };
             try {
-                method.invoke(task,objects);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
+                method.setAccessible(true);
+                System.out.println(method.getParameterTypes());
+                method.invoke(tuple.b(),task,objects);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                System.out.println(e.getCause());
+                System.out.println(e.getCause().getMessage());
                 throw new RuntimeException(e);
             }
 

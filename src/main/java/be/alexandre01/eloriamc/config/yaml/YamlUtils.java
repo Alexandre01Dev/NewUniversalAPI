@@ -85,11 +85,15 @@ public class YamlUtils {
                 confDataFile.delete();
                 confDataFile = new File(plugin.getDataFolder()+pathName);
             }
-            InputStream inputstream = new FileInputStream(confDataFile);
 
-            utf8.load(inputstream);
+            if(confDataFile.exists()){
+                InputStream inputstream = new FileInputStream(confDataFile);
 
-            confDataConfig = utf8;
+                utf8.load(inputstream);
+
+                confDataConfig = utf8;
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();

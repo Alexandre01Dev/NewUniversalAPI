@@ -6,13 +6,19 @@ import be.alexandre01.eloriamc.server.player.GamePlayer;
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.Update;
+import be.alexandre01.eloriamc.server.session.runnables.UpdateType;
 import be.alexandre01.eloriamc.server.session.runnables.Updater;
+import lombok.Getter;
+import lombok.Setter;
 
-public class WaitingGameSession extends Session<GamePlayer> implements Updater {
+public class WaitingGameSession<T extends BasePlayer> extends Session<T> implements Updater {
     private int maxTime;
     private int minTime;
 
     private Session<?> defaultSession;
+
+    @Getter @Setter
+    private Session<?> sessionRedirection;
 
     private int playerDif = 0;
 
@@ -33,18 +39,18 @@ public class WaitingGameSession extends Session<GamePlayer> implements Updater {
 
 
     @Override
-    protected void start(SpigotPlugin base) {
+    public void start(SpigotPlugin base) {
+        super.start(base);
         base.getUpdateFactory().createUpdate(this);
         base.getUpdateFactory().callScheduler("onStart",base);
-
     }
 
     @Override
-    protected void stop(SpigotPlugin base) {
+    public void stop(SpigotPlugin base) {
     }
 
 
-    @Update(name = "onStart",first = 20,delay = 20)
+    @Update(name = "onStart",first = 20,delay = 20,type = UpdateType.BUKKIT_ASYNC)
     public void taskOnStart(Task task, Object... o){
         SpigotPlugin base = (SpigotPlugin) o[0];
 
@@ -74,6 +80,7 @@ public class WaitingGameSession extends Session<GamePlayer> implements Updater {
                     if(ticks <= 0){
                         task.cancel();
                         finish();
+                        sessionRedirection.processStart();
                     }
             }
         });

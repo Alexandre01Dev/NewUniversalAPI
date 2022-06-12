@@ -26,7 +26,10 @@ import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.player.BasePlayerManager;
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.SessionManager;
+import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
+import be.alexandre01.eloriamc.server.session.runnables.Updater;
+import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
@@ -42,6 +45,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
@@ -59,7 +63,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private final BossBarManagerTask bossBarManagerTask = new BossBarManagerTask();
 
-    @Getter private final UpdateFactory updateFactory = new UpdateFactory();
+    @Getter private final UpdateFactory updateFactory = new UpdateFactory(this);
 
     @Getter private final BasePlayerManager basePlayerManager = new BasePlayerManager();
 
@@ -79,6 +83,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         instance = this;
         saveConfig();
         saveDefaultConfig();
+
 
         packetInjectorManager = new PacketInjectorManager();
         AutoPacketInjectorJoin.init(AutoPacketInjectorJoin.PacketInjectorType.INPUT_DECODER);
@@ -186,6 +191,9 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 moduleLoader.getCachedModule().addAll(moduleLoader.getModules());
                 moduleLoader.load();
                 moduleLoader.getCachedModule().clear();
+                for(Task tuple : updateFactory.getBukkitTasks().values()){
+                   tuple.cancel();
+                }
 
                 moduleLoader.getModules().forEach(module -> {
                     Class<?> c = module.getDefaultSession();
@@ -193,6 +201,9 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                     try {
                         session = (Session<?>) c.newInstance();
                         session.processStart();
+                        for(Player player : getServer().getOnlinePlayers()){
+                            session.addPlayer(player);
+                        }
 
                         sessionManager.getDefaultSessions().add(session);
                     } catch (Exception e) {
@@ -212,7 +223,9 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 try {
                     session = (Session<?>) c.newInstance();
                     session.processStart();
-
+                    for(Player player : getServer().getOnlinePlayers()){
+                        session.addPlayer(player);
+                    }
                     sessionManager.getDefaultSessions().add(session);
                 } catch (Exception e) {
                     e.printStackTrace();
