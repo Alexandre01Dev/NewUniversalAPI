@@ -51,9 +51,11 @@ public class Ban extends Identifier {
      //   LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
         long diff = time - System.currentTimeMillis();
         LocalDate temps = new LocalDate(time);
-        DateTime dateTime = new DateTime(temps);
+        LocalDateTime dateTime = new LocalDateTime(diff);//LocalDateTime.fromDateFields(new Date(diff));
+        LocalDateTime now = new LocalDateTime(System.currentTimeMillis());
+        //DateTime dateTime = new DateTime(temps);
 
-        LocalDate now = new LocalDate(System.currentTimeMillis());
+
         //LocalDate now = new LocalDate(2015, 7, 30);
        // Period tempsRestant = Period.between(LocalDate.now(), temps);
 
@@ -61,25 +63,36 @@ public class Ban extends Identifier {
         calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
-        int years = dateTime.getYear();
-        int mois = dateTime.getMonthOfYear();
-        int jours = dateTime.getDayOfMonth();
-        int heures =  dateTime.getHourOfDay();
+        int years = dateTime.getYear()-now.getYear();
+        int mois = dateTime.getMonthOfYear()-1;
+        int jours = dateTime.getDayOfMonth()-1;
+        int heures =  dateTime.getHourOfDay()-1;
         int minutes = dateTime.getMinuteOfHour();
         int secondes = dateTime.getSecondOfMinute();
 
         StringBuilder sb = new StringBuilder();
 
-        if(years > 0)
+        if(years > 0 &&  mois > 0){
             sb.append(years).append(" années ");
 
-        if(mois > 0)
-            sb.append(mois).append(" mois ");
+                sb.append(mois).append(" mois ");
 
-        if(jours > 0)
+            if(jours > 0)
+                sb.append(jours).append(" jours ");
+
+            return sb.toString();
+        }
+        if(jours > 0){
             sb.append(jours).append(" jours ");
-
-        sb.append(heures).append(" heures ");
+            if(heures > 0)
+                sb.append(heures).append(" heures ");
+            if(minutes > 0)
+                sb.append(minutes).append(" minutes ");
+            sb.append(secondes).append(" secondes ");
+            return sb.toString();
+        }
+        if(heures > 0)
+            sb.append(heures).append(" heures ");
         sb.append(minutes).append(" minutes ");
         sb.append(secondes).append(" secondes ");
 
