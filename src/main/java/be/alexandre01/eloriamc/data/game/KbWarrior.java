@@ -6,6 +6,7 @@ import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,9 @@ import java.sql.SQLException;
 @Getter
 @Setter
 public class KbWarrior extends Identifier {
-    private int kill = 0;
-    private int death = 0;
-    private int bestKs = 0;
-    private float elo = 0;
-    private String division = "§6§lBronze IV";
+    @Expose private int kill = 0;
+    @Expose private int death = 0;
+    @Expose private int bestKs = 0;
+    @Expose private float elo = 0;
+    @Expose private String division = "§6§lBronze IV";
 }

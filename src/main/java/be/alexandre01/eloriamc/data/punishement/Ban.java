@@ -17,12 +17,12 @@ import java.text.SimpleDateFormat;
 @Setter
 public class Ban extends Identifier {
 
-    private boolean isBanned = false;
-    private long time = 0;
-    private String reason = "none";
-    private String author = "none";
-    private String date = "none";
-    @Expose private Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    @Expose private boolean isBanned = false;
+    @Expose private long time = 0;
+    @Expose private String reason = "none";
+    @Expose private String author = "none";
+    @Expose private String date = "none";
+    private final Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 
 

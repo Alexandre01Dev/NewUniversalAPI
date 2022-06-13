@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.data;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Settings {
-
-    private boolean friendRequest;
-    private boolean sendMessage;
-    private boolean notifFriend;
-    private boolean soundMention;
+    @Expose private boolean friendRequest;
+    @Expose private boolean sendMessage;
+    @Expose private boolean notifFriend;
+    @Expose private boolean soundMention;
 }

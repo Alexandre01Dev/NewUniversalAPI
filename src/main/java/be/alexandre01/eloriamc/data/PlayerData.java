@@ -10,6 +10,7 @@ import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,27 +23,27 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+
 public class PlayerData implements IPlayerData {
 
-    private final String playerName;
-    private final String uuid;
+    @Expose private final String playerName;
+    @Expose private final String uuid;
+    @Expose private int coins;
+    @Expose private int ecu;
 
-    private int coins;
-    private int ecu;
+    @Expose private float exp;
+    @Expose private int level;
 
-    private float exp;
-    private int level;
-
-    private boolean mod;
+    @Expose private boolean mod;
 
 
-    private Settings settings;
+    @Expose private Settings settings;
 
-    private KbWarrior kbWarrior;
+    @Expose private KbWarrior kbWarrior;
 
-    private Madness madness;
+    @Expose private Madness madness;
 
-    private Ban ban;
+    @Expose private Ban ban;
 
 
     public PlayerData(String playerName, String uuid, boolean initDefault){

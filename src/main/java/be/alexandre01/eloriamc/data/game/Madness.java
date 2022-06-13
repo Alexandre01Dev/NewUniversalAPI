@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.data.game;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Madness extends Identifier{
-    private int kill = 0;
-    private int death = 0;
-    private int bestks = 0;
-    private float elo = 0;
-    private String division = "§6§lBronze IV";
+    @Expose private int kill = 0;
+    @Expose private int death = 0;
+    @Expose private int bestks = 0;
+    @Expose private float elo = 0;
+    @Expose private String division = "§6§lBronze IV";
 
-    private int[] killMsg = {0};
-    private int[] killAnim = {0};
+    @Expose private int[] killMsg = {0};
+    @Expose private int[] killAnim = {0};
 }
