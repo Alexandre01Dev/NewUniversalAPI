@@ -7,10 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.*;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
@@ -47,21 +48,23 @@ public class Ban extends Identifier {
             return "Non banni";
         if (time == -1L)
             return "§cPermanent";
-        LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
+     //   LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
         long diff = time - System.currentTimeMillis();
-
-        Period tempsRestant = Period.between(LocalDate.now(), temps);
+        LocalDate temps = new LocalDate(diff);
+        LocalDate now = new LocalDate(System.currentTimeMillis());
+        //LocalDate now = new LocalDate(2015, 7, 30);
+       // Period tempsRestant = Period.between(LocalDate.now(), temps);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
-        int years = tempsRestant.getYears()-1;
-        int mois = tempsRestant.getMonths()-1;
-        int jours = tempsRestant.getDays()-1;
-        int heures = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-        int secondes = calendar.get(Calendar.SECOND);
+        int years = Years.yearsBetween(now, temps).getYears();
+        int mois = Months.monthsBetween(now, temps).getMonths();
+        int jours = Days.daysBetween(now, temps).getDays();
+        int heures = Hours.hoursBetween(now, temps).getHours();
+        int minutes = Minutes.minutesBetween(now, temps).getMinutes();
+        int secondes = Seconds.secondsBetween(now, temps).getSeconds();
 
         StringBuilder sb = new StringBuilder();
 
