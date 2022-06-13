@@ -5,6 +5,7 @@ import be.alexandre01.eloriamc.data.game.KbWarrior;
 import be.alexandre01.eloriamc.data.game.Madness;
 import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
+import be.alexandre01.eloriamc.data.punishement.Ban;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
@@ -40,6 +41,8 @@ public class PlayerData implements IPlayerData {
 
     private Madness madness;
 
+    private Ban ban;
+
 
     public PlayerData(String playerName, String uuid, boolean initDefault){
         this.playerName = playerName;
@@ -53,6 +56,7 @@ public class PlayerData implements IPlayerData {
         this.settings = new Settings(true, true, true, true);
         this.kbWarrior = new KbWarrior();
         this.madness = new Madness();
+        this.ban = new Ban();
     }
 
     public String toJson(){

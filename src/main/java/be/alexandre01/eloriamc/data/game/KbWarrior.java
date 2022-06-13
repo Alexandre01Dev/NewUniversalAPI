@@ -17,7 +17,7 @@ import java.sql.SQLException;
 @NoArgsConstructor
 @Getter
 @Setter
-public class KbWarrior {
+public class KbWarrior extends Identifier {
     private int kill = 0;
     private int death = 0;
     private int bestKs = 0;

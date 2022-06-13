@@ -3,8 +3,12 @@ package be.alexandre01.eloriamc.data;
 import be.alexandre01.eloriamc.data.game.Identifier;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.utils.Tuple;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,9 +51,14 @@ public class SetupPlayerData {
                             }
                         }
                     }
-                    playerData.savePlayerCache();
 
                     pData.set(playerData);
+                    playerData.getBan().checkBan();
+                    playerData.savePlayerCache();
+                    if(playerData.getBan().isBanned()) {
+                        ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
+                        player.disconnect(new TextComponent("§c§LBANNI !\n" + playerData.getBan().getTimeLeft()));
+                    }
 
                 }
             } catch (SQLException e) {

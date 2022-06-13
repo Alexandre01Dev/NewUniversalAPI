@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Madness implements Identifier{
+public class Madness extends Identifier{
     private int kill = 0;
     private int death = 0;
     private int bestks = 0;

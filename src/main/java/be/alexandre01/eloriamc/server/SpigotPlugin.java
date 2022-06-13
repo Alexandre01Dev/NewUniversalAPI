@@ -4,6 +4,7 @@ import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.config.yaml.YamlUtils;
 import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.commands.PlayerDataModifier;
+import be.alexandre01.eloriamc.server.commands.Ban;
 import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
@@ -109,6 +110,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         registerCommand("reportchat", new ReportChat("reportchat"));
         registerCommand("rclist", new RcList("rclist"));
         registerCommand("pd", new PlayerDataModifier("pd"));
+        registerCommand("ban", new Ban("ban"));
 
         registerCommand("skin", new Command("Skin") {
             @Override
