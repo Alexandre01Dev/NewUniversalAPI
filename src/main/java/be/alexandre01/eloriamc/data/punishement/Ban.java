@@ -50,7 +50,9 @@ public class Ban extends Identifier {
             return "§cPermanent";
      //   LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
         long diff = time - System.currentTimeMillis();
-        LocalDate temps = new LocalDate(diff);
+        LocalDate temps = new LocalDate(time);
+        DateTime dateTime = new DateTime(temps);
+
         LocalDate now = new LocalDate(System.currentTimeMillis());
         //LocalDate now = new LocalDate(2015, 7, 30);
        // Period tempsRestant = Period.between(LocalDate.now(), temps);
@@ -59,12 +61,12 @@ public class Ban extends Identifier {
         calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
-        int years = Years.yearsBetween(now, temps).getYears();
-        int mois = Months.monthsBetween(now, temps).getMonths();
-        int jours = Days.daysBetween(now, temps).getDays();
-        int heures = Hours.hoursBetween(now, temps).getHours();
-        int minutes = Minutes.minutesBetween(now, temps).getMinutes();
-        int secondes = Seconds.secondsBetween(now, temps).getSeconds();
+        int years = dateTime.getYear();
+        int mois = dateTime.getMonthOfYear();
+        int jours = dateTime.getDayOfMonth();
+        int heures =  dateTime.getHourOfDay();
+        int minutes = dateTime.getMinuteOfHour();
+        int secondes = dateTime.getSecondOfMinute();
 
         StringBuilder sb = new StringBuilder();
 
