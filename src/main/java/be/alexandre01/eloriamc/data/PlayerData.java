@@ -9,6 +9,7 @@ import be.alexandre01.eloriamc.data.punishement.Ban;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,11 +61,12 @@ public class PlayerData implements IPlayerData {
     }
 
     public String toJson(){
-        return new Gson().toJson(this);
+        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this);
+        //return new Gson().toJson(this);
     }
 
     public static PlayerData fromJson(String playerdata) {
-        return new Gson().fromJson(playerdata, PlayerData.class);
+        return  new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(playerdata, PlayerData.class);
     }
 
 

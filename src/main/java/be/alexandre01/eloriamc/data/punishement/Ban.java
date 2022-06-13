@@ -2,10 +2,14 @@ package be.alexandre01.eloriamc.data.punishement;
 
 import be.alexandre01.eloriamc.data.game.Identifier;
 import be.alexandre01.eloriamc.utils.TimeUnit;
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +22,9 @@ public class Ban extends Identifier {
     private String reason = "none";
     private String author = "none";
     private String date = "none";
+    @Expose private Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+
 
     public void checkBan() {
         if (isBanned) {
@@ -35,7 +42,10 @@ public class Ban extends Identifier {
         if (time == -1L)
             return "§cPermanent";
         long tempsRestant = (time - System.currentTimeMillis()) / 1000L;
-        int mois = 0;
+
+
+        //résumé, bien tenté en tout cas
+        /*int mois = 0;
         int jours = 0;
         int heures = 0;
         int minutes = 0;
@@ -61,6 +71,10 @@ public class Ban extends Identifier {
             tempsRestant -= TimeUnit.SECONDE.getToSecond();
         }
         return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
+
+         */
+
+        return format.format(tempsRestant);
     }
 
 }
