@@ -37,6 +37,7 @@ public class SetupPlayerData {
                                     // <!> Attention a bien mettre des valeurs par défaut+ Mettre un @NoArgsConstructor dans ces classes <!>+
 
                                     Field field = playerData.getClass().getDeclaredField(id.b());
+                                    field.setAccessible(true);
                                     System.out.println("Fuck 2");
                                     field.set(playerData, field.getType().newInstance());
                                     System.out.println("TESTED");
