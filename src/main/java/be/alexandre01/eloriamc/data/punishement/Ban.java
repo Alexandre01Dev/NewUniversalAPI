@@ -52,11 +52,11 @@ public class Ban extends Identifier {
 
         Period tempsRestant = Period.between(LocalDate.now(), temps);
 
-        Duration duration = Duration.between(LocalDate.now(), temps);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
+        int years = tempsRestant.getYears();
         int mois = tempsRestant.getMonths();
         int jours = tempsRestant.getDays();
         int heures = calendar.get(Calendar.HOUR_OF_DAY);
@@ -84,7 +84,7 @@ public class Ban extends Identifier {
             secondes++;
             tempsRestant -= TimeUnit.SECONDE.getToSecond();
         }*/
-        return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
+        return years + "Année(s), " + mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
 
 
 

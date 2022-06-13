@@ -38,6 +38,7 @@ public class RankManager {
         return prefix.map(s -> s + " ").orElse(null);
     }
 
+
     public String getGroup() {
         Optional<User> user = ultraPermissionsAPI.getUsers().name(playerName);
         if(!user.isPresent()) return null;

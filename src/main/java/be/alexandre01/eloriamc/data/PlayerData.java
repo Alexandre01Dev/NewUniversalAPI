@@ -55,7 +55,7 @@ public class PlayerData implements IPlayerData {
         this.exp = 0;
         this.level = 1;
         this.mod = false;
-        this.settings = new Settings(true, true, true, true);
+        this.settings = new Settings();
         this.kbWarrior = new KbWarrior();
         this.madness = new Madness();
         this.ban = new Ban();
