@@ -56,9 +56,9 @@ public class Ban extends Identifier {
         calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
-        int years = tempsRestant.getYears();
-        int mois = tempsRestant.getMonths();
-        int jours = tempsRestant.getDays();
+        int years = tempsRestant.getYears()-1;
+        int mois = tempsRestant.getMonths()-1;
+        int jours = tempsRestant.getDays()-1;
         int heures = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         int secondes = calendar.get(Calendar.SECOND);
