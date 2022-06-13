@@ -10,6 +10,13 @@ import lombok.Setter;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +29,7 @@ public class Ban extends Identifier {
     @Expose private String reason = "none";
     @Expose private String author = "none";
     @Expose private String date = "none";
-    private final Format format = new SimpleDateFormat("yy année(s), MM mois, dd jours et hh:mm:ss");
+    private final Format format = new SimpleDateFormat("hh:mm:ss");
 
 
 
@@ -41,16 +48,16 @@ public class Ban extends Identifier {
             return "Non banni";
         if (time == -1L)
             return "§cPermanent";
-        long tempsRestant = (time - System.currentTimeMillis());
+        LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
+        long diff = time - System.currentTimeMillis();
+
+        Period tempsRestant = Period.between(temps, LocalDate.now());
 
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
-        /*int mois = 0;
-        int jours = 0;
-        int heures = 0;
-        int minutes = 0;
-        int secondes = 0;
-        while (tempsRestant >= TimeUnit.MOIS.getToSecond()) {
+        int mois = tempsRestant.getMonths();
+        int jours = tempsRestant.getDays();
+       /* while (tempsRestant >= TimeUnit.MOIS.getToSecond()) {
             mois++;
             tempsRestant -= TimeUnit.MOIS.getToSecond();
         }
@@ -69,12 +76,12 @@ public class Ban extends Identifier {
         while (tempsRestant >= TimeUnit.SECONDE.getToSecond()) {
             secondes++;
             tempsRestant -= TimeUnit.SECONDE.getToSecond();
-        }
-        return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
+        }*/
+        return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + format.format(diff);
 
-         */
 
-        return format.format(tempsRestant);
+
+        //
     }
 
 }
