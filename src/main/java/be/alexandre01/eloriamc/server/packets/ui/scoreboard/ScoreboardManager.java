@@ -1,12 +1,16 @@
 package be.alexandre01.eloriamc.server.packets.ui.scoreboard;
 
-import fr.itsalexousd.devplugin.Main;
+import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.player.BasePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -27,52 +31,63 @@ import java.util.concurrent.TimeUnit;
  * along with SamaGamesAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class ScoreboardManager {
-    private final Map<UUID, PersonalScoreboard> scoreboards;
+    private final ArrayList<BasePlayer> scoreboards;
     private final ScheduledFuture glowingTask;
     private final ScheduledFuture reloadingTask;
     private int ipCharIndex;
     private int cooldown;
 
+    private SpigotPlugin plugin;
+
     public ScoreboardManager() {
-        scoreboards = new HashMap<>();
+        scoreboards = new ArrayList<>();
         ipCharIndex = 0;
         cooldown = 0;
 
-        glowingTask = Main.getInstance().getScheduledExecutorService().scheduleAtFixedRate(() ->
+        this.plugin = SpigotPlugin.getInstance();
+
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(16);
+        ScheduledExecutorService executorMonoThread = Executors.newScheduledThreadPool(1);
+        glowingTask = scheduledExecutorService.scheduleAtFixedRate(() ->
         {
             String ip = colorIpAt();
-            for (PersonalScoreboard scoreboard : scoreboards.values())
-                Main.getInstance().getExecutorMonoThread().execute(() -> scoreboard.setLines(ip));
+            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).forEach(scoreboard -> {
+                executorMonoThread.execute(() -> scoreboard.setLines(ip));
+            });
         }, 80, 80, TimeUnit.MILLISECONDS);
 
-        reloadingTask = Main.getInstance().getScheduledExecutorService().scheduleAtFixedRate(() ->
+        reloadingTask = scheduledExecutorService.scheduleAtFixedRate(() ->
         {
-            for (PersonalScoreboard scoreboard : scoreboards.values())
-                Main.getInstance().getExecutorMonoThread().execute(scoreboard::reloadData);
+            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).forEach(scoreboard -> {
+                executorMonoThread.execute(scoreboard::reloadData);
+            });
         }, 1, 1, TimeUnit.SECONDS);
     }
 
     public void onDisable() {
-        scoreboards.values().forEach(PersonalScoreboard::onLogout);
+        this.glowingTask.cancel(true);
+        this.reloadingTask.cancel(true);
+        scoreboards.stream().map(BasePlayer::getPersonalScoreboard).forEach(PersonalScoreboard::onLogout);
     }
 
-    public void onLogin(Player player) {
-        if (scoreboards.containsKey(player.getUniqueId())) {
+    public void onLogin(BasePlayer player) {
+        if (scoreboards.contains(player)) {
             return;
         }
-        scoreboards.put(player.getUniqueId(), new PersonalScoreboard(player));
+        scoreboards.add(player);
     }
 
-    public void onLogout(Player player) {
-        if (scoreboards.containsKey(player.getUniqueId())) {
-            scoreboards.get(player.getUniqueId()).onLogout();
-            scoreboards.remove(player.getUniqueId());
+    public void onLogout(BasePlayer player) {
+        if (scoreboards.contains(player)) {
+            player.getPersonalScoreboard().onLogout();
+            scoreboards.remove(player);
         }
     }
 
-    public void update(Player player) {
-        if (scoreboards.containsKey(player.getUniqueId())) {
-            scoreboards.get(player.getUniqueId()).reloadData();
+    public void update(BasePlayer player) {
+        if (scoreboards.contains(player)) {
+            player.getPersonalScoreboard().reloadData();
         }
     }
 

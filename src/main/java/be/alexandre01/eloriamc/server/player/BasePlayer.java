@@ -5,9 +5,11 @@ import be.alexandre01.eloriamc.chat.ChatConfiguration;
 import be.alexandre01.eloriamc.chat.ChatOptions;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjector;
+import be.alexandre01.eloriamc.server.packets.ui.scoreboard.PersonalScoreboard;
 import be.alexandre01.eloriamc.server.session.players.PlayerDamager;
 import com.mojang.authlib.GameProfile;
 import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.*;
@@ -53,6 +55,9 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     API api;
     Player player;
 
+    @Getter
+    PersonalScoreboard personalScoreboard;
+
     public BasePlayer(Player player) {
         super(((CraftServer) player.getServer()), ((CraftPlayer) player).getHandle());
         this.player = player;
@@ -61,6 +66,14 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
         this.packetInjector = new PacketInjector(player);
     }
 
+
+
+    public void setPersonalScoreboard(PersonalScoreboard personalScoreboard) {
+        if(this.personalScoreboard != null) {
+            this.personalScoreboard.onLogout();
+        }
+        this.personalScoreboard = personalScoreboard;
+    }
 
     @Override
     public Player getPlayer() {

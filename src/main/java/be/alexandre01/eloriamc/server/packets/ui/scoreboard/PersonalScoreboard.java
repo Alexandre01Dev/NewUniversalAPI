@@ -1,5 +1,8 @@
 package be.alexandre01.eloriamc.server.packets.ui.scoreboard;
 
+import be.alexandre01.eloriamc.server.player.BasePlayer;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -21,12 +24,15 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with SamaGamesAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PersonalScoreboard {
-    private Player player;
+public class PersonalScoreboard<T extends BasePlayer> {
+    private T player;
     private final UUID uuid;
     private final ObjectiveSign objectiveSign;
 
-    PersonalScoreboard(Player player){
+    @Setter @Getter
+    private ScoreboardImpl<?> scoreboardImpl;
+
+    PersonalScoreboard(T player){
         this.player = player;
         uuid = player.getUniqueId();
         objectiveSign = new ObjectiveSign("sidebar", "DevPlugin");
@@ -35,18 +41,12 @@ public class PersonalScoreboard {
         objectiveSign.addReceiver(player);
     }
 
-    public void reloadData(){}
+    public void reloadData(){
+        scoreboardImpl.reloadData();
+    }
 
     public void setLines(String ip){
-        objectiveSign.setDisplayName("§eServeur");
-
-        objectiveSign.setLine(0, "§1");
-        objectiveSign.setLine(1, "§6Joueurs: §a" + Bukkit.getOnlinePlayers().size() + "/20");
-        objectiveSign.setLine(2, "§6Pseudo: §b" + player.getName());
-        objectiveSign.setLine(3, "§2");
-        objectiveSign.setLine(4, ip);
-
-        objectiveSign.updateLines();
+        scoreboardImpl.setLines(ip);
     }
 
     public void onLogout(){
