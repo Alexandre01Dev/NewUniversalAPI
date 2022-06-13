@@ -22,7 +22,7 @@ public class Ban extends Identifier {
     @Expose private String reason = "none";
     @Expose private String author = "none";
     @Expose private String date = "none";
-    private final Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private final Format format = new SimpleDateFormat("yy année(s), MM mois, dd jours et hh:mm:ss");
 
 
 
@@ -44,7 +44,7 @@ public class Ban extends Identifier {
         long tempsRestant = (time - System.currentTimeMillis());
 
 
-        //résumé, bien tenté en tout cas
+        //résumé, bien tenté en tout cas, mais c'est pas très joli
         /*int mois = 0;
         int jours = 0;
         int heures = 0;
