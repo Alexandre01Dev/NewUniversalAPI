@@ -10,13 +10,12 @@ import lombok.Setter;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
+import java.util.Calendar;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -51,12 +50,20 @@ public class Ban extends Identifier {
         LocalDate temps =  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
         long diff = time - System.currentTimeMillis();
 
-        Period tempsRestant = Period.between(temps, LocalDate.now());
+        Period tempsRestant = Period.between(LocalDate.now(), temps);
 
+        Duration duration = Duration.between(LocalDate.now(), temps);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(diff));
 
         //résumé, bien tenté en tout cas, mais c'est pas très joli
         int mois = tempsRestant.getMonths();
         int jours = tempsRestant.getDays();
+        int heures = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        int secondes = calendar.get(Calendar.SECOND);
+
+
        /* while (tempsRestant >= TimeUnit.MOIS.getToSecond()) {
             mois++;
             tempsRestant -= TimeUnit.MOIS.getToSecond();
@@ -77,7 +84,7 @@ public class Ban extends Identifier {
             secondes++;
             tempsRestant -= TimeUnit.SECONDE.getToSecond();
         }*/
-        return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + format.format(diff);
+        return mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
 
 
 
