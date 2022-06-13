@@ -41,7 +41,7 @@ public class Ban extends Identifier {
             return "Non banni";
         if (time == -1L)
             return "§cPermanent";
-        long tempsRestant = (time - System.currentTimeMillis()) / 1000L;
+        long tempsRestant = (time - System.currentTimeMillis());
 
 
         //résumé, bien tenté en tout cas
