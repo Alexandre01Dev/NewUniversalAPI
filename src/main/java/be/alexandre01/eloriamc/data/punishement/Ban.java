@@ -63,6 +63,21 @@ public class Ban extends Identifier {
         int minutes = calendar.get(Calendar.MINUTE);
         int secondes = calendar.get(Calendar.SECOND);
 
+        StringBuilder sb = new StringBuilder();
+
+        if(years > 0)
+            sb.append(years).append(" années ");
+
+        if(mois > 0)
+            sb.append(mois).append(" mois ");
+
+        if(jours > 0)
+            sb.append(jours).append(" jours ");
+
+        sb.append(heures).append(" heures ");
+        sb.append(minutes).append(" minutes ");
+        sb.append(secondes).append(" secondes ");
+
 
        /* while (tempsRestant >= TimeUnit.MOIS.getToSecond()) {
             mois++;
@@ -84,7 +99,7 @@ public class Ban extends Identifier {
             secondes++;
             tempsRestant -= TimeUnit.SECONDE.getToSecond();
         }*/
-        return years + "Année(s), " + mois + " " + TimeUnit.MOIS.getName() + ", " + jours + " " + TimeUnit.JOUR.getName() + ", " + heures + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + secondes + " " + TimeUnit.SECONDE.getName();
+        return sb.toString();
 
 
 
