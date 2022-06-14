@@ -45,6 +45,7 @@ public class BungeePlugin extends Plugin {
                 createInitialData("all", 0);
             }
         });
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package be.alexandre01.eloriamc.server.listener;
 
+import be.alexandre01.dreamnetwork.api.request.RequestType;
 import be.alexandre01.dreamnetwork.api.request.channels.DNChannel;
 import be.alexandre01.dreamnetwork.api.request.channels.DNChannelManager;
 import be.alexandre01.dreamnetwork.api.request.channels.DataListener;
@@ -38,7 +39,7 @@ public class ServerAttached implements Listener {
                 createInitialData("all", 0);
             }
         });
-
+        dnSpigotAPI.autoRefreshPlayers();
 
     }
 }
