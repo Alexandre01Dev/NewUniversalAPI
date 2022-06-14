@@ -23,7 +23,6 @@ public class ItemInteractEvent extends IEvent<PlayerInteractEvent> {
 
             ItemMeta itemMeta = item.getItemMeta();
             if(itemMeta.hasDisplayName()){
-                System.out.println(session.getItemFactory().getUniversalSpecialItems().keySet());
             if(session.getItemFactory().isUniversal(itemMeta.getDisplayName())){
                 SessionItem sessionItem = session.getItemFactory().getByDisplayName(itemMeta.getDisplayName());
                 sessionItem.getItemInteractEvent().onEvent(event);
