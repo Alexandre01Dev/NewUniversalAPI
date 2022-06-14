@@ -303,9 +303,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         try{
             final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
-            bukkitCommandMap.setAccessible(true);
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
             commandMap.register(commandName, commandClass);
         }catch (Exception ex){
             ex.printStackTrace();
