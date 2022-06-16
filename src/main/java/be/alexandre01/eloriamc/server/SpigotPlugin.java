@@ -23,6 +23,7 @@ import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.*;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
+import be.alexandre01.eloriamc.server.packets.ui.scoreboard.ScoreboardManager;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.player.BasePlayerManager;
 import be.alexandre01.eloriamc.server.session.Session;
@@ -75,7 +76,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private HashMap<Integer, MessageData> messageData = new HashMap<>();
 
-
+    @Getter private ScoreboardManager scoreboardManager = new ScoreboardManager();
 
     public boolean isReloading = false;
 
@@ -302,7 +303,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     public void registerCommand(String commandName, Command commandClass){
         try{
             final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
+            bukkitCommandMap.setAccessible(true);
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
             commandMap.register(commandName, commandClass);
         }catch (Exception ex){
