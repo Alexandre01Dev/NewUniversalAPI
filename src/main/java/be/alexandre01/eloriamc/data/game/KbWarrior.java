@@ -24,4 +24,5 @@ public class KbWarrior extends Identifier {
     @Expose private int bestKs = 0;
     @Expose private float elo = 0;
     @Expose private String division = "§6§lBronze IV";
+    @Expose private boolean ranked = false;
 }
