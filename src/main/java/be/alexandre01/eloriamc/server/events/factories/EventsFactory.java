@@ -1,6 +1,8 @@
 package be.alexandre01.eloriamc.server.events.factories;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.events.factories.eventloaders.PaperEventLoader;
+import be.alexandre01.eloriamc.server.events.factories.eventloaders.SpigotEventLoader;
 import be.alexandre01.eloriamc.server.events.nms.EventUtils;
 import be.alexandre01.eloriamc.server.events.players.RegisterPlayerEvent;
 import com.google.common.collect.ArrayListMultimap;
@@ -23,7 +25,14 @@ public class EventsFactory<T extends Event> extends EventUtils {
     public EventsFactory() {
         eventHashMap = ArrayListMultimap.create();
         spigotPlugin = SpigotPlugin.getInstance();
-        customEventLoader = new CustomEventLoader();
+        try {
+            Class aikar =  Class.forName("co.aikar.timings.TimedEventExecutor");
+            if(aikar != null){
+                customEventLoader = new PaperEventLoader();
+            }
+        } catch (ClassNotFoundException e) {
+            customEventLoader = new SpigotEventLoader();
+        }
     }
 
     public IEvent<T> fastRegisterEvent(Class<T> event, IEvent<T> iEvent, EventPriority eventPriority) {
