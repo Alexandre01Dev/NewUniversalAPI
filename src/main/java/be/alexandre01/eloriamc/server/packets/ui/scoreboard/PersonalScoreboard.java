@@ -29,16 +29,25 @@ public class PersonalScoreboard<T extends BasePlayer> {
     private final UUID uuid;
     private final ObjectiveSign objectiveSign;
 
-    @Setter @Getter
-    private ScoreboardImpl<?> scoreboardImpl;
+    @Getter
+    private ScoreboardImpl<T> scoreboardImpl;
 
-    PersonalScoreboard(T player){
+    public PersonalScoreboard(T player){
         this.player = player;
         uuid = player.getUniqueId();
         objectiveSign = new ObjectiveSign("sidebar", "DevPlugin");
 
+        //reloadData();
+        //objectiveSign.addReceiver(player);
+    }
+
+    public void setScoreboardImpl(ScoreboardImpl<T> scoreboardImpl){
+        this.scoreboardImpl = scoreboardImpl;
+        scoreboardImpl.setPlayer(player);
+        scoreboardImpl.setObjectiveSign(objectiveSign);
         reloadData();
-        objectiveSign.addReceiver(player);
+        if(!objectiveSign.receivers.contains(player))
+            objectiveSign.addReceiver(player);
     }
 
     public void reloadData(){

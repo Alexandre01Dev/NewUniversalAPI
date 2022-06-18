@@ -1,12 +1,14 @@
 package be.alexandre01.eloriamc.server;
 
 import be.alexandre01.eloriamc.API;
+import be.alexandre01.eloriamc.chat.ChatOptions;
 import be.alexandre01.eloriamc.config.yaml.YamlUtils;
 import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.commands.PlayerDataModifier;
 import be.alexandre01.eloriamc.server.commands.Ban;
 import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
+import be.alexandre01.eloriamc.server.events.factories.CustomEventLoader;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
 import be.alexandre01.eloriamc.server.listener.PlayerJoin;
@@ -20,10 +22,14 @@ import be.alexandre01.eloriamc.server.modules.Module;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
+import be.alexandre01.eloriamc.server.packets.npc.NPC;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.*;
+import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBar;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
+import be.alexandre01.eloriamc.server.packets.ui.scoreboard.PersonalScoreboard;
 import be.alexandre01.eloriamc.server.packets.ui.scoreboard.ScoreboardManager;
+import be.alexandre01.eloriamc.server.packets.ui.scoreboard.example.Base;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.player.BasePlayerManager;
 import be.alexandre01.eloriamc.server.session.Session;
@@ -43,12 +49,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -78,6 +87,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private ScoreboardManager scoreboardManager = new ScoreboardManager();
 
+
+
     public boolean isReloading = false;
 
     @Override
@@ -106,7 +117,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
 
-        //getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(this, this);
 
         registerCommand("reportchat", new ReportChat("reportchat"));
         registerCommand("rclist", new RcList("rclist"));
@@ -243,7 +254,9 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 session.addPlayer(player);
             }
         }
-
+       /* scoreboardManager.setupSchedulers(16,1);
+        scoreboardManager.startGlowingTask(80,80, TimeUnit.MILLISECONDS);
+        scoreboardManager.startReloadingTask(1,1, TimeUnit.SECONDS);*/
     }
 
     @Override
@@ -256,8 +269,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     }
 
 
-    /*
-    @EventHandler
+
+  /*  @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         NPC npc = new NPC("§a§lCreepah",player.getLocation());
@@ -274,14 +287,14 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         bossBarManagerTask.addBossBar("TheFuckingBossBar",bossBar);
         //send bossbar
         bossBarManagerTask.setBossBar(player,"TheFuckingBossBar");
+        BasePlayer basePlayer = getBasePlayer(player);
+        basePlayer.sendMessage(ChatOptions.PREFIX, "§a§lWelcome to the server");
+        basePlayer.setPersonalScoreboard(new PersonalScoreboard<BasePlayer>(basePlayer));
+        basePlayer.getPersonalScoreboard().setScoreboardImpl(new Base<BasePlayer>());
+        scoreboardManager.onLogin(basePlayer);
+    }*/
 
-        getBasePlayer(player);
 
-
-
-    }
-
-     */
 
 
 

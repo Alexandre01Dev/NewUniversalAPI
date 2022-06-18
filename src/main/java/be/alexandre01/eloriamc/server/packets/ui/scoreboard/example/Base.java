@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 public class Base<T extends BasePlayer> extends ScoreboardImpl<T> {
 
 
-    public Base(ObjectiveSign objectiveSign, T player) {
-        super(objectiveSign, player);
+    public Base() {
+        super();
     }
 
     @Override

@@ -5,10 +5,7 @@ import be.alexandre01.eloriamc.server.player.BasePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -32,37 +29,56 @@ import java.util.concurrent.TimeUnit;
  */
 public class ScoreboardManager {
     private final ArrayList<BasePlayer> scoreboards;
-    private final ScheduledFuture glowingTask;
-    private final ScheduledFuture reloadingTask;
-    private int ipCharIndex;
+    private ScheduledFuture glowingTask;
+    private ScheduledFuture reloadingTask;
+    private ScheduledExecutorService executorMonoThread;
+    private  ScheduledExecutorService scheduledExecutorService;
+    private int charIndex;
     private int cooldown;
+
+
+    private int ipCooldown;
+    private int ipCharIndex;
+
+
+    private String[] prefixes = new String[]{"play","mc"};
+    private int currentPrefix = 0;
 
     private SpigotPlugin plugin;
 
     public ScoreboardManager() {
         scoreboards = new ArrayList<>();
-        ipCharIndex = 0;
+        charIndex = 0;
+        ipCooldown = 0;
         cooldown = 0;
+        ipCooldown = 0;
+
+        boolean removing = false;
 
         this.plugin = SpigotPlugin.getInstance();
+    }
 
 
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(16);
-        ScheduledExecutorService executorMonoThread = Executors.newScheduledThreadPool(1);
+    public void setupSchedulers(int multiThread, int minThread){
+        scheduledExecutorService = Executors.newScheduledThreadPool(multiThread);
+        executorMonoThread = Executors.newScheduledThreadPool(minThread);
+    }
+    public void startGlowingTask(int initialDelay,int period, TimeUnit timeUnit){
         glowingTask = scheduledExecutorService.scheduleAtFixedRate(() ->
         {
             String ip = colorIpAt();
-            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).forEach(scoreboard -> {
+            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).filter(Objects::nonNull).forEach(scoreboard -> {
                 executorMonoThread.execute(() -> scoreboard.setLines(ip));
             });
-        }, 80, 80, TimeUnit.MILLISECONDS);
-
+        }, initialDelay, period, timeUnit);
+    }
+    public void startReloadingTask(int initialDelay,int period, TimeUnit timeUnit){
         reloadingTask = scheduledExecutorService.scheduleAtFixedRate(() ->
         {
-            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).forEach(scoreboard -> {
+            scoreboards.stream().map(BasePlayer::getPersonalScoreboard).filter(Objects::nonNull).forEach(scoreboard -> {
                 executorMonoThread.execute(scoreboard::reloadData);
             });
-        }, 1, 1, TimeUnit.SECONDS);
+        }, initialDelay, period, timeUnit);
     }
 
     public void onDisable() {
@@ -92,37 +108,98 @@ public class ScoreboardManager {
     }
 
     private String colorIpAt() {
-        String ip = "play.serveur.fr";
+        try {
+            //System.out.println("FuckingStart");
+            String prefix = calculPrefix();
+            String ip = prefix+".eloriamc.net";
+            if (cooldown > 0) {
+                cooldown--;
+                return ChatColor.WHITE + ip;
+            }
 
-        if (cooldown > 0) {
-            cooldown--;
-            return ChatColor.YELLOW + ip;
+            StringBuilder formattedIp = new StringBuilder();
+
+            if (charIndex > 0) {
+                //System.out.println("isCrashHere ?");
+                formattedIp.append(ip.substring(0, charIndex - 1));
+                formattedIp.append(ChatColor.YELLOW).append(ip.substring(charIndex - 1, charIndex));
+            } else {
+              //  System.out.println("OrCrashHere ?");
+                formattedIp.append(ip.substring(0, charIndex));
+            }
+
+         //   System.out.println("OkCrashHere ?");
+
+            while (charIndex >= ip.length()) {
+                charIndex--;
+            }
+            formattedIp.append(ChatColor.GOLD).append(ip.charAt(charIndex));
+
+            if (charIndex + 1 < ip.length()) {
+                //System.out.println("HmmCrashHere ?");
+                formattedIp.append(ChatColor.YELLOW).append(ip.charAt(charIndex + 1));
+
+                if (charIndex + 2 < ip.length()){
+                //    System.out.println("HmmCrashHere2 ?");
+                    if(formattedIp.length() > charIndex + 3){
+                        formattedIp.append(ChatColor.WHITE).append(ip.substring(charIndex + 2));
+                    }
+                }
+
+
+                charIndex++;
+            } else {
+                charIndex = 0;
+                cooldown = 50;
+            }
+
+            return ChatColor.WHITE + formattedIp.toString();
+        }catch (Exception e){
+            System.out.println(e.getCause().getMessage());
         }
 
-        StringBuilder formattedIp = new StringBuilder();
+        return "null";
+    }
 
-        if (ipCharIndex > 0) {
-            formattedIp.append(ip.substring(0, ipCharIndex - 1));
-            formattedIp.append(ChatColor.GOLD).append(ip.substring(ipCharIndex - 1, ipCharIndex));
-        } else {
-            formattedIp.append(ip.substring(0, ipCharIndex));
+    public String calculPrefix(){
+        String prepre = "";
+       // System.out.println("FuckOCalcoul");
+
+        if(ipCooldown <= 0) {
+            ipCooldown = 150;
         }
 
-        formattedIp.append(ChatColor.RED).append(ip.charAt(ipCharIndex));
 
-        if (ipCharIndex + 1 < ip.length()) {
-            formattedIp.append(ChatColor.GOLD).append(ip.charAt(ipCharIndex + 1));
-
-            if (ipCharIndex + 2 < ip.length())
-                formattedIp.append(ChatColor.YELLOW).append(ip.substring(ipCharIndex + 2));
-
-            ipCharIndex++;
-        } else {
+        ipCooldown--;
+       // System.out.println("Tadaa2!");
+        if(ipCooldown <= 0) {
             ipCharIndex = 0;
-            cooldown = 50;
+            if(currentPrefix + 1 < prefixes.length) {
+                currentPrefix++;
+            } else {
+                currentPrefix = 0;
+            }
+            return "";
+        }
+       // System.out.println("Tadaa2.5!");
+        String prefix = prefixes[currentPrefix];
+        if(ipCooldown > 150-10 && ipCooldown <= 150) {
+                prefix = prefix.substring(0, ipCharIndex);
+                if(ipCharIndex < prefixes[currentPrefix].length()) {
+                    ipCharIndex++;
+                }
+        }
+     //   System.out.println("Tadaa3!");
+        if(ipCooldown <= 5+prefixes[currentPrefix].length() && ipCooldown > 0) {
+            prefix = prefix.substring(0, ipCharIndex);
+            if(ipCharIndex != 0){
+                ipCharIndex--;
+            }
         }
 
-        return ChatColor.YELLOW + formattedIp.toString();
+      //  System.out.println("Tadaa!");
+
+        return prefix+prepre;
     }
 
 }

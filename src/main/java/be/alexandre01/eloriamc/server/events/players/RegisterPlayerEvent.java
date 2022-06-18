@@ -20,6 +20,7 @@ public class RegisterPlayerEvent<T extends Event> implements Listener {
 
 
 
+
     public <T extends Class<? extends Event>> RegisterPlayerEvent(Class<? extends Event> event, String handler, ListenerPlayerManager listenerPlayerManager) {
         this.handler = handler;
         System.out.println(event.getSimpleName());
