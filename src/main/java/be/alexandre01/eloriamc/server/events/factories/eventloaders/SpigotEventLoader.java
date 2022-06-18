@@ -81,24 +81,7 @@ public class SpigotEventLoader extends CustomEventLoader {
             }
             EventExecutor executor;
             //ADD compatibility for Aikar (Paper) and Old Spigot
-            try {
-                Class aikar = Class.forName("co.aikar.timings.TimedEventExecutor");
-                System.out.println("Aikar Timings detected");
-                executor = (EventExecutor)aikar.getDeclaredConstructor(EventExecutor.class,Plugin.class,Method.class,Class.class).newInstance(new EventExecutor() {
-                    @Override
-                    public void execute(Listener listener, Event event) throws EventException {
-                        if (!eventClass.isAssignableFrom(event.getClass()))
-                            return;
-                        try {
-                            method.invoke(listener, new Object[] { event });
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        } catch (InvocationTargetException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                },plugin,method,eventClass);
-            } catch (ClassNotFoundException e) {
+
                 final CustomTimingsHandler timings = new CustomTimingsHandler("Plugin: " + plugin.getDescription().getFullName() + " Event: " + listener.getClass().getName() + "::" + method.getName() + "(" + eventClass.getSimpleName() + ")", pluginParentTimer);
                 executor = new EventExecutor() {
                     public void execute(Listener listener, Event event) throws EventException {
@@ -118,15 +101,6 @@ public class SpigotEventLoader extends CustomEventLoader {
                         }
                     }
                 };
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
 
             eventSet.add(new RegisteredListener(listener, executor, ep, plugin, eh.ignoreCancelled()));
         }
