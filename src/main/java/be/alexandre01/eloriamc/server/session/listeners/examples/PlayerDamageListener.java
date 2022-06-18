@@ -30,29 +30,31 @@ public class PlayerDamageListener {
 
     }
 
-    private InstaKill addInstantKill(Session<?> session,Session<?> redirection,IListener<EntityDamageEvent> iListener){
+    @SafeVarargs
+    public final InstaKill addInstantKill(Session<?> session, Session<?> redirection, IListener<EntityDamageEvent>... iListener){
         InstaKill instaKill;
         iPlayerEvents.add(new Tuple<>(instaKill = new InstaKill(session,redirection,iListener),"getEntity"));
         instaKill.setPlayerDamageListener(this);
         return instaKill;
     }
 
-
-    private InstaKillOnVoid addInstantKillOnVoid(Session<?> session,Session<?> redirection,int height,IListener<PlayerMoveEvent> iListener){
+    @SafeVarargs
+    public final InstaKillOnVoid addInstantKillOnVoid(Session<?> session, Session<?> redirection, int height, IListener<PlayerMoveEvent>... iListener){
         InstaKillOnVoid instaKillOnVoid;
         iPlayerEvents.add(new Tuple<>(instaKillOnVoid = new InstaKillOnVoid(session,redirection,height,iListener),"getPlayer"));
         instaKillOnVoid.setPlayerDamageListener(this);
         return instaKillOnVoid;
     }
 
-
-    private InstaKillByEntity addInstantKillByEntity(Session<?> session,Session<?> redirection,IListener<EntityDamageByEntityEvent> iListener){
+    @SafeVarargs
+    public final InstaKillByEntity addInstantKillByEntity(Session<?> session, Session<?> redirection, IListener<EntityDamageByEntityEvent>... iListener){
         InstaKillByEntity instaKillByEntity;
         iPlayerEvents.add(new Tuple<>(instaKillByEntity = new InstaKillByEntity(session,redirection,iListener),"getEntity"));
         instaKillByEntity.setPlayerDamageListener(this);
         return instaKillByEntity;
     }
-    private InstaKillByBlock addInstantKillByBlock(Session<?> session,Session<?> redirection,IListener<EntityDamageByBlockEvent> iListener){
+    @SafeVarargs
+    public final InstaKillByBlock addInstantKillByBlock(Session<?> session, Session<?> redirection, IListener<EntityDamageByBlockEvent>... iListener){
         InstaKillByBlock instaKillByBlock;
         iPlayerEvents.add(new Tuple<>(instaKillByBlock = new InstaKillByBlock(session,redirection,iListener),"getEntity"));
         instaKillByBlock.setPlayerDamageListener(this);
@@ -60,7 +62,7 @@ public class PlayerDamageListener {
     }
 
 
-    private void build(Session<?> session){
+    public void build(Session<?> session){
         iPlayerEvents.forEach(iPlayerEvent -> {
             session.getListenerManager().registerPlayerEvent(iPlayerEvent.a(),iPlayerEvent.b());
         });

@@ -117,7 +117,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
 
-        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(this, this);
 
         registerCommand("reportchat", new ReportChat("reportchat"));
         registerCommand("rclist", new RcList("rclist"));
@@ -254,7 +254,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 session.addPlayer(player);
             }
         }
-       /* scoreboardManager.setupSchedulers(16,1);
+        /*scoreboardManager.setupSchedulers(16,1);
         scoreboardManager.startGlowingTask(80,80, TimeUnit.MILLISECONDS);
         scoreboardManager.startReloadingTask(1,1, TimeUnit.SECONDS);*/
     }
@@ -270,7 +270,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
 
 
-  /*  @EventHandler
+   /* @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         NPC npc = new NPC("§a§lCreepah",player.getLocation());

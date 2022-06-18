@@ -25,16 +25,15 @@ public class InstaKillOnVoid extends IPlayerEvent<PlayerMoveEvent> {
         this.session = session;
         this.redirection = redirection;
         height = 0.0;
+        this.listeners = new PlayerDamageListener.IListener[0];
     }
 
     @Override
     public void onPlayerEvent(PlayerMoveEvent event, Player player) {
-        if(playerDamageListener != null){
-            playerDamageListener.getGlobalListener().before(player);
-        }
         for (PlayerDamageListener.IListener listener : listeners) {
             if(!listener.before(event,player)) return;
         }
+
         if(player.getLocation().getY() <= height) {
             session.removePlayer(player);
             redirection.addPlayer(player);
