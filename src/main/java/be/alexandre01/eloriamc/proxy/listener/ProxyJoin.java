@@ -16,8 +16,10 @@ import java.util.Optional;
 
 public class ProxyJoin implements Listener {
     API api;
+    BungeePlugin bungeePlugin;
     public ProxyJoin(){
         api = API.getInstance();
+        bungeePlugin = BungeePlugin.getInstance();
     }
 
     @EventHandler
@@ -27,7 +29,8 @@ public class ProxyJoin implements Listener {
         //PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0,0, 0, 1, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
         PlayerData playerData = SetupPlayerData.setupPlayer(player.getName(), player.getUniqueId().toString());
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
-        BungeePlugin.getInstance().getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
+        bungeePlugin.getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
+        bungeePlugin.getTimePlayed().put(player.getUniqueId(),System.currentTimeMillis());
 
         Optional<User> user = JPremium.getApplication().getUserProfileByNickname(player.getName());
         player.sendMessage("Fuck");

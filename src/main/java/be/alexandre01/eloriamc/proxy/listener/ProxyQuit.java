@@ -12,8 +12,10 @@ import net.md_5.bungee.event.EventHandler;
 
 public class ProxyQuit implements Listener {
     API api;
+    BungeePlugin plugin;
     public ProxyQuit(){
         api = API.getInstance();
+        plugin = BungeePlugin.getInstance();
     }
 
     @EventHandler
@@ -21,9 +23,11 @@ public class ProxyQuit implements Listener {
         ProxiedPlayer player = e.getPlayer();
 
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
+        long dif = System.currentTimeMillis()-plugin.getTimePlayed().get(player.getUniqueId());
+        playerData.setTimePlayed(playerData.getTimePlayed()+dif);
         playerData.savePlayer();
         api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
 
-        BungeePlugin.getInstance().getOnline().setData("all", ProxyServer.getInstance().getOnlineCount() - 1);
+        plugin.getOnline().setData("all", ProxyServer.getInstance().getOnlineCount() - 1);
     }
 }

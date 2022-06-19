@@ -10,9 +10,14 @@ import be.alexandre01.eloriamc.data.mysql.DatabaseManager;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.proxy.listener.ProxyJoin;
 import be.alexandre01.eloriamc.proxy.listener.ProxyQuit;
-import com.jakub.premium.JPremium;
 import lombok.Getter;
+import lombok.Setter;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class BungeePlugin extends Plugin {
 
@@ -26,6 +31,9 @@ public class BungeePlugin extends Plugin {
     @Getter
     private DNChannel online;
 
+    @Getter
+    private HashMap<UUID,Long> timePlayed = new HashMap<>();
+
     @Override
     public void onEnable() {
         instance = this;
@@ -35,6 +43,7 @@ public class BungeePlugin extends Plugin {
         this.getProxy().getPluginManager().registerListener(this, new ProxyJoin());
         this.getProxy().getPluginManager().registerListener(this, new ProxyQuit());
         this.getProxy().getPluginManager().registerListener(this, new JPremiumLogin());
+
 
         online = new DNChannel("online");
 

@@ -37,6 +37,7 @@ import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
 import be.alexandre01.eloriamc.server.session.runnables.Updater;
+import be.alexandre01.eloriamc.server.utils.date.LongToDate;
 import be.alexandre01.eloriamc.utils.Tuple;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -117,7 +118,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
 
-        //getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(this, this);
 
         registerCommand("reportchat", new ReportChat("reportchat"));
         registerCommand("rclist", new RcList("rclist"));
@@ -270,10 +271,13 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
 
 
-   /* @EventHandler
+    @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        NPC npc = new NPC("§a§lCreepah",player.getLocation());
+        long l = API.getInstance().getPlayerDataManager().getPlayerData(player.getName()).getTimePlayed();
+        LongToDate longToDate = new LongToDate("dd:HH:mm:ss");
+        e.getPlayer().sendMessage("§eTu joue sur §fEloria§bMC§e depuis "+ longToDate.format(l));
+         /*NPC npc = new NPC("§a§lCreepah",player.getLocation());
         npc.setSkin(skinFactory.getSkinData("Boug1"));
         npc.setInteraction(new NPC.NPCInteract() {
             @Override
@@ -283,7 +287,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         });
         npc.initAndShow(player);
 
-        BossBar bossBar = new BossBar("§fTheFuckingBossBar",100);
+       BossBar bossBar = new BossBar("§fTheFuckingBossBar",100);
         bossBarManagerTask.addBossBar("TheFuckingBossBar",bossBar);
         //send bossbar
         bossBarManagerTask.setBossBar(player,"TheFuckingBossBar");
@@ -291,8 +295,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         basePlayer.sendMessage(ChatOptions.PREFIX, "§a§lWelcome to the server");
         basePlayer.setPersonalScoreboard(new PersonalScoreboard<BasePlayer>(basePlayer));
         basePlayer.getPersonalScoreboard().setScoreboardImpl(new Base<BasePlayer>());
-        scoreboardManager.onLogin(basePlayer);
-    }*/
+        scoreboardManager.onLogin(basePlayer);*/
+    }
 
 
 
