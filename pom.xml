@@ -127,6 +127,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/DreamNetwork-Plugin-api.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.jakub.premium</groupId>
+            <artifactId>JPremium</artifactId>
+            <version>1.13.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/JPremium-Cleared-1.13.1.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

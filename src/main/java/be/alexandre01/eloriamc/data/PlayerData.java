@@ -134,21 +134,12 @@ public class PlayerData implements IPlayerData {
 
     public List<Tuple<Identifier,String>> getIdentifiers(){
         List<Tuple<Identifier,String>> ids = new ArrayList<>();
-        System.out.println("LIST USED");
         for(Field field : this.getClass().getDeclaredFields()){
-            System.out.println("FOR USED "+ field.getName());
-            System.out.println("FOR TYPE "+ field.getType());
-            System.out.println("FOR ANNOTED"+ field.getAnnotatedType());
-            System.out.println("FOR GENERIC"+ field.getGenericType());
             field.setAccessible(true);
-            System.out.println();
 
-            System.out.println(isInheritedClass(Identifier.class,field.getType()));
             if(   isInheritedClass(Identifier.class,field.getType())){
-                System.out.println("SHEESH");
                 try {
                     ids.add(new Tuple<>((Identifier) field.get(this),field.getName()));
-                    System.out.println(ids);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -157,10 +148,9 @@ public class PlayerData implements IPlayerData {
         for(Field field : this.getClass().getFields()){
             field.setAccessible(true);
             if(field.getType().isAssignableFrom(Identifier.class)){
-                System.out.println("SHEESH");
                 try {
                     ids.add(new Tuple<>((Identifier) field.get(this),field.getName()));
-                    System.out.println(ids);
+
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }

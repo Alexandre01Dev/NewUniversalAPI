@@ -28,9 +28,9 @@ public class SetupPlayerData {
                 } else {
                     PlayerData playerData = PlayerData.fromJson(rs.getString("playerData"));
                     for (Tuple<Identifier, String> id : playerData.getIdentifiers()) {
-                        System.out.println("cc" + id.b() + " " + id.a());
+                        //System.out.println("cc" + id.b() + " " + id.a());
                         if (id.a() == null) {
-                            System.out.println("null");
+                            // System.out.println("null");
                             try {
                                 try {
                                     //Fait un new manuellement aux classes (ex: Madness,KbWarrior) et l'injecte dedans  si elles n'existent pas
@@ -38,9 +38,9 @@ public class SetupPlayerData {
 
                                     Field field = playerData.getClass().getDeclaredField(id.b());
                                     field.setAccessible(true);
-                                    System.out.println("Fuck 2");
+                                    //System.out.println("Fuck 2");
                                     field.set(playerData, field.getType().newInstance());
-                                    System.out.println("TESTED");
+                                    //System.out.println("TESTED");
                                     playerData.savePlayerCache();
                                 } catch (InstantiationException e) {
                                     throw new RuntimeException(e);

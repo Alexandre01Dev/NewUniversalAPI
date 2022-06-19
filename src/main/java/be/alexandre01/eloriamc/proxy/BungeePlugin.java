@@ -10,6 +10,7 @@ import be.alexandre01.eloriamc.data.mysql.DatabaseManager;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.proxy.listener.ProxyJoin;
 import be.alexandre01.eloriamc.proxy.listener.ProxyQuit;
+import com.jakub.premium.JPremium;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -34,6 +35,7 @@ public class BungeePlugin extends Plugin {
 
         this.getProxy().getPluginManager().registerListener(this, new ProxyJoin());
         this.getProxy().getPluginManager().registerListener(this, new ProxyQuit());
+        this.getProxy().getPluginManager().registerListener(this, new JPremiumLogin());
 
         online = new DNChannel("online");
 
@@ -45,6 +47,8 @@ public class BungeePlugin extends Plugin {
                 createInitialData("all", 0);
             }
         });
+
+
 
     }
 
