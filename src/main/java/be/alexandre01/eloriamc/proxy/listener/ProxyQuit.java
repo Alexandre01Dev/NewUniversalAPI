@@ -27,6 +27,7 @@ public class ProxyQuit implements Listener {
         playerData.setTimePlayed(playerData.getTimePlayed()+dif);
         playerData.savePlayer();
         api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
+        plugin.getTimePlayed().remove(player.getUniqueId());
 
         plugin.getOnline().setData("all", ProxyServer.getInstance().getOnlineCount() - 1);
     }

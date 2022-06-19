@@ -28,6 +28,7 @@ public class ProxyJoin implements Listener {
 
         //PlayerData playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0,0, 0, 1, false, new Settings(true, true, true, true), new KbWarrior(), new Madness());
         PlayerData playerData = SetupPlayerData.setupPlayer(player.getName(), player.getUniqueId().toString());
+
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         bungeePlugin.getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
         bungeePlugin.getTimePlayed().put(player.getUniqueId(),System.currentTimeMillis());

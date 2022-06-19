@@ -5,8 +5,12 @@ import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.PlayerDataManager;
 import be.alexandre01.eloriamc.manager.RankManager;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.packets.skin.MojangUtils;
+import be.alexandre01.eloriamc.server.packets.skin.SkinData;
+import be.alexandre01.eloriamc.server.packets.skin.SkinPlayer;
 import be.alexandre01.eloriamc.server.player.NameTagImpl;
 import be.alexandre01.eloriamc.server.session.Session;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,10 +28,16 @@ public class PlayerJoin implements Listener, NameTagImpl {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
+            if(playerData.getProfile().getSkinUUID() != null) {
+                SkinPlayer skinPlayer = new SkinPlayer(player);
+                skinPlayer.applySkin(MojangUtils.getSkinDataFromUUID(playerData.getProfile().getSkinUUID()));
+            }
 
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
             defaultSession.addPlayer(player);
         }
+
+
 
         api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         try {

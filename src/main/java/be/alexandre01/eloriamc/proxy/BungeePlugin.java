@@ -42,7 +42,7 @@ public class BungeePlugin extends Plugin {
 
         this.getProxy().getPluginManager().registerListener(this, new ProxyJoin());
         this.getProxy().getPluginManager().registerListener(this, new ProxyQuit());
-        this.getProxy().getPluginManager().registerListener(this, new JPremiumLogin());
+
 
 
         online = new DNChannel("online");

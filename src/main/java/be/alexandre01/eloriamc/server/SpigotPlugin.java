@@ -1,7 +1,9 @@
 package be.alexandre01.eloriamc.server;
 
 import be.alexandre01.eloriamc.API;
+import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.commands.PlayerDataModifier;
+import be.alexandre01.eloriamc.data.profile.Profile;
 import be.alexandre01.eloriamc.server.commands.Ban;
 import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
@@ -130,9 +132,11 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(SpigotPlugin.this,() -> {
                             SkinPlayer skinPlayer = new SkinPlayer(player);
                             skinPlayer.applySkin(skinData);
+                            PlayerData pd = API.getInstance().getPlayerDataManager().getPlayerData(player.getName());
+                            Profile profile = pd.getProfile();
+                            profile.setSkinUUID(uuid);
+                            pd.savePlayerCache();
                         });
-
-
                     }
                 }.start();
 
