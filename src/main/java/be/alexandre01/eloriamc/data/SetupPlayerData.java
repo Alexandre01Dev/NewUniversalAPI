@@ -58,7 +58,16 @@ public class SetupPlayerData {
                     playerData.savePlayerCache();
                     if(playerData.getBan().isBanned()) {
                         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
-                        player.disconnect(new TextComponent("§c§LBANNI !\n" + playerData.getBan().getTimeLeft()));
+                        player.disconnect(new TextComponent("§8>§8§m-------§8( §f» §c§LBANNISSEMENT §f« §8)§8§m-------§8<\n" +
+                                "\n" +
+                                "§8» §eDate d'expiration: §b" + playerData.getBan().getTimeLeft() + "\n" +
+                                "§8» §eRaison: §b" + playerData.getBan().getReason() + "\n" +
+                                "§8» §eAuteur: §b" + playerData.getBan().getAuthor() + "\n" +
+                                "\n" +
+                                "§8» §ePour toutes réclamations:\n" +
+                                "§b§neloriamc.fr/forum\n" +
+                                "\n" +
+                                "§8>§8§m---------------------------------§8<"));
                     }
 
                 }
