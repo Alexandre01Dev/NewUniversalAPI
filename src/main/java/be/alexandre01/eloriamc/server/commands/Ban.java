@@ -21,7 +21,7 @@ public class Ban extends Command {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (label.equalsIgnoreCase("ban")) {
             if (!sender.hasPermission("SMOD")) {
-                sender.sendMessage("§cVous n'avez pas la permission de faire ceci ! (§9SuperModo§c)");
+                sender.sendMessage("§cErreur: Vous n'avez pas les droits d'utilisation.");
                 return false;
             }
             if (args.length < 3) {
@@ -30,7 +30,7 @@ public class Ban extends Command {
             }
             String targetName = args[0];
             if(Bukkit.getPlayer(targetName) == null) {
-                sender.sendMessage("§cLe joueur n'est pas connecté !");
+                sender.sendMessage("§cErreur: Ce joueur n'est pas connecté.");
                 return false;
             }
             String reason = "";
@@ -39,7 +39,7 @@ public class Ban extends Command {
                 reason = reason + args[i] + " ";
             if (args[1].equalsIgnoreCase("perm")) {
 
-                sender.sendMessage("§6§LSANCTION§8│ §7Vous avez banni §c" + targetName +  " §7pendant une §bdurée inderterminé§7 pour §e" + reason);
+                sender.sendMessage("§c§lSANCTION §f❙ §aVous avez banni §c" + targetName +  " §apendant une durée §binderterminé §apour §e" + reason + "§a.");
                 return false;
             }
             if (!args[1].contains(":")) {
@@ -50,13 +50,13 @@ public class Ban extends Command {
             try {
                 duration = Integer.parseInt(args[1].split(":")[0]);
             } catch (NumberFormatException e) {
-                sender.sendMessage("§cLa valeur doit être un nombre !");
+                sender.sendMessage("§cErreur: La valeur doit être un nombre.");
                 return false;
             }
             if (!TimeUnit.existFromShortcut(args[1].split(":")[1])) {
-                sender.sendMessage("§cL'unité de temps n'existe pas !");
+                sender.sendMessage("§cErreur: L'unité de temps n'existe pas.");
                 for (TimeUnit units : TimeUnit.values())
-                    sender.sendMessage("§8│ §e" + units.getName() + ":" + units.getShortcut());
+                    sender.sendMessage("§f❙ §e" + units.getName() + ":" + units.getShortcut());
                 return false;
             }
             TimeUnit unit = TimeUnit.getFromShortcut(args[1].split(":")[1]);
@@ -71,16 +71,25 @@ public class Ban extends Command {
             playerData.getBan().setReason(reason);
             playerData.savePlayerCache();
 
-            Bukkit.getPlayer(targetName).kickPlayer("§CBANNI");
+            Bukkit.getPlayer(targetName).kickPlayer("§8>§8§m-------§8( §f» §c§LBANNISSEMENT §f« §8)§8§m-------§8<\n" +
+                    "\n" +
+                    "§8» §eDate d'expiration: §b" + playerData.getBan().getTimeLeft() + "\n" +
+                    "§8» §eRaison: §b" + playerData.getBan().getReason() + "\n" +
+                    "§8» §eAuteur: §b" + playerData.getBan().getAuthor() + "\n" +
+                    "\n" +
+                    "§8» §ePour toutes réclamations:\n" +
+                    "§b§neloriamc.fr/forum\n" +
+                    "\n" +
+                    "§8>§8§m---------------------------------§8<"
+                    );
 
-            sender.sendMessage("§6§LSANCTION§8│ §7Vous avez banni §c" + targetName +  " §7pendant §b "+ playerData.getBan().getTimeLeft() + "§7 pour §e" + reason);
+            sender.sendMessage("§c§lSANCTION §f❙ §aVous avez banni §c" + targetName +  " §apendant §b "+ playerData.getBan().getTimeLeft() + "§a pour §e" + reason + "§a.");
             return false;
         }
         return false;
     }
 
     private void helpMessage(CommandSender sender) {
-        sender.sendMessage("<joueur> perm <raison>");
-        sender.sendMessage("<joueur> <dur<raison>");
+        sender.sendMessage("§cSyntaxe: /ban <joueur> <perm/dur> <raison>");
     }
 }
