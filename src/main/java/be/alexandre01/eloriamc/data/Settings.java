@@ -16,5 +16,6 @@ public class Settings extends Identifier {
     @Expose private boolean sendMessage = true;
     @Expose private boolean notifFriend = true;
     @Expose private boolean soundMention = true;
+    @Expose private boolean speedLobby = true;
     @Expose private String chatSymbole = "§8»";
 }
