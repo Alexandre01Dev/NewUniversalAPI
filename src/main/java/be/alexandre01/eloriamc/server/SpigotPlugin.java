@@ -1,14 +1,10 @@
 package be.alexandre01.eloriamc.server;
 
 import be.alexandre01.eloriamc.API;
-import be.alexandre01.eloriamc.chat.ChatOptions;
-import be.alexandre01.eloriamc.config.yaml.YamlUtils;
-import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.commands.PlayerDataModifier;
 import be.alexandre01.eloriamc.server.commands.Ban;
 import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
-import be.alexandre01.eloriamc.server.events.factories.CustomEventLoader;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
 import be.alexandre01.eloriamc.server.listener.PlayerJoin;
@@ -18,37 +14,25 @@ import be.alexandre01.eloriamc.server.listener.ServerAttached;
 
 import be.alexandre01.eloriamc.server.manager.MessageData;
 import be.alexandre01.eloriamc.server.modules.CustomClassLoader;
-import be.alexandre01.eloriamc.server.modules.Module;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
-import be.alexandre01.eloriamc.server.packets.npc.NPC;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.*;
-import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBar;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
-import be.alexandre01.eloriamc.server.packets.ui.scoreboard.PersonalScoreboard;
 import be.alexandre01.eloriamc.server.packets.ui.scoreboard.ScoreboardManager;
-import be.alexandre01.eloriamc.server.packets.ui.scoreboard.example.Base;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
 import be.alexandre01.eloriamc.server.player.BasePlayerManager;
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
-import be.alexandre01.eloriamc.server.session.runnables.Updater;
-import be.alexandre01.eloriamc.server.utils.date.LongToDate;
-import be.alexandre01.eloriamc.utils.Tuple;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import be.alexandre01.eloriamc.server.utils.date.LongToDays;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,9 +40,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -275,8 +257,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         long l = API.getInstance().getPlayerDataManager().getPlayerData(player.getName()).getTimePlayed();
-        LongToDate longToDate = new LongToDate("dd:HH:mm:ss");
-        e.getPlayer().sendMessage("§eTu joue sur §fEloria§bMC§e depuis "+ longToDate.format(l));
+
+        e.getPlayer().sendMessage("§eTu joue sur §fEloria§bMC§e depuis "+ LongToDays.format(l));
          /*NPC npc = new NPC("§a§lCreepah",player.getLocation());
         npc.setSkin(skinFactory.getSkinData("Boug1"));
         npc.setInteraction(new NPC.NPCInteract() {
