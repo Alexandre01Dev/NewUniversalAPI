@@ -27,7 +27,7 @@ public class BossBar {
   public Location calculLocation(Player player){
     Location location = player.getLocation();
     location.setPitch(player.getLocation().getPitch()/4);
-    return  location.add(location.getDirection().normalize().multiply(65));
+    return  location.add(location.getDirection().normalize().multiply(25));
   }
 
 
