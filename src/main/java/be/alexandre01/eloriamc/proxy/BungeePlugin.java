@@ -30,7 +30,6 @@ public class BungeePlugin extends Plugin {
     public void onEnable() {
         instance = this;
 
-
         API.getInstance().onOpen();
 
         this.getProxy().getPluginManager().registerListener(this, new ProxyJoin());

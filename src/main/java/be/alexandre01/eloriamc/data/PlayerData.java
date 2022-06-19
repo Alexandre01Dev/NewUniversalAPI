@@ -34,6 +34,8 @@ public class PlayerData implements IPlayerData {
     @Expose private float exp;
     @Expose private int level;
 
+    @Expose private long timePlayed;
+
     @Expose private boolean mod;
 
 
@@ -54,6 +56,7 @@ public class PlayerData implements IPlayerData {
         this.ecu = 0;
         this.exp = 0;
         this.level = 1;
+        this.timePlayed = 0L;
         this.mod = false;
         this.settings = new Settings();
         this.kbWarrior = new KbWarrior();
