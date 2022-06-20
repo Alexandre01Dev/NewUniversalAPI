@@ -41,7 +41,6 @@ public class PlayerData implements IPlayerData {
 
     @Expose private boolean mod;
 
-
     @Expose private Settings settings;
 
     @Expose private KbWarrior kbWarrior;
