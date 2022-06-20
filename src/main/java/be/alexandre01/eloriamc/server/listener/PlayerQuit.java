@@ -8,6 +8,7 @@ import be.alexandre01.eloriamc.server.player.NameTagImpl;
 import be.alexandre01.eloriamc.server.session.Session;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -19,14 +20,16 @@ public class PlayerQuit implements Listener, NameTagImpl {
      plugin = SpigotPlugin.getInstance();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent e) {
+        System.out.println("Priority LOWEST");
         Player player = e.getPlayer();
 
          api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
-            defaultSession.addPlayer(player);
+            defaultSession.removePlayer(player);
         }
+        plugin.getBasePlayerManager().getPlayerHashMap().remove(player.getUniqueId());
         try {
             RankManager rankManager = new RankManager(player.getName());
             switch (rankManager.getGroup()) {

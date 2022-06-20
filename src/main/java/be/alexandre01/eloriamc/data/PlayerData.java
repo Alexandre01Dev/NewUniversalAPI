@@ -67,6 +67,7 @@ public class PlayerData implements IPlayerData {
         this.kbWarrior = new KbWarrior();
         this.madness = new Madness();
         this.ban = new Ban();
+        this.profile = new Profile();
     }
 
     public String toJson(){

@@ -28,10 +28,13 @@ public class PlayerJoin implements Listener, NameTagImpl {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
+        if(playerData != null) {
             if(playerData.getProfile().getSkinUUID() != null) {
                 SkinPlayer skinPlayer = new SkinPlayer(player);
                 skinPlayer.applySkin(MojangUtils.getSkinDataFromUUID(playerData.getProfile().getSkinUUID()));
             }
+        }
+
 
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
             defaultSession.addPlayer(player);

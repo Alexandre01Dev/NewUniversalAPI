@@ -2,7 +2,7 @@ package be.alexandre01.eloriamc.server.session.examples;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.player.BasePlayer;
-import be.alexandre01.eloriamc.server.player.GamePlayer;
+
 import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.Update;

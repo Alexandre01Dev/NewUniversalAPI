@@ -89,12 +89,14 @@ public class ScoreboardManager {
 
     public void onLogin(BasePlayer player) {
         if (scoreboards.contains(player)) {
+            player.sendMessage("Déjà connecté");
             return;
         }
         scoreboards.add(player);
     }
 
     public void onLogout(BasePlayer player) {
+        System.out.println("Logout");
         if (scoreboards.contains(player)) {
             player.getPersonalScoreboard().onLogout();
             scoreboards.remove(player);

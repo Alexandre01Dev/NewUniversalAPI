@@ -19,9 +19,9 @@ public abstract class PacketInterceptor extends PacketUtils {
     /*
     READ PLAYER DECODED PACKET - THIS IS WHAT THE PLAYER SENT TO SERVER
      */
-    protected abstract void decode(Player player, Packet<?> packet);
+    public abstract void decode(Player player, Packet<?> packet);
     /*
     READ PLAYER ENCODED PACKET - THIS IS WHAT THE SERVER SENT TO PLAYER
     */
-    protected abstract void encode(Player player, Packet<?> packet);
+    public abstract void encode(Player player, Packet<?> packet);
 }

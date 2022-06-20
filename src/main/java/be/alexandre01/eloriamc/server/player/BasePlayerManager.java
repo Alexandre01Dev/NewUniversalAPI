@@ -6,12 +6,13 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Getter
 public class BasePlayerManager {
 
-    private Class<? extends BasePlayer> defaultPlayerClass = GamePlayer.class;
-    private final HashMap<Player, BasePlayer> playerHashMap = new HashMap<>();
+    private Class<? extends BasePlayer> defaultPlayerClass = BasePlayer.class;
+    private final HashMap<UUID, BasePlayer> playerHashMap = new HashMap<>();
 
 
     public void changeBasePlayer(Class<?> o){
@@ -23,18 +24,18 @@ public class BasePlayerManager {
         try {
             System.out.println(defaultPlayerClass.getName());
             BasePlayer gamePlayer = defaultPlayerClass.getConstructor(Player.class).newInstance(player);
-            playerHashMap.put(player, gamePlayer);
+            playerHashMap.put(player.getUniqueId(), gamePlayer);
             return gamePlayer;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    public void initPlayer(Player player, GamePlayer gamePlayer){
-        playerHashMap.put(player, gamePlayer);
+    public void initPlayer(Player player, BasePlayer basePlayer){
+        playerHashMap.put(player.getUniqueId(), basePlayer);
     }
 
-    public void removePlayer(BasePlayer gamePlayer){
-        playerHashMap.remove(gamePlayer.getPlayer());
+    public void removePlayer(BasePlayer basePlayer){
+        playerHashMap.remove(basePlayer.getUniqueId());
     }
 }

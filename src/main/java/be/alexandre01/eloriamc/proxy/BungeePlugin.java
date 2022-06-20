@@ -10,6 +10,7 @@ import be.alexandre01.eloriamc.data.mysql.DatabaseManager;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
 import be.alexandre01.eloriamc.proxy.listener.ProxyJoin;
 import be.alexandre01.eloriamc.proxy.listener.ProxyQuit;
+import com.jakub.premium.JPremium;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -55,6 +56,7 @@ public class BungeePlugin extends Plugin {
                 createInitialData("all", 0);
             }
         });
+
 
 
 

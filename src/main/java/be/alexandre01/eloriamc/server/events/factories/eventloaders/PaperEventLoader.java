@@ -92,6 +92,7 @@ public class PaperEventLoader extends CustomEventLoader {
                             method.invoke(listener, new Object[] { event });
                         } catch (IllegalAccessException e) {
                             throw new RuntimeException(e);
+
                         } catch (InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }

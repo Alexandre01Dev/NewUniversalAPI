@@ -17,8 +17,12 @@ import be.alexandre01.eloriamc.server.listener.ServerAttached;
 import be.alexandre01.eloriamc.server.manager.MessageData;
 import be.alexandre01.eloriamc.server.modules.CustomClassLoader;
 import be.alexandre01.eloriamc.server.modules.ModuleLoader;
+import be.alexandre01.eloriamc.server.packets.PacketShuffler;
+import be.alexandre01.eloriamc.server.packets.Reflections;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
+import be.alexandre01.eloriamc.server.packets.injector.PacketInterceptor;
+import be.alexandre01.eloriamc.server.packets.injector.compatibility.ProtocolInjector;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.*;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
@@ -30,11 +34,20 @@ import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
 import be.alexandre01.eloriamc.server.utils.date.LongToDays;
+import be.alexandre01.eloriamc.server.utils.locations.ChunkCoord;
+import be.alexandre01.eloriamc.server.utils.locations.ChunksUtils;
+import be.alexandre01.eloriamc.utils.ClassUtils;
 import lombok.Getter;
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.ChunkSection;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,6 +55,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
@@ -179,6 +193,72 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 return false;
             }
         });
+        registerCommand("troll", new Command("troll") {
+            @Override
+            public boolean execute(CommandSender commandSender, String s, String[] strings) {
+                if(commandSender instanceof Player){
+                    Player player = (Player) commandSender;
+                    if(player.hasPermission("eloriamc.troll")){
+                        if(strings.length == 0){
+                            player.sendMessage("§cUsage: /troll <player>");
+                            return false;
+                        }
+                        Player target = Bukkit.getPlayer(strings[0]);
+                        if(target == null){
+                            player.sendMessage("§cPlayer not found");
+                            return false;
+                        }
+
+                        System.out.println(getBasePlayer(target));
+                        getBasePlayer(target).getPacketInjector().injectAll();
+                        PacketShuffler packetShuffler = new PacketShuffler();
+                        //target.sendMessage("je t'ajoute");
+                        getBasePlayer(target).getPacketInjector().addInterceptor(new PacketInterceptor() {
+                            @Override
+                            public void decode(Player player, Packet<?> packet) {
+                                packetShuffler.shufflePacket(packet);
+                            }
+
+                            @Override
+                            public void encode(Player player, Packet<?> packet) {
+                                packetShuffler.shufflePacket(packet);
+                            }
+                        });
+                        //ArrayList<ChunkCoord> chunkCoords = ChunksUtils.around(player.getLocation().getChunk(),3);
+
+                            /*for(ChunkCoord chunkCoord : chunkCoords){
+                                Chunk c = player.getWorld().getChunkAt(chunkCoord.getX(),chunkCoord.getZ());
+                                net.minecraft.server.v1_8_R3.Chunk nmsc = ((CraftChunk)c).getHandle();
+                                ChunkSection[] sections = nmsc.getSections().clone();
+
+                                for (int i = 0; i < sections.length; i++) {
+                                    ChunkSection section = sections[i];
+                                    if(section == null) continue;
+                                    boolean flag = false;
+                                    if(section.getSkyLightArray() != null)
+                                        flag = true;
+
+                                    Reflections r = new Reflections();
+                                    char[] id = ((char[]) r.getValue(section, "blockIds")).clone();
+                                    sections[i] = new ChunkSection(section.getYPosition(),flag,id);
+                                    if(id == null || id.length == 0) continue;
+                                    for (int j = 0; i < id.length-1; j++) {
+                                        System.out.println(j);
+                                        if(j >= 4096) break;
+                                        id[j] = (char) (byte) (Math.random() * 255);
+                                    }
+                                }
+                                PacketPlayOutMapChunk p = ChunksUtils.createPacket(nmsc,sections,true,20);
+                                getBasePlayer(player).sendPacket(p);
+                                }*/
+
+                                    //r.setValue(section, "blockIds", id);
+
+                }
+                }
+                return false;
+            }
+        });
 
         registerCommand("erl", new Command("ERl") {
             @Override
@@ -241,6 +321,8 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 session.addPlayer(player);
             }
         }
+
+
         /*scoreboardManager.setupSchedulers(16,1);
         scoreboardManager.startGlowingTask(80,80, TimeUnit.MILLISECONDS);
         scoreboardManager.startReloadingTask(1,1, TimeUnit.SECONDS);*/
@@ -290,15 +372,16 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     public BasePlayer getBasePlayer(Player player){
 
-        if(getBasePlayerManager().getPlayerHashMap().containsKey(player)){
-            return getBasePlayerManager().getPlayerHashMap().get(player);
+        if(getBasePlayerManager().getPlayerHashMap().containsKey(player.getUniqueId())){
+            return getBasePlayerManager().getPlayerHashMap().get(player.getUniqueId());
         }
-        return new BasePlayer(player);
+
+        return getBasePlayerManager().createPlayerObject(player);
     }
     public <T> T getBasePlayer(Player player, Class<T> b){
 
-        if(getBasePlayerManager().getPlayerHashMap().containsKey(player)){
-            return (T) getBasePlayerManager().getPlayerHashMap().get(player);
+        if(getBasePlayerManager().getPlayerHashMap().containsKey(player.getUniqueId())){
+            return (T) getBasePlayerManager().getPlayerHashMap().get(player.getUniqueId());
         }
         return (T) getBasePlayerManager().createPlayerObject(player);
     }

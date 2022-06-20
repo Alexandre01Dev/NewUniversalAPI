@@ -3,10 +3,13 @@ package be.alexandre01.eloriamc.server.player;
 import be.alexandre01.eloriamc.API;
 import be.alexandre01.eloriamc.chat.ChatConfiguration;
 import be.alexandre01.eloriamc.chat.ChatOptions;
+import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjector;
+import be.alexandre01.eloriamc.server.packets.injector.compatibility.ProtocolInjector;
 import be.alexandre01.eloriamc.server.packets.ui.scoreboard.PersonalScoreboard;
 import be.alexandre01.eloriamc.server.session.players.PlayerDamager;
+import be.alexandre01.eloriamc.utils.ClassUtils;
 import com.mojang.authlib.GameProfile;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +66,13 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
         this.player = player;
         this.spigotPlugin = SpigotPlugin.getInstance();
         this.api = API.getInstance();
-        this.packetInjector = new PacketInjector(player);
+        if(ClassUtils.classExist("com.comphenix.protocol.ProtocolManager")) {
+            System.out.println("ProtocolInjector");
+            this.packetInjector = new ProtocolInjector(player);
+        }else {
+            this.packetInjector = new PacketInjector(player);
+        }
+
     }
 
 
@@ -78,6 +87,17 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     @Override
     public Player getPlayer() {
        return this.player;
+    }
+
+    public PlayerData getData(boolean request){
+        if(request)
+            return api.getPlayerDataManager().getPlayerData(this.player.getName());
+
+        return api.getPlayerDataManager().getLocalPlayerData(this.player.getName());
+    }
+
+    public PlayerData getData(){
+        return getData(false);
     }
     /**
      * Send packet to Player
@@ -193,4 +213,5 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     public BasePlayer(CraftServer server, EntityPlayer entity) {
         super(server, entity);
     }
+
 }
