@@ -58,7 +58,6 @@ public class PacketInjector {
         channel.pipeline().addAfter("decoder","PacketDecoderInjector",new MessageToMessageDecoder<Packet<?>>() {
             @Override
             protected void decode(ChannelHandlerContext channelHandlerContext, Packet<?> packet, List<Object> list) throws Exception {
-                System.out.println("Huh1 ?");
                 list.add(packet);
                 for( PacketInterceptor interceptor : packetInjectorManager.getInterceptors()){
                     interceptor.decode(player,packet);
