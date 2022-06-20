@@ -18,5 +18,6 @@ public class Settings extends Identifier {
     @Expose private boolean soundMention = true;
     @Expose private boolean speedLobby = true;
     @Expose private boolean joinMessage = true;
+    @Expose private String deplacementLobby = "false";
     @Expose private String chatSymbole = "§8»";
 }
