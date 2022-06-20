@@ -37,6 +37,13 @@ public class PlayerData implements IPlayerData {
     @Expose private float exp;
     @Expose private int level;
 
+    // Boosters
+
+    @Expose private int booster;
+    @Expose private int megaBooster;
+
+    // TimePlayed
+
     @Expose private long timePlayed;
 
     @Expose private boolean mod;
@@ -62,6 +69,8 @@ public class PlayerData implements IPlayerData {
         this.level = 1;
         this.timePlayed = 0L;
         this.mod = false;
+        this.booster = 0;
+        this.megaBooster = 0;
         this.settings = new Settings();
         this.kbWarrior = new KbWarrior();
         this.madness = new Madness();
