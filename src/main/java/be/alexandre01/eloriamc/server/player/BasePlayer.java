@@ -58,6 +58,8 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     API api;
     Player player;
 
+    PlayerData playerData;
+
     @Getter
     PersonalScoreboard personalScoreboard;
 
@@ -90,10 +92,14 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     }
 
     public PlayerData getData(boolean request){
-        if(request)
-            return api.getPlayerDataManager().getPlayerData(this.player.getName());
+        if(request || playerData == null) {
+            this.playerData = api.getPlayerDataManager().getPlayerData(this.player.getName());
+        }
+        return playerData;
+    }
 
-        return api.getPlayerDataManager().getLocalPlayerData(this.player.getName());
+    public void refreshData(){
+        this.playerData = api.getPlayerDataManager().getPlayerData(this.player.getName());
     }
 
     public PlayerData getData(){

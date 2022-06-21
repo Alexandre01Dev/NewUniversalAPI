@@ -16,12 +16,14 @@ import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import shaded.org.apache.http.client.entity.GzipDecompressingEntity;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.GZIPInputStream;
 
 @AllArgsConstructor
 @Getter

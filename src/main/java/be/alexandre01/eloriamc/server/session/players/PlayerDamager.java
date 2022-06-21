@@ -38,7 +38,10 @@ public class PlayerDamager {
         ArrayList<BasePlayer> players = new ArrayList<>();
         for(BasePlayer player : damagerTime.keySet()){
             if(System.currentTimeMillis() - damagerTime.get(player) < 7000){
-                players.add(player);
+                if(lastDamager != null)
+                    if(lastDamager.a() != player){
+                        players.add(player);
+                    }
             }
         }
         return players;

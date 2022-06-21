@@ -109,7 +109,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         this.getServer().getPluginManager().registerEvents(new ReloadListener(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerDamage(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDamage(),this);
 
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 

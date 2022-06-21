@@ -8,7 +8,8 @@ public class CancelWeatherChange extends IEvent<WeatherChangeEvent> {
 
     @Override
     public void onEvent(WeatherChangeEvent event) {
-        Bukkit.broadcastMessage(""+event.getWorld().getWeatherDuration());
-        Bukkit.broadcastMessage(""+event.getWorld().getThunderDuration());
+        if(event.getWorld().getWeatherDuration() != 0){
+            event.getWorld().setStorm(false);
+        }
     }
 }
