@@ -18,6 +18,7 @@ public class PlayerDamager {
 
     public void addDamager(BasePlayer player){
         damagerTime.put(player, System.currentTimeMillis());
+        lastDamager = new Tuple<>(player, System.currentTimeMillis());
     }
 
     public void setTotalAssist(Integer assist){

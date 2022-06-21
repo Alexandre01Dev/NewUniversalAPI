@@ -9,10 +9,7 @@ import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
-import be.alexandre01.eloriamc.server.listener.PlayerJoin;
-import be.alexandre01.eloriamc.server.listener.PlayerQuit;
-import be.alexandre01.eloriamc.server.listener.ReloadListener;
-import be.alexandre01.eloriamc.server.listener.ServerAttached;
+import be.alexandre01.eloriamc.server.listener.*;
 
 import be.alexandre01.eloriamc.server.manager.MessageData;
 import be.alexandre01.eloriamc.server.modules.CustomClassLoader;
@@ -112,6 +109,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         this.getServer().getPluginManager().registerEvents(new ReloadListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDamage(), this);
 
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
