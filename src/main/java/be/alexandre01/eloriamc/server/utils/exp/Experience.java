@@ -84,7 +84,6 @@ public class Experience {
         for (int i = 0; i < (int) (percent/7); i++) {
             sb.append("|");
         }
-        System.out.println("Here ? ");
         sb.append("§7");
         for (int i = (percent/7); i < (int) (100/7); i++) {
             sb.append("|");
@@ -92,6 +91,7 @@ public class Experience {
         System.out.println(percent);
         sb.append(suffix);
         //sb.append(" ").append(percent).append("%");
+
         System.out.println(sb.toString());
         return sb.toString();
     }

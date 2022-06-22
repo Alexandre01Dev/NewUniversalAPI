@@ -11,12 +11,24 @@
 
     <name>EloriaAPI</name>
 
+    <distributionManagement>
+        <repository>
+            <id>Eloria</id>
+            <url>sftp://root@87.98.142.211</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.1</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -45,6 +57,58 @@
                 </executions>
             </plugin>
         </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+        <id>Dev</id>
+        <activation>
+            <activeByDefault>false</activeByDefault>
+        </activation>
+        <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>upload-assembly</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>upload-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>Eloria</serverId> <!-- references the server declaration -->
+                            <fromFile>${project.build.directory}/${project.build.finalName}.jar</fromFile>
+                            <url>sftp://87.98.142.211</url>
+                            <toFile>/home/dev/api/EloriaAPI.jar</toFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ssh-assembly</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>sshexec</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>Eloria</serverId> <!-- references the server declaration -->
+                            <url>sftp://87.98.142.211</url>
+                            <commands>
+                                <command>cp /home/dev/api/EloriaAPI.jar /home/dev/template/proxy/BungeeCord/plugins/EloriaAPI.jar</command>
+                                <command>cp /home/dev/api/EloriaAPI.jar /home/dev/template/server/Hub/plugins/EloriaAPI.jar</command>
+                                <command>cp /home/dev/api/EloriaAPI.jar /home/dev/template/server/Madness/plugins/EloriaAPI.jar</command>
+                                <command>cp /home/dev/api/EloriaAPI.jar /home/dev/template/server/KbWarrior/plugins/EloriaAPI.jar</command>
+                                <command>cp /home/dev/api/EloriaAPI.jar /home/dev/template/server/Vampire/plugins/EloriaAPI.jar</command>
+                                <command>rm /home/dev/api/EloriaAPI.jar</command>
+                                <command>rm -d /home/dev/api</command>
+                            </commands>
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -52,6 +116,8 @@
             </resource>
         </resources>
     </build>
+    </profile>
+    </profiles>
 
     <repositories>
         <repository>
