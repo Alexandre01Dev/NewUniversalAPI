@@ -11,8 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bukkit.block.Block;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +27,7 @@ public class KbWarrior extends Identifier {
     @Expose private float elo = 0;
     @Expose private String division = "§6§lBronze IV";
     @Expose private boolean ranked = false;
+    @Expose private int[] blockList = {0};
+
+
 }
