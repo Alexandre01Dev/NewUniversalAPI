@@ -22,6 +22,12 @@ public class ProxyQuit implements Listener {
     public void onQuit(PlayerDisconnectEvent e) {
         ProxiedPlayer player = e.getPlayer();
 
+
+        if(api.getPlayerDataManager().getPlayerDataHashMap().containsKey(player.getName())) {
+            PlayerData playerData = api.getPlayerDataManager().getPlayerDataHashMap().get(player.getName());
+            playerData.savePlayerCache();
+        }
+
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
         long dif = System.currentTimeMillis()-plugin.getTimePlayed().get(player.getUniqueId());
         playerData.setTimePlayed(playerData.getTimePlayed()+dif);
