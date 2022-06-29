@@ -30,6 +30,7 @@ import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
+import be.alexandre01.eloriamc.server.utils.PluginManager;
 import be.alexandre01.eloriamc.server.utils.date.LongToDays;
 import be.alexandre01.eloriamc.server.utils.locations.ChunkCoord;
 import be.alexandre01.eloriamc.server.utils.locations.ChunksUtils;
@@ -83,6 +84,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private ScoreboardManager scoreboardManager = new ScoreboardManager();
 
+    @Getter private PluginManager pluginManager = new PluginManager();
 
 
     public boolean isReloading = false;
@@ -324,6 +326,10 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         /*scoreboardManager.setupSchedulers(16,1);
         scoreboardManager.startGlowingTask(80,80, TimeUnit.MILLISECONDS);
         scoreboardManager.startReloadingTask(1,1, TimeUnit.SECONDS);*/
+
+
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
     }
 
     @Override
