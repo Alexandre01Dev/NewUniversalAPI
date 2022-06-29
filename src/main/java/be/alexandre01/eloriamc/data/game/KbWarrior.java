@@ -25,9 +25,9 @@ public class KbWarrior extends Identifier {
     @Expose private int kill = 0;
     @Expose private int death = 0;
     @Expose private int bestKs = 0;
-    @Expose private float elo = 0;
-    @Expose private String division = "§6§lBronze IV";
-    @Expose private boolean ranked = false;
+    @Expose private float exp = 0;
+    @Expose private int[] killMsg = {0};
+    @Expose private int[] killAnim = {0};
     @Expose private int[] blockList = {0};
 
     @Expose private int blockChoose = 159;
