@@ -21,5 +21,7 @@ public abstract class NPCInstance extends Reflections {
 
     public abstract void show();
 
+    public abstract void hide();
+
     public abstract void setCustomName(String name);
 }

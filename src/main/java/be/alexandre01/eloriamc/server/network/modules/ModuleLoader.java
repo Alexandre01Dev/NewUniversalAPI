@@ -1,8 +1,6 @@
-package be.alexandre01.eloriamc.server.modules;
+package be.alexandre01.eloriamc.server.network.modules;
 
 import be.alexandre01.eloriamc.config.yaml.YamlUtils;
-import be.alexandre01.eloriamc.server.session.Session;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -27,6 +25,8 @@ import java.util.Objects;
 public class ModuleLoader {
     private File dir;
     @Getter private final ArrayList<Module> modules = new ArrayList<>();
+
+    @Getter private final ArrayList<Module> host = new ArrayList<>();
 
     @Getter private final ArrayList<Module> cachedModule = new ArrayList<>();
 
@@ -93,6 +93,7 @@ public class ModuleLoader {
                 String version = null;
                 Material material = null;
                 String description = null;
+                boolean overrideLoading = false;
                 CustomClassLoader child = new CustomClassLoader(
                         file.toURI().toURL(),
                         this.getClass().getClassLoader()
@@ -105,6 +106,7 @@ public class ModuleLoader {
                     version = cache.getVersion();
                     material = cache.getMaterial();
                     description = cache.getDescription();
+                    overrideLoading = cache.isOverrideLoading();
                 }else {
                     YamlConfiguration yamlConfiguration = new YamlConfiguration();
                     if(child.getResource("module.yml") != null){
@@ -119,6 +121,9 @@ public class ModuleLoader {
                         authors = yamlConfiguration.getStringList("authors").toArray(new String[0]);
                         version = yamlConfiguration.getString("version");
                         material = Material.getMaterial(yamlConfiguration.getInt("itemId"));
+                        description = yamlConfiguration.getString("description");
+                        overrideLoading = yamlConfiguration.getBoolean("override-loading");
+
                         inputStream.close();
                     }
                 }
@@ -141,6 +146,7 @@ public class ModuleLoader {
                 module.setMaterial(material);
 
                 module.setChild(child);
+                module.setOverrideLoading(overrideLoading);
                 module.setUrl(file.toURI().toURL());
 
                 if(module == null)
@@ -149,6 +155,7 @@ public class ModuleLoader {
                 System.out.println(module.getSessionPath());
                 Class<?> classToLoad = Class.forName(module.getSessionPath(), true, child);
                 module.setDefaultSession(classToLoad);
+
 
                 System.out.println(module.getModuleName());
                 //Preset.instance.add(module.getModuleName(), module);

@@ -1,4 +1,4 @@
-package be.alexandre01.eloriamc.server.modules;
+package be.alexandre01.eloriamc.server.network.modules;
 
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 

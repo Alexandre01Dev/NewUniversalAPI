@@ -1,4 +1,4 @@
-package be.alexandre01.eloriamc.server.modules;
+package be.alexandre01.eloriamc.server.network.modules;
 
 
 
@@ -36,4 +36,5 @@ public class Module implements Serializable {
      @Expose
      private URL url;
      private Class<?> defaultSession;
+     private boolean overrideLoading;
 }

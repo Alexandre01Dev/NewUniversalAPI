@@ -107,6 +107,8 @@ public class NPCHuman extends NPCInstance {
         sendPacket(player,packet);
     }
 
+
+    @Override
     public void hide(){
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(new int[] {entityID});
         rmvFromTablist();
@@ -123,6 +125,12 @@ public class NPCHuman extends NPCInstance {
 
         sendPacket(player,packet);
         sendPacket(player,packetHead);
+    }
+    public void rotateToAnotherLoc(Location loc){
+        teleport(location.setDirection(loc.subtract(location).toVector()));
+    }
+    public void rotateToPlayer(Player player){
+        teleport(location.setDirection(player.getLocation().subtract(location).toVector()));
     }
 
     public void teleport(Location location){

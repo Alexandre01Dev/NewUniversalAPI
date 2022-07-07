@@ -5,12 +5,15 @@ import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.data.PlayerDataManager;
 import be.alexandre01.eloriamc.manager.RankManager;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
+import be.alexandre01.eloriamc.server.packets.npc.MirrorNPC;
 import be.alexandre01.eloriamc.server.packets.skin.MojangUtils;
 import be.alexandre01.eloriamc.server.packets.skin.SkinData;
 import be.alexandre01.eloriamc.server.packets.skin.SkinPlayer;
 import be.alexandre01.eloriamc.server.player.NameTagImpl;
 import be.alexandre01.eloriamc.server.session.Session;
+import be.alexandre01.eloriamc.server.utils.locations.Cuboid;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,6 +37,8 @@ public class PlayerJoin implements Listener, NameTagImpl {
                 skinPlayer.applySkin(MojangUtils.getSkinDataFromUUID(playerData.getProfile().getSkinUUID()));
             }
         }
+
+        new MirrorNPC(new Location(player.getWorld(), 346.5D,74,1623.5D), new Cuboid(new Location(player.getWorld(),346,74,1622.3D),new Location(player.getWorld(),346.5D,74,1623.5D))).run(player);
 
 
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
