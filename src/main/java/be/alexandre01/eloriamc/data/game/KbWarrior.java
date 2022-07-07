@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.sql.SQLException;
@@ -24,16 +25,19 @@ public class KbWarrior extends Identifier {
     @Expose private int kill = 0;
     @Expose private int death = 0;
     @Expose private int bestKs = 0;
-    @Expose private float elo = 0;
-    @Expose private String division = "§6§lBronze IV";
-    @Expose private boolean ranked = false;
+    @Expose private float exp = 0;
+    @Expose private int[] killMsg = {0};
+    @Expose private int[] killAnim = {0};
     @Expose private int[] blockList = {0};
 
+    @Expose private int blockChoose = 159;
 
-    public void addBlock(Block block){
-        addBlock(block.getTypeId());
+
+    public void addBlock(Material block){
+        addBlock(block.getId());
     }
-    public void addBlock(int b){
+
+    private void addBlock(int b){
         int[] newBlockList = new int[blockList.length + 1];
         for(int i = 0; i < blockList.length; i++){
             newBlockList[i] = blockList[i];
@@ -42,11 +46,11 @@ public class KbWarrior extends Identifier {
         blockList = newBlockList;
     }
 
-    public void removeBlock(Block block){
-        removeBlock(block.getTypeId());
+    public void removeBlock(Material block){
+        removeBlock(block.getId());
     }
 
-    public void removeBlock(int b){
+    private void removeBlock(int b){
         int[] newBlockList = new int[blockList.length - 1];
         int j = 0;
         for(int i = 0; i < blockList.length; i++){
