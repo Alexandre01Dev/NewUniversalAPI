@@ -3,6 +3,7 @@ package be.alexandre01.eloriamc.data;
 import be.alexandre01.eloriamc.data.game.Identifier;
 import be.alexandre01.eloriamc.data.game.KbWarrior;
 import be.alexandre01.eloriamc.data.game.Madness;
+import be.alexandre01.eloriamc.data.game.PvPBox;
 import be.alexandre01.eloriamc.data.impl.IPlayerData;
 import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.profile.Profile;
@@ -54,6 +55,8 @@ public class PlayerData implements IPlayerData {
 
     @Expose private Madness madness;
 
+    @Expose private PvPBox pvPBox;
+
     @Expose private Ban ban;
 
     @Expose private Profile profile;
@@ -74,6 +77,7 @@ public class PlayerData implements IPlayerData {
         this.settings = new Settings();
         this.kbWarrior = new KbWarrior();
         this.madness = new Madness();
+        this.pvPBox = new PvPBox();
         this.ban = new Ban();
         this.profile = new Profile();
     }
