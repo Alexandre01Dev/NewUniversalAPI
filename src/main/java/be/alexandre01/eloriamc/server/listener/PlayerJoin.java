@@ -38,7 +38,7 @@ public class PlayerJoin implements Listener, NameTagImpl {
             }
         }
 
-        new MirrorNPC(new Location(player.getWorld(), 346.5D,74,1623.5D), new Cuboid(new Location(player.getWorld(),346,74,1622.3D),new Location(player.getWorld(),346.5D,74,1623.5D))).run(player);
+        //new MirrorNPC(new Location(player.getWorld(), 346.5D,74,1623.5D), new Cuboid(new Location(player.getWorld(),346,74,1622.3D),new Location(player.getWorld(),346.5D,74,1623.5D))).run(player);
 
 
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){

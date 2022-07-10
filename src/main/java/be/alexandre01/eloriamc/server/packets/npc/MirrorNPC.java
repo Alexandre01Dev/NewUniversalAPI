@@ -67,10 +67,10 @@ public class MirrorNPC {
             System.out.println(locationWithVector.distance(player.getLocation()));
           //  Vector v = player.getLocation().toVector().subtract(centerMirror.toVector()).multiply(2);
 
-            locationWithVector.
-            Location location = v.toLocation(centerMirror.getWorld());
-            location.setDirection(player.getLocation().subtract(location).toVector());
-            npcHuman.teleport(location);
+            //locationWithVector.
+            //Location location = v.toLocation(centerMirror.getWorld());
+            //location.setDirection(player.getLocation().subtract(location).toVector());
+            //npcHuman.teleport(location);
         }, 1,1);
     }
 
