@@ -39,7 +39,7 @@ public class Ban extends Command {
                 reason = reason + args[i] + " ";
             if (args[1].equalsIgnoreCase("perm")) {
 
-                sender.sendMessage("§c§lSANCTION §f❙ §aVous avez banni §c" + targetName +  " §apendant une durée §binderterminé §apour §e" + reason + "§a.");
+                sender.sendMessage("§c§lSANCTION §f❙ §fVous avez banni §c" + targetName +  " §fpendant une durée §einderterminé §fpour §a" + reason + "§a.");
                 return false;
             }
             if (!args[1].contains(":")) {
@@ -68,6 +68,11 @@ public class Ban extends Command {
             PlayerData playerData = API.getInstance().getPlayerDataManager().getPlayerData(targetName);
             playerData.getBan().setBanned(true);
             playerData.getBan().setTime(end);
+            if(sender instanceof Player) {
+                playerData.getBan().setAuthor(sender.getName());
+            } else {
+                playerData.getBan().setAuthor("EloriaAC");
+            }
             playerData.getBan().setReason(reason);
             playerData.savePlayerCache();
 
@@ -83,7 +88,7 @@ public class Ban extends Command {
                     "§8>§8§m---------------------------------§8<"
                     );
 
-            sender.sendMessage("§c§lSANCTION §f❙ §aVous avez banni §c" + targetName +  " §apendant §b "+ playerData.getBan().getTimeLeft() + "§a pour §e" + reason + "§a.");
+            sender.sendMessage("§c§lSANCTION §f❙ §fVous avez banni §c" + targetName +  " §fpendant §e "+ playerData.getBan().getTimeLeft() + "§f pour §a" + reason + "§f.");
             return false;
         }
         return false;

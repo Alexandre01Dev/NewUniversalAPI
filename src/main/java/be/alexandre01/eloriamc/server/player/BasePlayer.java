@@ -7,10 +7,13 @@ import be.alexandre01.eloriamc.data.PlayerData;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjector;
 import be.alexandre01.eloriamc.server.packets.injector.compatibility.ProtocolInjector;
+import be.alexandre01.eloriamc.server.packets.skin.SkinData;
 import be.alexandre01.eloriamc.server.packets.ui.scoreboard.PersonalScoreboard;
 import be.alexandre01.eloriamc.server.session.players.PlayerDamager;
 import be.alexandre01.eloriamc.utils.ClassUtils;
+import com.comphenix.protocol.ProtocolManager;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -57,6 +60,9 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     SpigotPlugin spigotPlugin;
     API api;
     Player player;
+    @Getter SkinData skinData;
+
+    PlayerData playerData;
 
     @Getter
     PersonalScoreboard personalScoreboard;
@@ -72,6 +78,10 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
         }else {
             this.packetInjector = new PacketInjector(player);
         }
+
+        Property property = getProfile().getProperties().get("textures").iterator().next();
+        skinData = new SkinData(property.getValue(), property.getSignature());
+
 
     }
 
@@ -90,10 +100,14 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
     }
 
     public PlayerData getData(boolean request){
-        if(request)
-            return api.getPlayerDataManager().getPlayerData(this.player.getName());
+        if(request || playerData == null) {
+            this.playerData = api.getPlayerDataManager().getPlayerData(this.player.getName());
+        }
+        return playerData;
+    }
 
-        return api.getPlayerDataManager().getLocalPlayerData(this.player.getName());
+    public void refreshData(){
+        this.playerData = api.getPlayerDataManager().getPlayerData(this.player.getName());
     }
 
     public PlayerData getData(){

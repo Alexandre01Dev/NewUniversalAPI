@@ -76,7 +76,6 @@ public class WaitingGameSession<T extends BasePlayer> extends Session<T> impleme
                     if(ticks > 20 && players >= maxPlayers-playerDif){
                         ticks = 20;
                     }
-
                     if(ticks <= 0){
                         task.cancel();
                         finish();

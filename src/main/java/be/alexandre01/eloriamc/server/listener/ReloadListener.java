@@ -1,9 +1,8 @@
 package be.alexandre01.eloriamc.server.listener;
 
-import be.alexandre01.dreamnetwork.plugins.spigot.DNSpigot;
 import be.alexandre01.eloriamc.config.yaml.YamlUtils;
 import be.alexandre01.eloriamc.server.SpigotPlugin;
-import be.alexandre01.eloriamc.server.modules.Module;
+import be.alexandre01.eloriamc.server.network.modules.Module;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

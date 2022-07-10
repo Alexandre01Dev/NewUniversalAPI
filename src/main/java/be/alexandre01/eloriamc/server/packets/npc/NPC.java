@@ -115,6 +115,8 @@ public class NPC extends Reflections {
         }
     }
 
+
+
     public interface NPCInteract {
          public void action(Player player,InteractClick click);
     }

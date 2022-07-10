@@ -13,11 +13,10 @@ public class PlayerDamage implements Listener {
         spigotPlugin = SpigotPlugin.getInstance();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDamage(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
 
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            System.out.println("Player damages");
             BasePlayer player = spigotPlugin.getBasePlayer((org.bukkit.entity.Player)event.getEntity());
             BasePlayer damager = spigotPlugin.getBasePlayer((org.bukkit.entity.Player)event.getDamager());
             player.getDamagerUtils().addDamager(damager);

@@ -54,7 +54,7 @@ public class NPCUniversalEntity extends NPCInstance {
         headRotation(location.getYaw(), location.getPitch());
     }
 
-
+    @Override
     public void hide(){
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(new int[] {entityID});
         this.isVisible = false;

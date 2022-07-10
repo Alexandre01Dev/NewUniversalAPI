@@ -18,6 +18,7 @@ public class PlayerDamager {
 
     public void addDamager(BasePlayer player){
         damagerTime.put(player, System.currentTimeMillis());
+        lastDamager = new Tuple<>(player, System.currentTimeMillis());
     }
 
     public void setTotalAssist(Integer assist){
@@ -37,7 +38,10 @@ public class PlayerDamager {
         ArrayList<BasePlayer> players = new ArrayList<>();
         for(BasePlayer player : damagerTime.keySet()){
             if(System.currentTimeMillis() - damagerTime.get(player) < 7000){
-                players.add(player);
+                if(lastDamager != null)
+                    if(lastDamager.a() != player){
+                        players.add(player);
+                    }
             }
         }
         return players;

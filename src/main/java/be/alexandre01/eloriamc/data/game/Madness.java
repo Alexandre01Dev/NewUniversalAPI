@@ -14,9 +14,7 @@ public class Madness extends Identifier{
     @Expose private int kill = 0;
     @Expose private int death = 0;
     @Expose private int bestks = 0;
-    @Expose private float elo = 0;
-    @Expose private String division = "§6§lBronze IV";
-
+    @Expose private float exp = 0;
     @Expose private int[] killMsg = {0};
     @Expose private int[] killAnim = {0};
 }

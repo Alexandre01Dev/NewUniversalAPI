@@ -9,20 +9,15 @@ import be.alexandre01.eloriamc.server.commands.RcList;
 import be.alexandre01.eloriamc.server.commands.ReportChat;
 import be.alexandre01.eloriamc.server.events.factories.EventsFactory;
 import be.alexandre01.eloriamc.server.events.players.ListenerPlayerManager;
-import be.alexandre01.eloriamc.server.listener.PlayerJoin;
-import be.alexandre01.eloriamc.server.listener.PlayerQuit;
-import be.alexandre01.eloriamc.server.listener.ReloadListener;
-import be.alexandre01.eloriamc.server.listener.ServerAttached;
+import be.alexandre01.eloriamc.server.listener.*;
 
 import be.alexandre01.eloriamc.server.manager.MessageData;
-import be.alexandre01.eloriamc.server.modules.CustomClassLoader;
-import be.alexandre01.eloriamc.server.modules.ModuleLoader;
+import be.alexandre01.eloriamc.server.network.modules.CustomClassLoader;
+import be.alexandre01.eloriamc.server.network.modules.ModuleLoader;
 import be.alexandre01.eloriamc.server.packets.PacketShuffler;
-import be.alexandre01.eloriamc.server.packets.Reflections;
 import be.alexandre01.eloriamc.server.packets.injector.AutoPacketInjectorJoin;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInjectorManager;
 import be.alexandre01.eloriamc.server.packets.injector.PacketInterceptor;
-import be.alexandre01.eloriamc.server.packets.injector.compatibility.ProtocolInjector;
 import be.alexandre01.eloriamc.server.packets.npc.NPCFactory;
 import be.alexandre01.eloriamc.server.packets.skin.*;
 import be.alexandre01.eloriamc.server.packets.ui.bossbar.BossBarManagerTask;
@@ -33,21 +28,14 @@ import be.alexandre01.eloriamc.server.session.Session;
 import be.alexandre01.eloriamc.server.session.SessionManager;
 import be.alexandre01.eloriamc.server.session.runnables.Task;
 import be.alexandre01.eloriamc.server.session.runnables.UpdateFactory;
+import be.alexandre01.eloriamc.server.utils.PluginManager;
 import be.alexandre01.eloriamc.server.utils.date.LongToDays;
-import be.alexandre01.eloriamc.server.utils.locations.ChunkCoord;
-import be.alexandre01.eloriamc.server.utils.locations.ChunksUtils;
-import be.alexandre01.eloriamc.utils.ClassUtils;
 import lombok.Getter;
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.ChunkSection;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,7 +43,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
@@ -86,15 +73,24 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
     @Getter private ScoreboardManager scoreboardManager = new ScoreboardManager();
 
+    @Getter private PluginManager pluginManager = new PluginManager();
 
 
     public boolean isReloading = false;
+
+    public boolean isHosting;
 
     @Override
     public void onEnable() {
         instance = this;
         saveConfig();
         saveDefaultConfig();
+
+        getConfig().options().configuration().addDefault("hosting", false);
+
+        isHosting = getConfig().getBoolean("hosting");
+
+
 
 
         packetInjectorManager = new PacketInjectorManager();
@@ -112,6 +108,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         this.getServer().getPluginManager().registerEvents(new ReloadListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDamage(),this);
 
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -276,6 +273,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                    tuple.cancel();
                 }
 
+
                 moduleLoader.getModules().forEach(module -> {
                     Class<?> c = module.getDefaultSession();
                     Session session = null;
@@ -298,23 +296,35 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
             }
         });
         skinFactory.registerSkinData("Boug1",new SkinData("ewogICJ0aW1lc3RhbXAiIDogMTY1MTI0OTM1NTkxOCwKICAicHJvZmlsZUlkIiA6ICIxMGZhZDhhOWVmZTQ0NzEzYmYxMThjY2MzODRkZTU3NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJDb2ZmZWVCdW5ueSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80NTNkM2I2MmFkOTVlMjFkZDJiOTFiZGFhMDI5OWViNWJhYWZkYzEyYmYxN2UxMjAwZGI5OWMwNTQwZWJjYjI2IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjYzA4ODQwNzAwNDQ3MzIyZDk1M2EwMmI5NjVmMWQ2NWExM2E2MDNiZjY0YjE3YzgwM2MyMTQ0NmZlMTYzNSIKICAgIH0KICB9Cn0=","fUy+nnSryBoMJQiTOqfuCTlxErYexvhseHEDqimCNfnQ8nRSfGIH8PCXv6mTq7p+3hJ0ZjE9n5bDXsEGPhLz9MJyU2QHfK1k2mdqHEopPUSsy88b/E1+xib2ZS5Lbv/lP843Al1ABupnaOgboOxknt4tiO5QgKowIqJDzffF0DYMbAKe2QBKxDKZiZeFFoSkmvJnd0fLf6AK5je7KzBxebWYzOrPdkbSANO5tNtZ79rJzAYb6lOe6osZ3yycJ7HRZVicB3WJA9znGSr/CjQQLw1XU0vKbC26MoG8sTHAy1GJxEWe7eMBkWyo7IPbJj6+lD7DQJ6PZUfMRfQ+NMRRja0UqMgC5jQmQQCgvAWEclmZSmbv9V9cPUa/kifIZVI9ySqx395Dl6ghQdh7pnk3+weHxyE44vVH9qnisPF/TS2LeD4I/ZLPhcgZpZ/98oavbznckdARcAwHZNWtSYP7KNGde6qBkN7LnjKfM1B5bqrAcSF8RWQJ26aUespULN9thpuA6lvsNJKMa39up0qeaaqI25Sp9eH+qsT5qHA6SYhm2Hs+tttnvPlN2LZQ6poobJ4ALYbkAR7JR8bwxQvfppBHz1z3WLsTu6JvVa3CVJn+2i4Fi9iMcpNZFaiA58PFNXI4sZR3DEmRMyt8cbb536Vzr3/1L791366V8V++dh0="));
+
         moduleLoader.getModules().forEach(module -> {
+            if(module.isOverrideLoading() || !isHosting){
             Class<?> c = module.getDefaultSession();
                 Session session = null;
                 try {
                     session = (Session<?>) c.newInstance();
-                    session.processStart();
-                    for(Player player : getServer().getOnlinePlayers()){
-                        session.addPlayer(player);
-                    }
+
+                        session.processStart();
+                        for(Player player : getServer().getOnlinePlayers()){
+                            session.addPlayer(player);
+                        }
+
                     sessionManager.getDefaultSessions().add(session);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println(session.getName() + " is not supported");
+
+
                 }
+            }else {
+                if(isHosting){
+                    moduleLoader.getHost().add(module);
+                }
+            }
         });
 
         skinFactory.readFiles();
+
 
         for(Player player : Bukkit.getOnlinePlayers()){
             for(Session<?> session : sessionManager.getDefaultSessions()){
@@ -326,6 +336,10 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         /*scoreboardManager.setupSchedulers(16,1);
         scoreboardManager.startGlowingTask(80,80, TimeUnit.MILLISECONDS);
         scoreboardManager.startReloadingTask(1,1, TimeUnit.SECONDS);*/
+
+
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
     }
 
     @Override

@@ -9,9 +9,7 @@ import be.alexandre01.eloriamc.data.mysql.Mysql;
 import be.alexandre01.eloriamc.data.profile.Profile;
 import be.alexandre01.eloriamc.data.punishement.Ban;
 import be.alexandre01.eloriamc.data.redis.RedisManager;
-import be.alexandre01.eloriamc.server.packets.skin.SkinData;
 import be.alexandre01.eloriamc.utils.Tuple;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
@@ -22,7 +20,6 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Getter

@@ -7,6 +7,7 @@ import be.alexandre01.eloriamc.proxy.BungeePlugin;
 import com.jakub.premium.JPremium;
 import com.jakub.premium.api.User;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -39,10 +40,10 @@ public class ProxyJoin implements Listener {
         if(user.isPresent()) {
             if(user.get().isPremium()) {
                 System.out.println("Premium");
-                player.sendMessage("§aTu as été enregistré comme un Premium");
+                player.sendMessage(new TextComponent("§aTu es premium WALLAH SUR PEPE"));
             } else {
                 System.out.println("Non-Premium");
-                player.sendMessage("§aTu as été enregistré comme un Non-Premium");
+                player.sendMessage(new TextComponent("§cTu es cracke en 2022 STARF"));
             }
         }
     }
