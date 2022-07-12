@@ -33,6 +33,7 @@ import be.alexandre01.eloriamc.server.utils.date.LongToDays;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -44,6 +45,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 
 public class SpigotPlugin extends JavaPlugin implements Listener {
 
@@ -109,6 +111,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         this.getServer().getPluginManager().registerEvents(new ReloadListener(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerDamage(),this);
+        this.getServer().getPluginManager().registerEvents(new WeatherChange(),this);
 
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -339,6 +342,11 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        List<World> worlds = Bukkit.getWorlds();
+        World world = Bukkit.getWorld(worlds.get(0).getName());
+        world.setThundering(false);
+        world.setStorm(false);
 
     }
 

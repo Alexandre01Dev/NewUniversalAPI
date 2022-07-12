@@ -30,6 +30,7 @@ public class PlayerJoin implements Listener, NameTagImpl {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        e.setJoinMessage(null);
         PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
         if(playerData != null) {
             if(playerData.getProfile().getSkinUUID() != null) {
