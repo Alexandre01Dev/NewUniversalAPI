@@ -1,6 +1,6 @@
-name: EloriaAPI
+name: UniversalAPI
 version: '${project.version}'
-main: be.alexandre01.eloriamc.server.SpigotPlugin
+main: be.alexandre01.universal.server.SpigotPlugin
 softdepend:
   - UltraPermissions
   - DreamNetwork-Core
