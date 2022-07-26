@@ -35,7 +35,6 @@ public class NPCHuman extends NPCInstance {
         this.location = npc.getLocation();
         this.gameProfile = npc.getGameProfile();
         this.skinData = npc.getSkinData();
-        System.out.println(skinData);
         this.player = player;
     }
 
@@ -54,7 +53,6 @@ public class NPCHuman extends NPCInstance {
         w.a(10, (byte)127);
         this.setValue(packet, "i", w);
         addToTablist();
-        System.out.println(packet.toString());
         this.sendPacket(packet, player);
         this.isVisible = true;
         headRotation(location.getYaw(), location.getPitch());

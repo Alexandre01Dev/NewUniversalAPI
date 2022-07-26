@@ -62,8 +62,6 @@ public class MirrorNPC {
             double zDif = zone.getMinZ() - player.getLocation().getZ();
             Location locationWithVector = mirrorMin.clone().add(rotation.clone().normalize().multiply(new Vector(xDif,0,zDif)));
 
-            System.out.println(xDif);
-            System.out.println(zDif);
             System.out.println(locationWithVector.distance(player.getLocation()));
           //  Vector v = player.getLocation().toVector().subtract(centerMirror.toVector()).multiply(2);
 

@@ -9,7 +9,9 @@ import com.google.common.collect.Multimap;
 import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.RegisteredListener;
 
 import java.util.Map;
@@ -17,7 +19,7 @@ import java.util.Set;
 
 public class EventsFactory<T extends Event> extends EventUtils {
 
-    @Getter private Multimap<Class<T>, IEvent<T>> eventHashMap;
+    @Getter private Multimap<String, IEvent<T>> eventHashMap;
     private SpigotPlugin spigotPlugin;
     @Getter private CustomEventLoader customEventLoader;
     public EventsFactory() {
@@ -34,14 +36,17 @@ public class EventsFactory<T extends Event> extends EventUtils {
     }
 
     public IEvent<T> fastRegisterEvent(Class<T> event, IEvent<T> iEvent, EventPriority eventPriority) {
-        if(!eventHashMap.containsKey(iEvent.getEventClass())){
-            eventHashMap.put(iEvent.getEventClass(), iEvent);
-            Listener registerEvent = new RegisterEvent<>(iEvent.getEventClass(), this);
-            for (Map.Entry<Class<? extends Event>, Set<RegisteredListener>> entry : spigotPlugin.getEventsFactory().getCustomEventLoader().createCustomRegisteredListeners(registerEvent, spigotPlugin,eventPriority).entrySet())
-                getEventListeners(getRegistrationClass(iEvent.getEventClass())).registerAll(entry.getValue());
-        }
+        if(!eventHashMap.containsKey(event.getSimpleName())){
+            //eventHashMap.put(iEvent.getEventClass().getSimpleName(), iEvent);
+            Listener registerEvent = new RegisterEvent<>(event, this);
 
-        eventHashMap.put(iEvent.getEventClass(), iEvent);
+
+
+
+            for (Map.Entry<Class<? extends Event>, Set<RegisteredListener>> entry : this.getCustomEventLoader().createCustomRegisteredListeners(registerEvent, spigotPlugin,eventPriority).entrySet())
+                getEventListeners(getRegistrationClass(event)).registerAll(entry.getValue());
+        }
+        eventHashMap.put(event.getSimpleName(), iEvent);
 
         return (IEvent<T>) iEvent;
     }
@@ -49,10 +54,10 @@ public class EventsFactory<T extends Event> extends EventUtils {
         return fastRegisterEvent(event,iEvent,EventPriority.NORMAL);
     }
     public void unregisterEvent(IEvent<? extends Event> iEvent){
-        eventHashMap.remove(iEvent.getEventClass(),iEvent);
+        eventHashMap.remove(iEvent.getEventClass().getSimpleName(),iEvent);
     }
 
     public void  unregisterEvent(Class<? extends Event> event){
-        eventHashMap.removeAll(event);
+        eventHashMap.removeAll(event.getSimpleName());
     }
 }

@@ -42,7 +42,6 @@ public class PacketShuffler extends Reflections {
                     break;
                 }
             }
-            System.out.println(value);
             setValue(packet,"a", newValue.toString());
         }
 

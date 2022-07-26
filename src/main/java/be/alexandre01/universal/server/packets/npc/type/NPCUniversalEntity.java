@@ -48,7 +48,6 @@ public class NPCUniversalEntity extends NPCInstance {
             w.a((byte) 3,(byte) 1);
         }
         this.setValue(packet, "l", w);
-        System.out.println(packet.toString());
         this.sendPacket(packet, player);
         this.isVisible = true;
         headRotation(location.getYaw(), location.getPitch());
@@ -61,6 +60,10 @@ public class NPCUniversalEntity extends NPCInstance {
         sendPacket(player,packet);
     }
 
+    public void changeHealth(int health) {
+        PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus(entityID, (byte) health);
+        sendPacket(player,packet);
+    }
     public void headRotation(float yaw,float pitch){
         PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(entityID, getFixRotation(yaw),getFixRotation(pitch) , true);
         PacketPlayOutEntityHeadRotation packetHead = new PacketPlayOutEntityHeadRotation();

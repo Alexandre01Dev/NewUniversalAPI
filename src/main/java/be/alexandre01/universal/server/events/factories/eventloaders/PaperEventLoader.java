@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.logging.Level;
 
 public class PaperEventLoader extends CustomEventLoader {
+    public PaperEventLoader() {
+        //A check s'execute 2 fois
+    }
     public Map<Class<? extends Event>, Set<RegisteredListener>> createCustomRegisteredListeners(Listener listener, Plugin plugin, EventPriority ep) {
         Set<Method> methods;
         Validate.notNull(plugin, "Plugin can not be null");
@@ -87,6 +90,7 @@ public class PaperEventLoader extends CustomEventLoader {
                     public void execute(Listener listener, Event event) throws EventException {
                         if (!eventClass.isAssignableFrom(event.getClass()))
                             return;
+
                         try {
                             method.invoke(listener, new Object[] { event });
                         } catch (IllegalAccessException e) {

@@ -22,7 +22,7 @@ public class ChunksUtils {
 
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
-                System.out.println(cX + x+">"+cZ + z);
+
                 chunks.add(new ChunkCoord(cX + x, cZ + z));
             }
         }

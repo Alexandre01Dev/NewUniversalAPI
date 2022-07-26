@@ -7,6 +7,7 @@ import com.google.common.collect.Multimap;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,14 @@ public class SessionListenerManager {
     }
 
     public void registerEvent(IEvent<? extends Event> event) {
+        if(events.contains(event)){
+            return;
+        }
         events.add(event);
+        if(event.getEventClass() == EntityDamageEvent.class){
+            System.out.println(event.getEventClass().getSimpleName() + " register session Event");
+        }
+
         spigotPlugin.getEventsFactory().fastRegisterEvent(event.getEventClass(), event);
     }
 
