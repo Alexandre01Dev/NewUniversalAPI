@@ -23,7 +23,7 @@ public class PlayerQuit implements Listener, NameTagImpl {
     public void onQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         e.setQuitMessage(null);
-         api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
+        // api.getPlayerDataManager().getPlayerDataHashMap().remove(player.getName());
         for(Session<?> defaultSession : plugin.getSessionManager().getDefaultSessions()){
             defaultSession.removePlayer(player);
         }

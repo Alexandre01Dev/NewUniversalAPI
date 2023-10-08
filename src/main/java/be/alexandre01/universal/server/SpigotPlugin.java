@@ -14,6 +14,7 @@ import be.alexandre01.universal.server.modules.ModuleLoader;
 import be.alexandre01.universal.server.packets.PacketShuffler;
 import be.alexandre01.universal.server.packets.injector.PacketInjectorManager;
 import be.alexandre01.universal.server.packets.injector.PacketInterceptor;
+import be.alexandre01.universal.server.packets.npc.NPC;
 import be.alexandre01.universal.server.packets.npc.NPCFactory;
 import be.alexandre01.universal.server.packets.skin.*;
 import be.alexandre01.universal.server.packets.ui.bossbar.BossBarManagerTask;
@@ -32,6 +33,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -303,12 +305,10 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
                 Session session = null;
                 try {
                     session = (Session<?>) c.newInstance();
-
                         session.processStart();
                         for(Player player : getServer().getOnlinePlayers()){
                             session.addPlayer(player);
                         }
-
                     sessionManager.getDefaultSessions().add(session);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -364,7 +364,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
 //        long l = API.getInstance().getPlayerDataManager().getPlayerData(player.getName()).getTimePlayed();
 
       //  e.getPlayer().sendMessage("§eTu joue sur §fEloria§bMC§e depuis "+ LongToDays.format(l));
-         /*NPC npc = new NPC("§a§lCreepah",player.getLocation());
+        NPC npc = new NPC("§a§lCreepah",player.getLocation(), EntityType.ARMOR_STAND);
         npc.setSkin(skinFactory.getSkinData("Boug1"));
         npc.setInteraction(new NPC.NPCInteract() {
             @Override
@@ -373,7 +373,7 @@ public class SpigotPlugin extends JavaPlugin implements Listener {
             }
         });
         npc.initAndShow(player);
-
+        /*
        BossBar bossBar = new BossBar("§fTheFuckingBossBar",100);
         bossBarManagerTask.addBossBar("TheFuckingBossBar",bossBar);
         //send bossbar

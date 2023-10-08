@@ -85,9 +85,7 @@ public class BasePlayer extends CraftPlayer implements TitleImpl, NameTagImpl {
         this.playerData = api.getPlayerDataManager().getPlayerData(this.player.getName());
     }
 
-    public PlayerData getData(){
-        return getData(false);
-    }
+
     /**
      * Send packet to Player
      * @param packet

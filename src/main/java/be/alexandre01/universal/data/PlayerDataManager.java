@@ -37,7 +37,8 @@ public class PlayerDataManager {
     }
 
     public PlayerData getPlayerData(String playername) {
-        return PlayerData.fromJson(RedisManager.get("Player:" + playername));
+        return null;
+        //return PlayerData.fromJson(RedisManager.get("Player:" + playername));
     }
 
 

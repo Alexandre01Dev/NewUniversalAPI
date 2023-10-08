@@ -25,13 +25,13 @@ public class PlayerJoin implements Listener, NameTagImpl {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         e.setJoinMessage(null);
-        PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
+        /*PlayerData playerData = api.getPlayerDataManager().getPlayerData(player.getName());
         if(playerData != null) {
             if(playerData.getProfile().getSkinUUID() != null) {
                 SkinPlayer skinPlayer = new SkinPlayer(player);
                 skinPlayer.applySkin(MojangUtils.getSkinDataFromUUID(playerData.getProfile().getSkinUUID()));
             }
-        }
+        }*/
 
         //new MirrorNPC(new Location(player.getWorld(), 346.5D,74,1623.5D), new Cuboid(new Location(player.getWorld(),346,74,1622.3D),new Location(player.getWorld(),346.5D,74,1623.5D))).run(player);
 
@@ -41,8 +41,7 @@ public class PlayerJoin implements Listener, NameTagImpl {
         }
 
 
-
-        api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
+        // api.getPlayerDataManager().getPlayerDataHashMap().put(player.getName(), playerData);
         try {
           /*  RankManager rankManager = new RankManager(player.getName());
             switch (rankManager.getGroup()) {

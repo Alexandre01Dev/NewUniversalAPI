@@ -2,17 +2,24 @@ package be.alexandre01.universal.server.packets.npc.type;
 
 import be.alexandre01.universal.server.packets.npc.NPC;
 import be.alexandre01.universal.server.packets.skin.SkinData;
+import be.alexandre01.universal.server.utils.CustomHead;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import io.netty.util.concurrent.ScheduledFuture;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class NPCHuman extends NPCInstance {
     private final be.alexandre01.universal.server.packets.npc.NPC npc;
@@ -233,7 +240,6 @@ public class NPCHuman extends NPCInstance {
             this.animation(2);
             this.teleport(this.location.clone().subtract(0.0, 0.3, 0.0));
         }
-
     }
 
 }

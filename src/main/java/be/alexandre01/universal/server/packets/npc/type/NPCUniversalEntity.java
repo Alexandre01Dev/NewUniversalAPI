@@ -61,7 +61,10 @@ public class NPCUniversalEntity extends NPCInstance {
     }
 
     public void changeHealth(int health) {
-        PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus(entityID, (byte) health);
+       // PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus(entityID, (byte) health);
+        PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus();
+        setValue(packet,"a",entityID);
+        setValue(packet,"b", (byte) health);
         sendPacket(player,packet);
     }
     public void headRotation(float yaw,float pitch){

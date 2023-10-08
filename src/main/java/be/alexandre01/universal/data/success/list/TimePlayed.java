@@ -16,7 +16,7 @@ public class TimePlayed extends Success {
             @Override
             public boolean checkOnEvent(PlayerJoinEvent event) {
                 BasePlayer player = getSpigotPlugin().getBasePlayer(event.getPlayer());
-                long l = player.getData().getTimePlayed();
+                long l = player.getData(false).getTimePlayed();
                 long h = TimeUnit.MILLISECONDS.toHours(l);
 
                 if(h >= hours){

@@ -3,7 +3,6 @@ package be.alexandre01.universal.proxy;
 import be.alexandre01.dnplugin.api.request.channels.DNChannel;
 import be.alexandre01.dnplugin.api.request.channels.DNChannelManager;
 import be.alexandre01.dnplugin.api.request.channels.RegisterListener;
-import be.alexandre01.dnplugin.gson.internal.LinkedTreeMap;
 import be.alexandre01.dnplugin.plugins.bungeecord.api.DNBungeeAPI;
 import be.alexandre01.universal.API;
 import be.alexandre01.universal.proxy.listener.ProxyJoin;
@@ -44,12 +43,12 @@ public class BungeePlugin extends Plugin {
 
         dnBungeeAPI = (DNBungeeAPI) DNBungeeAPI.getInstance();
         DNChannelManager dnChannelManager = BungeePlugin.getInstance().getDnBungeeAPI().getChannelManager();
-        online = dnChannelManager.registerChannel(online, false, new RegisterListener() {
+       /* online = dnChannelManager.registerChannel(online, false, new RegisterListener() {
             @Override
             public void onNewDataReceived(LinkedTreeMap<String, Object> linkedTreeMap) {
                 createInitialData("all", 0);
             }
-        });
+        });*/
 
 
 

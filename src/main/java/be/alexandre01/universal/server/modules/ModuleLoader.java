@@ -155,6 +155,8 @@ public class ModuleLoader {
                 System.out.println(module.getSessionPath());
                 Class<?> classToLoad = Class.forName(module.getSessionPath(), true, child);
                 module.setDefaultSession(classToLoad);
+                
+                
 
 
                 System.out.println(module.getModuleName());

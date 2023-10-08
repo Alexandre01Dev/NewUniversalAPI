@@ -1,17 +1,14 @@
 package be.alexandre01.universal.manager;
 
 import lombok.AllArgsConstructor;
-import me.TechsCode.UltraPermissions.UltraPermissions;
-import me.TechsCode.UltraPermissions.UltraPermissionsAPI;
-import me.TechsCode.UltraPermissions.storage.collection.GroupList;
-import me.TechsCode.UltraPermissions.storage.objects.User;
+
 
 import java.util.Optional;
 
 @AllArgsConstructor
 public class RankManager {
 
-    private final UltraPermissionsAPI ultraPermissionsAPI = UltraPermissions.getAPI();
+ /*   private final UltraPermissionsAPI ultraPermissionsAPI = UltraPermissions.getAPI();
 
     private String playerName;
 
@@ -52,5 +49,5 @@ public class RankManager {
     public String getPlayerSuffix() {
         Optional<User> user = ultraPermissionsAPI.getUsers().name(playerName);
         return user.map(value -> value.getSuffix().orElse(null) + " ").orElse(null);
-    }
+    }*/
 }

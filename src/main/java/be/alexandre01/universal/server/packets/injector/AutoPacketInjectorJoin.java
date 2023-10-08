@@ -30,7 +30,7 @@ public class AutoPacketInjectorJoin implements Listener {
     public void onLeave(PlayerQuitEvent event){
         spigotPlugin.getPacketInjectorManager().getPacketInjectors().get(event.getPlayer().getUniqueId()).uninjectAll();
 
-        spigotPlugin.getBasePlayer(event.getPlayer()).getData().savePlayerCache();
+        spigotPlugin.getBasePlayer(event.getPlayer()).getData(false).savePlayerCache();
     }
 
     public static void init(PacketInjectorType type) {

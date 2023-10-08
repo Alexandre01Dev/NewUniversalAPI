@@ -22,14 +22,10 @@ public class BossBar {
     npc = new NPC(this.text, new Location(Bukkit.getWorlds().get(0), 0, 0, 0), EntityType.WITHER);
   }
 
-
-
   //In face of player direction
   public Location calculLocation(Player player){
     Location location = player.getLocation();
     location.setPitch(player.getLocation().getPitch()/4);
     return  location.add(location.getDirection().normalize().multiply(25));
   }
-
-
 }

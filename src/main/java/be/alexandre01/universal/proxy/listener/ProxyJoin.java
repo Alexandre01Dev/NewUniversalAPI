@@ -4,8 +4,7 @@ import be.alexandre01.universal.API;
 import be.alexandre01.universal.data.PlayerData;
 import be.alexandre01.universal.data.SetupPlayerData;
 import be.alexandre01.universal.proxy.BungeePlugin;
-import com.jakub.premium.JPremium;
-import com.jakub.premium.api.User;
+
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -34,8 +33,7 @@ public class ProxyJoin implements Listener {
         bungeePlugin.getOnline().setData("all", ProxyServer.getInstance().getOnlineCount());
         bungeePlugin.getTimePlayed().put(player.getUniqueId(),System.currentTimeMillis());
 
-        Optional<User> user = JPremium.getApplication().getUserProfileByNickname(player.getName());
-        player.sendMessage("Fuck");
+      /*  Optional<User> user = JPremium.getApplication().getUserProfileByNickname(player.getName());
         System.out.println(user);
         if(user.isPresent()) {
             if(user.get().isPremium()) {
@@ -45,6 +43,6 @@ public class ProxyJoin implements Listener {
                 System.out.println("Non-Premium");
                 player.sendMessage(new TextComponent("§cTu es cracke en 2022 STARF"));
             }
-        }
+        }*/
     }
 }
